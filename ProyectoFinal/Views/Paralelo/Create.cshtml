@@ -1,0 +1,96 @@
+﻿@model ProyectoFinalModel.Paralelo
+
+<h2>Crear nuevo paralelo</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Registro Paralelo</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+
+                    @*<div class="input-group">
+                            <label for="CCiMaquina" class="control-label">Id Paralelo</label>
+                            @Html.EditorFor(model => model.IdParalelo, new { htmlAttributes = new { @id = "txtIdParalelo", @class = "form-control" } })
+                        </div>*@
+
+                    <label for="NNuTonelaje" class="control-label">Descripción</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="radio">
+                            <input type="checkbox" name="chkEstado" , checked>
+                            Activo
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $('#btnGenerar').on('click', function () {
+        var Descripcion = document.getElementById("txtDescripcion").value;
+        var Estado = "A";
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            Estado = "I";
+        }
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        var jsonCad = "{'IdParalelo':'" + 0 + "'";
+        jsonCad = jsonCad + ", 'Descripcion': '" + Descripcion + "'";
+        jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Paralelo ",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Paralelo/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Paralelo")';
+                                }, 4000);
+
+                            }else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    });
+</script>

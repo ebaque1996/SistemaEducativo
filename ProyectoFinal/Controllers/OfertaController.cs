@@ -1,0 +1,341 @@
+﻿using ProyectoFinal.Models;
+using ProyectoFinalModel;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace ProyectoFinal.Controllers
+{
+    public class OfertaController : Controller
+    {
+        ProyectoFinalEntities db = new ProyectoFinalEntities();
+        string error = "";
+        // GET: Oferta
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public JsonResult GetPeriodos(string q)
+        {
+
+            var FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion }
+                   ).ToList();
+
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+
+                FatherItem.RemoveAll(item => item == null);
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpGet]
+        public JsonResult GetProfesores(string q)
+        {
+
+            var FatherItems = (from maq in db.Profesor.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdProfesor, text = maq.Nombres + " " + maq.Apellidos }
+                   ).ToList();
+
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+
+                FatherItem.RemoveAll(item => item == null);
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult GetCursos(string q)
+        {
+
+            var FatherItems = (from maq in db.Curso.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdCurso, text = maq.Descripcion }
+                   ).ToList();
+
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+
+                FatherItem.RemoveAll(item => item == null);
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult GetParalelos(string q)
+        {
+
+            var FatherItems = (from maq in db.Paralelo.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdParalelo, text = maq.Descripcion }
+                   ).ToList();
+
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+
+                FatherItem.RemoveAll(item => item == null);
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpGet]
+        public JsonResult GetDetalle(int idPer)
+        {
+            List<Oferta> listOfertas = new List<Oferta>();
+            listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == idPer).ToList();
+
+            List<OfertaExt> listOfertaExt = new List<OfertaExt>();
+            foreach (var item in listOfertas)
+            {
+                OfertaExt objOferExt = new OfertaExt();
+                objOferExt.IdOferta = item.IdOferta;
+                objOferExt.IdPeriodoLectivo = item.IdPeriodoLectivo;
+                objOferExt.IdCurso = item.IdCurso;
+                objOferExt.IdParalelo = item.IdParalelo;                
+                objOferExt.IdProfesor = item.IdProfesor;
+                objOferExt.Capacidad = item.Capacidad;
+                objOferExt.Ocupado = item.Ocupado;
+                objOferExt.Disponible = item.Capacidad - item.Ocupado;
+                objOferExt.Estado = item.Estado;
+                objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
+                objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
+                objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;                
+                objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
+                listOfertaExt.Add(objOferExt);
+            }
+
+            return Json(new { listOfertaExt }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [HttpPost]
+        public JsonResult Create(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, int Capacidad)
+        {
+            string strResult = string.Empty;
+            bool bResult = false;
+            List<Oferta> listOfertas = new List<Oferta>();
+            List<OfertaExt> listOfertaExt = new List<OfertaExt>();
+
+            ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+
+            if (esValido(IdPeriodo, IdCurso, IdParalelo, IdProfesor, Capacidad))
+            {
+                Oferta objOferta = new Oferta();
+                objOferta.IdPeriodoLectivo = IdPeriodo;
+                objOferta.IdCurso = IdCurso;
+                objOferta.IdParalelo = IdParalelo;
+                objOferta.IdProfesor = IdProfesor;
+                objOferta.Capacidad = Capacidad;
+                objOferta.Ocupado = 0;
+                objOferta.Estado = "A";
+
+                List<Oferta> ofertas = new List<Oferta>();
+                ofertas = db.Oferta.AsNoTracking().ToList();
+                objOferta.IdOferta = ofertas.Count() == 0 ? 1 : ofertas.Max(x => x.IdOferta) + 1;
+
+                objOferta.UsuarioCreacion = 1;
+                objOferta.FechaCreacion = DateTime.Now;
+                dbGrabar.Entry(objOferta).State = EntityState.Added;
+
+                dbGrabar.SaveChanges();
+
+                listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == IdPeriodo).ToList();
+                
+                foreach (var item in listOfertas)
+                {
+                    OfertaExt objOferExt = new OfertaExt();
+                    objOferExt.IdOferta = item.IdOferta;
+                    objOferExt.IdPeriodoLectivo = item.IdPeriodoLectivo;
+                    objOferExt.IdCurso = item.IdCurso;
+                    objOferExt.IdParalelo = item.IdParalelo;
+                    objOferExt.IdProfesor = item.IdProfesor;
+                    objOferExt.Capacidad = item.Capacidad;
+                    objOferExt.Ocupado = item.Ocupado;
+                    objOferExt.Disponible = item.Capacidad - item.Ocupado;
+                    objOferExt.Estado = item.Estado;
+                    objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
+                    objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
+                    objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;
+                    objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
+                    listOfertaExt.Add(objOferExt);
+                }
+
+                bResult = true;
+                strResult = "Datos Grabados Correctamente";
+            }
+            else
+            {
+                bResult = false;
+                strResult = "Error al grabar el registro: " + error;
+            }
+
+            return Json(new { Message = strResult, bResultado = bResult, listOfertaExt }, JsonRequestBehavior.AllowGet);
+        }
+
+        public bool esValido(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, int Capacidad)
+        {
+            if (IdPeriodo == 0)
+            {
+                error = "Debe ingresar el periodo";
+                return false;
+            }
+
+            if (IdCurso == 0)
+            {
+                error = "Debe ingresar el curso";
+                return false;
+            }
+
+            if (IdParalelo == 0)
+            {
+                error = "Debe ingresar el paralelo";
+                return false;
+            }
+
+            if (IdProfesor == 0)
+            {
+                error = "Debe ingresar el profesor";
+                return false;
+            }
+
+            if (Capacidad == 0)
+            {
+                error = "Debe ingresar la capacidad";
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public JsonResult DeleteOferta(int IdOferta)
+        {
+            string strResult = string.Empty;
+            bool bResult = false;
+            List<OfertaExt> listOfertaExt = new List<OfertaExt>();
+
+            ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+
+            try
+            {
+                Oferta consOferta = db.Oferta.AsNoTracking().Where(x => x.IdOferta == IdOferta).FirstOrDefault();
+
+                if (consOferta != null)
+                {
+
+                    //Si la oferta ya tiene algun estudiante matriculado, no se le permite borrar
+                    if (consOferta.Ocupado == 0)
+                    {
+                        int idPerLec = consOferta.IdPeriodoLectivo;
+                        dbGrabar.Entry(consOferta).State = EntityState.Deleted;
+
+                        dbGrabar.SaveChanges();
+
+                        List<Oferta> listOfertas = new List<Oferta>();
+                        listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == idPerLec).ToList();
+
+                        //List<OfertaExt> listOfertaExt = new List<OfertaExt>();
+                        foreach (var item in listOfertas)
+                        {
+                            OfertaExt objOferExt = new OfertaExt();
+                            objOferExt.IdOferta = item.IdOferta;
+                            objOferExt.IdPeriodoLectivo = item.IdPeriodoLectivo;
+                            objOferExt.IdCurso = item.IdCurso;
+                            objOferExt.IdParalelo = item.IdParalelo;
+                            objOferExt.IdProfesor = item.IdProfesor;
+                            objOferExt.Capacidad = item.Capacidad;
+                            objOferExt.Ocupado = item.Ocupado;
+                            objOferExt.Disponible = item.Capacidad - item.Ocupado;
+                            objOferExt.Estado = item.Estado;
+                            objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
+                            objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
+                            objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;
+                            objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
+                            listOfertaExt.Add(objOferExt);
+                        }
+
+                        bResult = true;
+                        strResult = "Datos Eliminados Correctamente";
+                    }
+                    else
+                    {
+                        bResult = false;
+                        strResult = "Error al eliminar el registro: No es posible eliminar una oferta que tiene estudiantes matriculados";
+                    }
+
+                }
+                else
+                {
+                    bResult = false;
+                    strResult = "Error al eliminar el registro: La oferta no existe";
+                }
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                strResult = "Error al eliminar el registro: " + ex.Message;
+            }
+
+            return Json(new { Message = strResult, bResultado = bResult, listOfertaExt }, JsonRequestBehavior.AllowGet);
+        }
+
+    }
+}

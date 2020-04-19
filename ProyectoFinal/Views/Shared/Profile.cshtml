@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNet.Identity
+
+
+@if (Request.IsAuthenticated)
+{
+
+    <li class="dropdown user user-menu">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <img src="~/Content/Img/user_3.jpg" class="user-image" alt="User Image">
+            @*<span class="hidden-xs">[nombre Usuario ]</span>*@
+            @*<span class="hidden-xs">@User.Identity.GetUserName()</span>*@
+            <span class="hidden-xs">@Request.Cookies["UserCode"].Value.ToString()</span>            
+        </a>
+        <ul class="dropdown-menu">
+            <!-- User image -->
+            <li class="user-header">
+                <img src="~/Content/Img/user_3.jpg" class="img-circle" alt="User Image">
+                <p>
+                    @Request.Cookies["UserName"].Value.ToString()
+                    <small>@Request.Cookies["CTxMail"].Value.ToString()</small>
+                    @*<small>@Request.Cookies["Rol"].Value.ToString()</small>*@                    
+                    @*<small>@Request.Cookies["Dpto"].Value.ToString()</small>*@
+                </p>
+            </li>
+
+
+            <!-- Menu Body -->
+            @*<li class="user-body">
+                    <div class="row">
+                        <div class="col-xs-4 text-center">
+                            <a href="#">Followers</a>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <a href="#">Sales</a>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <a href="#">Friends</a>
+                        </div>
+                    </div>
+                </li>*@
+            <!-- Menu Footer-->
+            <li class="user-footer">
+                <div class="pull-left">
+                    @*<a href="#" class="btn btn-default btn-flat"><i class="fa fa-user"></i>&nbsp;Perfil</a>*@
+                    <a href='@Url.Action("Index", "Manage")' class="btn btn-default btn-flat"><i class="fa fa-user"></i>&nbsp;Perfil</a>
+
+                </div>
+                <div class="pull-right">
+                    @using (Html.BeginForm("LogOff", "Account", new { Area = "" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-default btn-flat" type="submit"><i class="fa fa-sign-out"></i>&nbsp;Sair</button>
+                    }
+                </div>
+            </li>
+        </ul>
+    </li>
+
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Iniciar sesión", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
+
+@*<script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Recibo/GetDatosUsuario",
+                dataType: "json",
+                success: function (data3) {
+                    $('#txtIdRecibo').val(data3.maxsec);
+                }
+            });
+        });
+    </script>*@

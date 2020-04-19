@@ -1,0 +1,247 @@
+﻿
+<h2>Opciones</h2>
+
+<div class="content">
+    <div class="row">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"> Parametros de Consulta </h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <input type="text" id="txtSelectModulo" />
+                    <input type="text" id="txtModulo" hidden />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"> Detalle </h3>
+            </div>
+            <div class="box-body">
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="form-control no-border">Descripción:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control"
+                                           id="txtDescripcion" placeholder="Descripcion" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="form-control no-border">Url:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" id="txtUrl"
+                                           placeholder="Url" />
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <br />
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="button" class="btn btn-primary" id="btnAddRow" value="Agregar" />
+                        </div>
+                    </div>
+                
+                </div>
+
+                <br />
+
+                <table id="example2" class="table table-striped table-bordered dt-responsive nowrap">
+                    <thead>
+                        <tr>                            
+                            <th>Id Opcion</th>
+                            <th>Descripcion</th>
+                            <th>Url</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#txtSelectModulo").on("select2-selecting", function (e) { document.getElementById('txtModulo').value = e.val; });
+
+        $('#txtSelectModulo').select2({
+            width: '50%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Modulo",
+
+            ajax: {
+                url: '/Opcion/GetModulos',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+        
+    });
+
+    $('#txtSelectModulo').on("change", function (e) {
+        if ($(txtSelectModulo).select2('data') != null) {
+            $.ajax({
+                type: "GET",
+                url: "/Opcion/GetDetalle",
+                data: { idMod: document.getElementById('txtModulo').value },
+                dataType: "json",
+                success: function (data) {
+                    GeneraConsulta(data.detsOpciones);                   
+                }
+            });
+        } else {
+            $('#example2').DataTable().clear().draw();
+        }
+
+    });
+
+    $('#btnAddRow').on('click', function () {
+
+        var IdModulo = document.getElementById("txtModulo").value;
+        var Descripcion = document.getElementById("txtDescripcion").value;
+        var Url = document.getElementById("txtUrl").value;
+
+        var jsonCad = "{'IdModulo':'" + IdModulo + "'";        
+        jsonCad = jsonCad + ", 'Descripcion': '" + Descripcion + "'";
+        jsonCad = jsonCad + ", 'Url': '" + Url + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Relación Modulo - Opcion ",
+            text: "Desea grabar el registro? ",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Opcion/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+                                GeneraConsulta(data.detsOpciones);    
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+
+            }
+
+        });
+    });
+
+    function GeneraConsulta(detsOpciones) {
+        $('#example2').DataTable().destroy();
+
+        $('#example2').DataTable({
+            "autoWidth": false,
+            "info": false,
+            "JQueryUI": true,
+            "ordering": false,
+            "paging": false,
+            "responsive": true,
+            "processing": true,
+            "data": detsOpciones,
+            "columns": [
+                { "data": "IdOpcion", "className": 'IdOpcion', "title": "Id Opcion", "visible": false },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Url", "className": 'Url', "title": "Url" },
+                {
+                    "data": "btnElim", "className": 'btnElim', "title": "",
+                    "render": function (data, type, row) {
+                        var sCad = '<button type="button" class="btn btn-danger btn-sm btnDeleteRow"> ';
+                        sCad = sCad + '<i class="fa fas fa-trash" aria - hidden="true" ></i >';
+                        sCad = sCad + '</button>';
+
+                        return sCad;
+                    }
+                }
+            ],
+        });
+    }
+
+    $('#example2').DataTable().on('click', '.btnDeleteRow', function () {
+        var table = $('#example2').DataTable();
+        var data = table.row($(this).parents('tr')).data();        
+        var txtIdOpcion = data.IdOpcion;
+        var jsonCad = "{'IdOpcion':" + txtIdOpcion + "}";
+
+        swal({
+            title: "Relación Modulo - Opcion ",
+            text: "Esta seguro que desea eliminar el registro? ",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Opcion/DeleteOpcion",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+                                GeneraConsulta(data.detsOpciones);
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+
+            }
+
+        });
+
+    });
+
+</script>

@@ -1,0 +1,187 @@
+﻿@model ProyectoFinalModel.Matricula
+
+<h2>Editar Matricula</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Editar Matricula</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+
+                    <div class="input-group">
+                        <label for="CCiMaquina" class="control-label">Id Matricula</label>
+                        @Html.EditorFor(model => model.IdMatricula, new { htmlAttributes = new { @id = "txtIdMatricula", @class = "form-control", disabled = "disabled" } })
+                    </div>
+
+                    <div class="box-body">
+                        <label for="NNuTonelaje" class="control-label">Alumno</label>
+                        <div class="form-group">
+                            <input type="text" id="txtSelectAlumno" />
+                            <input type="text" id="txtAlumno" hidden />
+                        </div>
+                    </div>
+
+                    <div class="box-body">
+                        <label for="NNuTonelaje" class="control-label">Oferta</label>
+                        <div class="form-group">
+                            <input type="text" id="txtSelectOferta" />
+                            <input type="text" id="txtOferta" hidden />
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="radio">
+                            <input type="checkbox" name="chkEstado" , checked>
+                            Activo
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtAlumno').value = e.val; });
+        $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtOferta').value = e.val; });
+
+        $('#txtSelectAlumno').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Alumno",
+
+            ajax: {
+                url: '/Matricula/GetAlumnos',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        $('#txtSelectOferta').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Oferta",
+
+            ajax: {
+                url: '/Matricula/GetOfertas',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        var obj = @Html.Raw(Json.Encode(Model));
+
+        $('#txtSelectAlumno').select2('data', { id: obj.IdAlumno, text: obj.DescAlumno });
+        document.getElementById('txtAlumno').value = obj.IdAlumno;
+
+        $('#txtSelectOferta').select2('data', { id: obj.IdOferta, text: obj.DescOferta });
+        document.getElementById('txtOferta').value = obj.IdOferta;
+        
+    });
+
+    $('#txtSelectAlumno').on("change", function (e) {
+        if ($(txtAlumno).select2('data') == null) {
+            document.getElementById('txtAlumno').value = null;
+        }
+    });
+
+    $('#txtSelectOferta').on("change", function (e) {
+        if ($(txtOferta).select2('data') == null) {
+            document.getElementById('txtOferta').value = null;
+        }
+    });
+
+    $('#btnGenerar').on('click', function () {
+        var IdMatricula = document.getElementById("txtIdMatricula").value;
+        var IdAlumno = document.getElementById("txtAlumno").value;
+        var IdOferta = document.getElementById("txtOferta").value;
+        var Estado = "A";
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            Estado = "I";
+        }
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        var jsonCad = "{'IdMatricula':'" + IdMatricula + "'";
+        jsonCad = jsonCad + ", 'IdAlumno': '" + IdAlumno + "'";
+        jsonCad = jsonCad + ", 'IdOferta': '" + IdOferta + "'";
+        jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Matricula ",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Matricula/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Matricula")';
+                                }, 4000);
+
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    });
+</script>

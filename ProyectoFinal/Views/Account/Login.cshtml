@@ -1,0 +1,166 @@
+﻿@using ProyectoFinal.Models
+@model LoginViewModel
+@*@{
+            ViewBag.Title = "Iniciar sesión";
+    }*@
+
+@{
+    Layout = null;
+}
+<head>
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="~/Content/Img/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap/4.0/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/select2/4.0.3/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/login/css/main.css">
+    <!--===============================================================================================-->
+
+
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+
+
+
+    <title>Login</title>
+
+</head>
+
+<body>
+    @*Ip Address:=<h3 class='ipAdd'></h3>*@
+
+
+
+
+    <div class="limiter">
+        <p class="login-box-msg"> </p>
+
+        @*<div class="container-login100" style="background-image:url(Content/Img/plapasa1.png)">*@
+        <div class="container-login100 bgImgCenter">
+            <div class="wrap-login100">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post
+          , new { @class = "form-horizontal validate-form", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <span class="login100-form-logo">
+                        <img src="~/Content/Img/prometeo_logo1.jpg" style="width:80%; border-radius:50%" />
+                    </span>
+
+                    <span class="login100-form-title p-b-30 p-t-20"> Login </span>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter username">
+                        @Html.TextBoxFor(m => m.CCiUsuario, new { placeholder = "Username", @class = "input100" })
+
+                        <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "input100" })
+                        <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                    </div>
+
+                    @*<div class="contact100-form-checkbox">
+                            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+                            <label class="label-checkbox100" for="ckb1">
+                                Remember me
+                            </label>
+
+                                      <p>
+                                @Html.ActionLink("Registrar como nuevo usuario", "Register")
+                            </p>
+
+                        </div>*@
+
+
+
+                    <button id="btnIngresar" class="login100-form-btn"> Login </button>
+
+                    <p class="login-box-msg">  @Html.ValidationSummary(true, "", new { @class = "text-danger" }) </p>
+                }
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+    <!--===============================================================================================-->
+    <script src="~/Content/jquery/3.3.1/jquery.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/bootstrap/4.0/js/popper.js"></script>
+    <script src="~/Content/bootstrap/4.0/js/bootstrap.min.js"></script>
+
+
+    @*<!--===============================================================================================-->
+        <script src="~/Content/select2/select2.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/daterangepicker/moment.min.js"></script>
+        <script src="~/Content/daterangepicker/daterangepicker.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Content/countdowntime/countdowntime.js"></script>*@
+    <!--===============================================================================================-->
+    <script src="~/Scripts/login/js/main.js"></script>
+
+
+</body>
+
+
+<script>
+    $(document).ready(function ubsrt() {
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+        var pc = new RTCPeerConnection({ iceServers: [] }),
+            noop = function () { };
+
+
+        //var ax = new ActiveXObject("WScript.Network");
+
+        //console.log('User: ' + ax.UserName);
+        //console.log('Computer: ' + ax.Computer);
+
+
+        pc.createDataChannel("");
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);
+        pc.onicecandidate = function (ice) {
+            if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+
+            //var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+
+            var myHostName = window.location.hostname;
+            //console.log('my IP: ', myIP);
+
+
+            //$('.ipAdd').text(myIP + "; HostName: " + myHostName);
+
+            pc.onicecandidate = noop;
+
+        };
+    });
+
+</script>
+
+

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ProyectoFinalModel.RolOpcion>
+
+<section class="sidebar">
+    <ul class="sidebar-menu">
+        <li class="header">Menu de Navegación</li>
+
+        <li>
+            <a href="@(Url.Action("Index","Home"))">
+                <i class="fa fa-home fa-fw"></i> <span>Inicio</span>
+            </a>
+        </li>
+
+        @{ 
+            ProyectoFinalModel.ProyectoFinalEntities db = new ProyectoFinalModel.ProyectoFinalEntities();            
+            List<int> listIdOpciones = Model.Select(x => x.IdOpcion).ToList();
+            List<int> listIdModulos = db.Opcion.AsNoTracking().Where(x => listIdOpciones.Contains(x.IdOpcion) && x.Estado == "A").Select(y => y.IdModulo).Distinct().ToList();
+            List<ProyectoFinalModel.Modulo> listModulos = db.Modulo.AsNoTracking().Where(x => listIdModulos.Contains(x.IdModulo) && x.Estado == "A").ToList();
+        }
+
+        @foreach (var item in listModulos)
+        {
+            <li class="treeview">
+                <a href="#">
+                    <span> @item.Descripcion </span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    @{
+                        List<ProyectoFinalModel.Opcion> listOpciones = db.Opcion.AsNoTracking().Where(x => listIdOpciones.Contains(x.IdOpcion) && x.IdModulo == item.IdModulo && x.Estado == "A").ToList();
+                    }
+
+                    @foreach (var item2 in listOpciones)
+                    {
+                        @*<li> <a href="@(Url.Action("Index","Maquina"))"> <i class="#"></i><span> @item2.Descripcion </span></a></li>*@
+                        @*<li> <a href="~/Curso/Index"> <i class="#"></i><span> @item2.Descripcion </span></a></li>*@
+                        <li> <a href='~/@item2.Url'> <i class="#"></i><span> @item2.Descripcion </span></a></li>
+                    }
+                </ul>
+
+            </li>
+        }
+       
+    </ul>
+</section>

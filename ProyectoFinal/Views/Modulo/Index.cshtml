@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ProyectoFinalModel.Modulo>
+
+<p>
+    @Html.ActionLink("Crear Modulo", "Create")
+</p>
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="example2" class="table table-striped table-bordered dt-responsive nowrap">
+                <thead>
+                    <tr>
+                        <th>Id Modulo</th>
+                        <th>Descripcion</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example2').DataTable().destroy();
+
+        var arr = @Html.Raw(Json.Encode(Model));
+
+        $('#example2').DataTable({
+            "autoWidth": false,
+            "info": false,
+            //"serverSide": true,
+            "JQueryUI": true,
+            "ordering": true,
+            "paging": true,
+            //"scrollY": "500px",
+            //"Select": true,
+            "scrollCollapse": true,
+            "responsive": true,
+            "processing": true,
+            //"data": data.data,
+            "data": arr,
+            "columns": [
+                { "data": "IdModulo", "className": 'IdModulo', "title": "Id Modulo" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Estado", "className": 'Estado', "title": "Estado" },
+                {
+                    "render": function (data, type, row) {
+
+                    var myUrl = '@Url.Action("Edit", "Modulo")/' + row.IdModulo;
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                }
+                },
+            ],
+        });
+    });
+
+</script>

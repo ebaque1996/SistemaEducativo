@@ -1,0 +1,78 @@
+﻿@model ProyectoFinalModel.Usuario
+
+<h2>Perfil</h2>
+
+<div class="content">
+
+    <div class="row">
+        <div class="col">
+            <div class="box box-default">
+
+                <div class="box-header with-border">
+                    <h3 class="box-title">Datos de Perfil </h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="form-control no-border">Id Usuario:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-control no-border">@Model.IdUsuario</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="form-control no-border">Nombres:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-control no-border">@Model.Nombres</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="form-control no-border">Apellidos:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-control no-border">@Model.Apellidos</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="form-control no-border">Email:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-control no-border">@Model.Email</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        @Html.ActionLink("Cambiar Contrasenia", "ChangePassword")
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

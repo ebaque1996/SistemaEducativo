@@ -1,0 +1,148 @@
+﻿@model ProyectoFinalModel.Profesor
+
+<h2>Crear nuevo profesor</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Registro Profesor</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+
+                    @*<div class="input-group">
+                        <label for="CCiMaquina" class="control-label">Id Profesor</label>
+                        @Html.EditorFor(model => model.IdProfesor, new { htmlAttributes = new { @id = "txtIdProfesor", @class = "form-control" } })
+                    </div>*@
+
+                    <label for="NNuTonelaje" class="control-label">Cédula</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @id = "txtCedula", @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
+                    </div>
+
+                    <label for="Nombres" class="control-label">Nombres</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
+                    </div>
+
+                    <label for="Apellidos" class="control-label">Apellidos</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                    </div>
+
+                    <label for="Email" class="control-label">Email</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "txtEmail", @class = "form-control" } })
+                    </div>
+
+                    <label for="Direccion" class="control-label">Dirección</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "txtDireccion", @class = "form-control" } })
+                    </div>
+
+                    <label for="Telefono" class="control-label">Teléfono</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @id = "txtTelefono", @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
+                    </div>
+
+                    <label for="Sexo" class="control-label">Sexo</label>
+                    @*<div class="input-group">
+                        @Html.EditorFor(model => model.Sexo, new { htmlAttributes = new { @id = "txtSexo", @class = "form-control" } })
+                    </div>*@
+
+                    <div class="input-group">
+                        <select id="cmbSexo" class="form-control">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="radio">
+                            <input type="checkbox" name="chkEstado" , checked>
+                            Activo
+                        </label>
+                    </div>
+
+                    </div>
+
+                    <div class="box-footer">
+                        <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                    </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $('#btnGenerar').on('click', function () {
+        var Cedula = document.getElementById("txtCedula").value;
+        var Nombres = document.getElementById("txtNombres").value;
+        var Apellidos = document.getElementById("txtApellidos").value;
+        var Email = document.getElementById("txtEmail").value;
+        var Direccion = document.getElementById("txtDireccion").value;
+        var Telefono = document.getElementById("txtTelefono").value;
+        
+        var Estado = "A";
+        var Sexo = "";
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked');
+        var Sexo = document.getElementById("cmbSexo").value;
+
+        if (chkestado == false) {
+            Estado = "I";
+        }
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        var jsonCad = "{'IdProfesor':'" + 0 + "'";
+        jsonCad = jsonCad + ", 'Cedula': '" + Cedula + "'";
+        jsonCad = jsonCad + ", 'Nombres': '" + Nombres + "'";
+        jsonCad = jsonCad + ", 'Apellidos': '" + Apellidos + "'";
+        jsonCad = jsonCad + ", 'Email': '" + Email + "'";
+        jsonCad = jsonCad + ", 'Direccion': '" + Direccion + "'";
+        jsonCad = jsonCad + ", 'Telefono': '" + Telefono + "'";
+        jsonCad = jsonCad + ", 'Sexo': '" + Sexo + "'";
+        jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Profesor ",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Profesor/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Profesor")';
+                                }, 4000);
+
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    });
+</script>

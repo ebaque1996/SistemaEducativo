@@ -1,0 +1,325 @@
+﻿@model ProyectoFinalModel.Alumno
+
+<h2>Editar Alumno</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Editar Datos Alumno</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="input-group" style="display:none;">
+                                    <label for="CCiMaquina" class="control-label">Id Alumno</label>
+                                    @Html.EditorFor(model => model.IdAlumno, new { htmlAttributes = new { @id = "txtIdAlumno", @class = "form-control" } })
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="NNuCedula" class="control-label">Cédula</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @id = "txtCedula", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuNombres" class="control-label">Nombres</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuApellidos" class="control-label">Apellidos</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="FechaNac" class="control-label">Fecha de Nacimiento</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(model => model.FechaNac, new { @id = "FechaNac", @type = "date", @Value = Model.FechaNac.ToString("yyyy-MM-dd"), @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="Sexo" class="control-label">Sexo</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="cmbSexo" class="form-control">
+                                        <option value="M">Masculino</option>
+                                        <option value="F">Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDireccion" class="control-label">Dirección</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "txtDireccion", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuTelefono" class="control-label">Teléfono</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @id = "txtTelefono", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuNivel" class="control-label">Último Nivel</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.UltimoNivel, new { htmlAttributes = new { @id = "txtUltimoNivel", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                </div>
+            </form>
+        </div>
+
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Editar Datos Representante</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuCedulaRepresentante" class="control-label">Cédula Representante</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.CedulaRepresentante, new { htmlAttributes = new { @id = "txtCedulaRepresentante", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuNombresRepresentante" class="control-label">Nombres Representante</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.NombresRepresentante, new { htmlAttributes = new { @id = "txtNombresRepresentante", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuApellidosRepresentante" class="control-label">Apellidos Representante</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.ApellidosRepresentante, new { htmlAttributes = new { @id = "txtApellidosRepresentante", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuTelefonoRepresentante" class="control-label">Teléfono Representante</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.TelefonoRepresentante, new { htmlAttributes = new { @id = "txtTelefonoRepresentante", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDireccionRepresentante" class="control-label">Dirección Representante</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.DireccionRepresentante, new { htmlAttributes = new { @id = "txtDireccionRepresentante", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuColegioAnterior" class="control-label">Colegio Anterior</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.ColegioAnterior, new { htmlAttributes = new { @id = "txtColegioAnterior", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <label class="radio">
+                                            @if (Model.Estado == "A")
+                                            {
+                                                <input type="checkbox" name="chkEstado" , checked>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="chkEstado" />
+                                            }
+                                            Activo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $('#btnGenerar').on('click', function () {
+        var IdAlumno = document.getElementById("txtIdAlumno").value;
+        var Cedula = document.getElementById("txtCedula").value;
+        var Nombres = document.getElementById("txtNombres").value;
+        var Apellidos = document.getElementById("txtApellidos").value;
+        var FechaNac = document.getElementById("FechaNac").value;
+        var Sexo = document.getElementById("cmbSexo").value;
+        var Direccion = document.getElementById("txtDireccion").value;
+        var Telefono = document.getElementById("txtTelefono").value;
+        var UltimoNivel = document.getElementById("txtUltimoNivel").value;
+        var CedulaRepresentante = document.getElementById("txtCedulaRepresentante").value;
+        var NombresRepresentante = document.getElementById("txtNombresRepresentante").value;
+        var ApellidosRepresentante = document.getElementById("txtApellidosRepresentante").value;
+        var TelefonoRepresentante = document.getElementById("txtTelefonoRepresentante").value;
+        var DireccionRepresentante = document.getElementById("txtDireccionRepresentante").value;
+        var ColegioAnterior = document.getElementById("txtColegioAnterior").value;
+        var Estado = "A";
+
+        if (FechaNac == '') {
+            FechaNac = "01/01/1900";
+        }
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            Estado = "I";
+        }
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        var jsonCad = "{'IdAlumno':'" + IdAlumno + "'";
+        jsonCad = jsonCad + ", 'Cedula': '" + Cedula + "'";
+        jsonCad = jsonCad + ", 'Nombres': '" + Nombres + "'";
+        jsonCad = jsonCad + ", 'Apellidos': '" + Apellidos + "'";
+        jsonCad = jsonCad + ", 'FechaNac': '" + FechaNac + "'";
+        jsonCad = jsonCad + ", 'Sexo': '" + Sexo + "'";
+        jsonCad = jsonCad + ", 'Direccion': '" + Direccion + "'";
+        jsonCad = jsonCad + ", 'Telefono': '" + Telefono + "'";
+        jsonCad = jsonCad + ", 'UltimoNivel': '" + UltimoNivel + "'";
+        jsonCad = jsonCad + ", 'CedulaRepresentante': '" + CedulaRepresentante + "'";
+        jsonCad = jsonCad + ", 'NombresRepresentante': '" + NombresRepresentante + "'";
+        jsonCad = jsonCad + ", 'ApellidosRepresentante': '" + ApellidosRepresentante + "'";
+        jsonCad = jsonCad + ", 'TelefonoRepresentante': '" + TelefonoRepresentante + "'";
+        jsonCad = jsonCad + ", 'DireccionRepresentante': '" + DireccionRepresentante + "'";
+        jsonCad = jsonCad + ", 'ColegioAnterior': '" + ColegioAnterior + "'";
+        jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Alumno",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Alumno/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Alumno")';
+                                }, 4000);
+
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    });
+</script>

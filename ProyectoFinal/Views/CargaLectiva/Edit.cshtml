@@ -1,0 +1,274 @@
+﻿@model ProyectoFinal.Models.CargaLectivaExt
+
+<h2>Editar carga lectiva</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-8">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Editar Carga Lectiva</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+
+                    <div class="input-group">
+                        <label for="CCiMaquina" class="control-label">Id Carga Lectiva</label>
+                        @Html.EditorFor(model => model.IdCargaLectiva, new { htmlAttributes = new { @id = "txtIdCargaLectiva", @class = "form-control", disabled = "disabled" } })
+                    </div>
+
+                    <div class="input-group">
+                        <label for="CDsMaquina" class="control-label">Profesor</label>
+                        <input type="text" id="txtSelectProfesor" style="width: 100%;" />
+                        <input type="text" id="txtProfesor" hidden />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="CDsMaquina" class="control-label">Curso</label>
+                        <input type="text" id="txtSelectCurso" style="width: 100%;" />
+                        <input type="text" id="txtCurso" hidden />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="CDsMaquina" class="control-label">Periodo</label>
+                        <input type="text" id="txtSelectPeriodo" style="width: 100%;" />
+                        <input type="text" id="txtPeriodo" hidden />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="CDsMaquina" class="control-label">Materia</label>
+                        <input type="text" id="txtSelectMateria" style="width: 100%;" />
+                        <input type="text" id="txtMateria" hidden />
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="radio">
+                            @if (Model.Estado == "A")
+                            {
+                                <input type="checkbox" name="chkEstado" , checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="chkEstado" />
+                            }
+                            Activo
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    $(document).ready(function () {
+        $("#txtSelectProfesor").on("select2-selecting", function (e) { document.getElementById('txtProfesor').value = e.val; });
+        $("#txtSelectCurso").on("select2-selecting", function (e) { document.getElementById('txtCurso').value = e.val; });
+        $("#txtSelectPeriodo").on("select2-selecting", function (e) { document.getElementById('txtPeriodo').value = e.val; });
+        $("#txtSelectMateria").on("select2-selecting", function (e) { document.getElementById('txtMateria').value = e.val; });
+
+        $('#txtSelectProfesor').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Profesor",
+
+            ajax: {
+                url: '/CargaLectiva/GetProfesores',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        $('#txtSelectCurso').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Curso",
+
+            ajax: {
+                url: '/CargaLectiva/GetCursos',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        $('#txtSelectPeriodo').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Periodo",
+
+            ajax: {
+                url: '/CargaLectiva/GetPeriodos',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        $('#txtSelectMateria').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Materia",
+
+            ajax: {
+                url: '/CargaLectiva/GetMaterias',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        var obj = @Html.Raw(Json.Encode(Model));
+
+        $('#txtSelectProfesor').select2('data', { id: obj.IdProfesor, text: obj.DescProfesor });        
+        document.getElementById('txtProfesor').value = obj.IdProfesor;
+
+        //$('#txtSelectCurso').select2('data', { id: obj.IdCurso, text: obj.DescCurso });
+        //document.getElementById('txtCurso').value = obj.IdCurso;
+
+        $('#txtSelectCurso').select2('data', { id: obj.IdOferta, text: obj.DescOferta });
+        document.getElementById('txtCurso').value = obj.IdOferta;
+
+        $('#txtSelectPeriodo').select2('data', { id: obj.IdPeriodoLectivo, text: obj.DescPerLec });
+        document.getElementById('txtPeriodo').value = obj.IdPeriodoLectivo;
+
+        $('#txtSelectMateria').select2('data', { id: obj.IdMateria, text: obj.DescMateria });
+        document.getElementById('txtMateria').value = obj.IdMateria;
+
+    });
+
+    $('#txtSelectProfesor').on("change", function (e) {
+        if ($(txtSelectProfesor).select2('data') == null) {
+            document.getElementById('txtProfesor').value = null;
+        }
+    });
+
+    $('#txtSelectCurso').on("change", function (e) {
+        if ($(txtSelectCurso).select2('data') == null) {
+            document.getElementById('txtCurso').value = null;
+        }
+    });
+
+    $('#txtSelectPeriodo').on("change", function (e) {
+        if ($(txtSelectPeriodo).select2('data') == null) {
+            document.getElementById('txtPeriodo').value = null;
+        }
+    });
+
+    $('#txtSelectMateria').on("change", function (e) {
+        if ($(txtSelectMateria).select2('data') == null) {
+            document.getElementById('txtMateria').value = null;
+        }
+    });
+
+    $('#btnGenerar').on('click', function () {
+        var objCL = {};
+        objCL.IdCargaLectiva = document.getElementById('txtIdCargaLectiva').value;
+        objCL.IdProfesor = document.getElementById('txtProfesor').value;
+        //objCL.IdCurso = document.getElementById('txtCurso').value;
+        objCL.IdOferta = document.getElementById('txtCurso').value;
+        objCL.IdPeriodoLectivo = document.getElementById('txtPeriodo').value;
+        objCL.IdMateria = document.getElementById('txtMateria').value;
+        objCL.Estado = "A";
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            objCL.Estado = "I";
+        }
+
+        var myJsonData = { objCargaLectiva: objCL };
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        swal({
+            title: "Carga Lectiva ",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax({
+                    url: "/CargaLectiva/Create",
+                    type: "POST",
+                    data: JSON.stringify(myJsonData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "CargaLectiva")';
+                                }, 1500);
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                    }
+                });
+            }
+        });
+
+    });
+
+</script>

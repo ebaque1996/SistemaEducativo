@@ -1,0 +1,176 @@
+﻿@model ProyectoFinal.Models.RolesOpciones
+
+<div class="content">
+
+    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+
+    <div class="class=" col-md-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Crear Rol</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+
+                    <label for="NNuTonelaje" class="control-label">Descripción</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Rol.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="radio">                  
+                            <input type="checkbox" name="chkEstado" , checked>
+                            Activo
+                        </label>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table id="example2" class="table table-striped table-bordered dt-responsive nowrap">
+                <thead>
+                    <tr>
+                        <th>Id Opcion</th>
+                        <th>Id Modulo</th>
+                        <th>Desc Modulo</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example2').DataTable().destroy();
+
+        var arr = @Html.Raw(Json.Encode(Model.OpcionExt));
+        $('#example2').DataTable({
+            "autoWidth": false,
+            "info": false,
+            "ordering": false,
+            "paging": false,
+            "JQueryUI": true,
+            "bFilter": false,
+            "scrollCollapse": true,
+            "responsive": true,
+            "processing": true,
+            "data": arr,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+                api.column(2, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(                            
+                            '<tr class="group"><td bgcolor="#D3D3D3" style="font-weight:bold" colspan="5">' + group + '</td></tr>'
+                        );
+                        last = group;
+                    }
+                });
+            },
+            "columns": [
+                { "data": "IdOpcion", "className": 'IdOpcion', "title": "Id Opcion", "visible": false },
+                { "data": "IdModulo", "className": 'IdModulo', "title": "Id Modulo", "visible": false },
+                { "data": "DescModulo", "className": 'DescModulo', "title": "Desc Modulo", "visible": false },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "" },
+                {
+                    "render": function (data, type, row) {
+                        return '<input type="checkbox" name="chkPermiso">';
+
+                    }
+                },
+            ],
+        });
+    });
+
+    $('#btnGenerar').on('click', function () {
+
+        var objRol = {};        
+        objRol.Descripcion = document.getElementById("txtDescripcion").value;
+        objRol.Estado = "A";
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            objRol.Estado = "I";
+        }
+
+        var table = $('#example2').DataTable();
+        var listOpc = table.rows().data().toArray();
+        var data = new Array();
+
+        $.each(listOpc, function (index, value) {
+            var objOpc = {};
+            objOpc.IdOpcion = value.IdOpcion;
+            objOpc.IdRol = 0;
+            objOpc.Estado = "I";
+
+            table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                if (rowIdx == index) {
+                    var dataRow = this.node();
+                    var check = $(dataRow).find('input').prop('checked');
+                    if (check) {
+                        objOpc.Estado = "A";
+                    }
+                }
+
+            });
+
+            data.push(objOpc);
+        });
+
+        var objRolOpc = {};
+        objRolOpc.Rol = objRol;
+        objRolOpc.OpcionExt = data;
+
+        var myJsonData = { objRol: objRol, detOpc: data, trans: "A" };
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        swal({
+            title: "Rol ",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Rol/Create",
+                        data: JSON.stringify(myJsonData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Rol")';
+                                }, 1500);
+
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ProyectoFinal.Models.CargaLectivaExt>
+
+<p>
+    @Html.ActionLink("Crear Carga Lectiva", "Create")
+</p>
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="example2" class="table table-striped table-bordered dt-responsive nowrap">
+                <thead>
+                    <tr>
+                        <th>Id Carga Lectiva</th>
+                        <th>Id Profesor</th>
+                        <th>Id Curso</th>
+                        <th>Id Periodo Lectivo</th>
+                        <th>Id Materia</th>
+                        <th>Profesor</th>
+                        <th>Curso</th>
+                        <th>Periodo Lectivo</th>
+                        <th>Materia</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@*<script src="https://cdn.datatables.net/rowgroup/1.1.1/js/dataTables.rowGroup.min.js"></script>*@
+@*<script src="https://code.jquery.com/jquery-3.3.1.js"></script>*@
+@*<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>*@
+
+<script>
+    $(document).ready(function () {
+        $('#example2').DataTable().destroy();
+
+        var arr = @Html.Raw(Json.Encode(Model));
+        $('#example2').DataTable({
+            "autoWidth": false,
+            "info": false,
+            "JQueryUI": true,
+            "ordering": true,
+            "paging": true,
+            "scrollCollapse": true,
+            "responsive": true,
+            "processing": true,
+            "data": arr,
+            //"drawCallback": function (settings) {
+            //    var api = this.api();
+            //    var rows = api.rows({ page: 'current' }).nodes();
+            //    var last = null;
+            //    api.column(5, { page: 'current' }).data().each(function (group, i) {
+            //        if (last !== group) {
+            //            $(rows).eq(i).before('' + group + ''); last = group;
+            //        }
+            //    });
+            //},
+            "columns": [
+                { "data": "IdCargaLectiva", "className": 'IdCargaLectiva', "title": "Id Carga Lectiva" },
+                { "data": "IdProfesor", "className": 'IdProfesor', "title": "Id Profesor", "visible": false },
+                //{ "data": "IdCurso", "className": 'IdCurso', "title": "Id Curso", "visible": false },
+                { "data": "IdOferta", "className": 'IdOferta', "title": "Id Curso", "visible": false },
+                { "data": "IdPeriodoLectivo", "className": 'IdPeriodoLectivo', "title": "Id Periodo Lectivo", "visible": false },
+                { "data": "IdMateria", "className": 'IdMateria', "title": "Id Materia", "visible": false },
+                //{ "data": "DescCurso", "className": 'DescCurso', "title": "Curso" },
+                { "data": "DescOferta", "className": 'DescOferta', "title": "Curso" },
+                { "data": "DescMateria", "className": 'DescMateria', "title": "Materia" },
+                { "data": "DescPerLec", "className": 'DescPerLec', "title": "Periodo" },
+                { "data": "DescProfesor", "className": 'DescProfesor', "title": "Profesor" },
+                { "data": "Estado", "className": 'Estado', "title": "Estado" },
+                {
+                    "render": function (data, type, row) {
+
+                    var myUrl = '@Url.Action("Edit", "CargaLectiva")/' + row.IdCargaLectiva;
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                }
+                },
+            ],
+        });
+    });
+
+</script>
+

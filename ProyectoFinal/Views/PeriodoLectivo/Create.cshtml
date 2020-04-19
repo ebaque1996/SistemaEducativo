@@ -1,0 +1,119 @@
+﻿@model ProyectoFinalModel.PeriodoLectivo
+
+<h2>Crear nuevo Periodo Lectivo</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-6">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Registro Periodo Lectivo</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+
+                    @*<div class="input-group">
+                            <label for="CCiMaquina" class="control-label">Id PeriodoLectivo</label>
+                            @Html.EditorFor(model => model.IdPeriodoLectivo, new { htmlAttributes = new { @id = "txtIdPeriodoLectivo", @class = "form-control" } })
+                        </div>*@
+
+                    <label for="NNuTonelaje" class="control-label">Descripción</label>
+                    <div class="input-group">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                    </div>
+
+                    <label for="FechaInicio" class="control-label">Fecha Inicio</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaInicio", type = "date" })                        
+                    </div>
+
+                    <label for="FechaFin" class="control-label">Fecha Fin</label>
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaFin", type = "date" })                        
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="radio">
+                            <input type="checkbox" name="chkEstado" , checked>
+                            Activo
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $('#btnGenerar').on('click', function () {
+        var Descripcion = document.getElementById("txtDescripcion").value;
+        var FechaInicio = document.getElementById("FechaInicio").value;
+        var FechaFin = document.getElementById("FechaFin").value;
+        var Estado = "A";
+
+        if (FechaInicio == '') {
+            FechaInicio = "01/01/1900";
+        }
+
+        if (FechaFin == '') {
+            FechaFin = "01/01/1900";
+        }
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            Estado = "I";
+        }
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        var jsonCad = "{'IdPeriodoLectivo':'" + 0 + "'";
+        jsonCad = jsonCad + ", 'Descripcion': '" + Descripcion + "'";
+        jsonCad = jsonCad + ", 'FechaInicio': '" + FechaInicio + "'";
+        jsonCad = jsonCad + ", 'FechaFin': '" + FechaFin + "'";
+        jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Periodo Lectivo ",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/PeriodoLectivo/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "PeriodoLectivo")';
+                                }, 4000);
+
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    });
+</script>
