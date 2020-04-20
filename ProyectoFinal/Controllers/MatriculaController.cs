@@ -100,7 +100,8 @@ namespace ProyectoFinal.Controllers
                            join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso 
                            join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo 
                            where (per.Descripcion.Contains(sValue) || cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) /*&& (ofer.Ocupado < ofer.Capacidad)*/
-                           select new { id = ofer.IdOferta, text = per.Descripcion + " | " + cur.Descripcion + " | " + par.Descripcion}
+                           select new { id = ofer.IdOferta, text = per.Descripcion + " | " + cur.Descripcion + " | " + par.Descripcion
+                                        , disabled = true}
                           ).ToList();
             Ofertas.RemoveAll(item => item == null);
 
