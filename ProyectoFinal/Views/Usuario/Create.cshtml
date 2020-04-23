@@ -1,0 +1,256 @@
+﻿@model ProyectoFinalModel.Usuario
+
+<h2>Crear nuevo Usuario</h2>
+
+<section class="content">
+
+    <div class="class=" col-md-6">        
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Datos Usuario</h3>
+            </div>
+
+            <form class="input-horizontal">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuCedulaRepresentante" class="control-label">Id Usuario</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.IdUsuario, new { htmlAttributes = new { @id = "txtIdUsuario", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuCedulaRepresentante" class="control-label">Cédula</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @id = "txtCedula", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuNombresRepresentante" class="control-label">Nombres</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuApellidosRepresentante" class="control-label">Apellidos</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuTelefonoRepresentante" class="control-label">Email</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "txtEmail", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDireccionRepresentante" class="control-label">Password</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @*@Html.(model => model.Password, new { htmlAttributes = new { @id = "txtPassword", @class = "form-control" } })*@
+                                    @Html.PasswordFor(model => model.Password, new { @id = "txtPassword", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuColegioAnterior" class="control-label">Confirmar Password</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @*@Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @id = "txtConfPassword", @class = "form-control" } })*@
+                                    @Html.PasswordFor(model => model.Password, new { @id = "txtConfPassword", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDireccionRepresentante" class="control-label">Rol</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @*@Html.EditorFor(model => model.IdRol, new { htmlAttributes = new { @id = "txtRol", @class = "form-control" } })*@
+                                    <input type="text" id="txtSelectRol" style="width: 100%;" />
+                                    <input type="text" id="txtRol" hidden />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <div class="checkbox">
+                                        <label class="radio">
+                                            <input type="checkbox" name="chkEstado" , checked>
+                                            Activo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#txtSelectRol").on("select2-selecting", function (e) { document.getElementById('txtRol').value = e.val; });
+
+    $('#txtSelectRol').select2({
+        width: '100%',
+        allowClear: true,
+        // minimumInputLength: 3,
+        placeholder: "Rol",
+
+        ajax: {
+            url: '/Usuario/GetRoles',
+            dataType: 'json',
+
+            data: function (term, page) {
+                return {
+                    q: term // search term
+                };
+            },
+            results: function (data, page) { // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter the remote JSON data
+                return { results: data.items };
+            },
+            cache: true
+        },
+        dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+        escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+    });
+
+    $('#txtSelectRol').on("change", function (e) {
+        if ($(txtSelectRol).select2('data') == null) {
+            document.getElementById('txtRol').value = null;
+        }
+    });
+
+
+
+    $('#btnGenerar').on('click', function () {
+        var IdUsuario = document.getElementById("txtIdUsuario").value;
+        var Cedula = document.getElementById("txtCedula").value;
+        var Nombres = document.getElementById("txtNombres").value;
+        var Apellidos = document.getElementById("txtApellidos").value;
+        var Email = document.getElementById("txtEmail").value;
+        var Password = document.getElementById("txtPassword").value;
+        var ConfPassword = document.getElementById("txtConfPassword").value;
+        var Rol = document.getElementById("txtRol").value == '' ? 0 : document.getElementById("txtRol").value;        
+        var Estado = "A";
+        var Transaccion = "C";        
+
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        if (chkestado == false) {
+            Estado = "I";
+        }
+
+        var previousWindowKeyDown = window.onkeydown;
+
+        var jsonCad = "{'IdUsuario':'" + IdUsuario + "'";
+        jsonCad = jsonCad + ", 'Cedula': '" + Cedula + "'";
+        jsonCad = jsonCad + ", 'Nombres': '" + Nombres + "'";
+        jsonCad = jsonCad + ", 'Apellidos': '" + Apellidos + "'";
+        jsonCad = jsonCad + ", 'Email': '" + Email + "'";
+        jsonCad = jsonCad + ", 'Password': '" + Password + "'";
+        jsonCad = jsonCad + ", 'ConfPassword': '" + ConfPassword + "'";
+        jsonCad = jsonCad + ", 'Rol': '" + Rol + "'";        
+        jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
+        jsonCad = jsonCad + ", 'Transaccion': '" + Transaccion + "'";
+        jsonCad = jsonCad + "}";
+
+        swal({
+            title: "Usuario",
+            text: "Esta seguro que desea grabar los datos",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Usuario/Create",
+                        data: jsonCad,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.bResultado) {
+                                swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Usuario")';
+                                }, 4000);
+
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                        }
+                    }
+                )
+            }
+        });
+    });
+
+
+</script>
