@@ -63,44 +63,61 @@ namespace ProyectoFinal.Controllers
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
-            if (esValido(Descripcion, FechaInicio, FechaFin, Estado))
+            var model = (from per in db.PeriodoLectivo.AsNoTracking() 
+                         where per.Estado.Contains("A")
+                         select new
+                         {
+                             per.Estado
+                         }).ToList().FirstOrDefault();
+
+            if (model != null && Estado.Equals("A"))
             {
-                PeriodoLectivo objPeriodoLectivo = new PeriodoLectivo();
-                objPeriodoLectivo.Descripcion = Descripcion;
-                objPeriodoLectivo.FechaInicio = FechaInicio;
-                objPeriodoLectivo.FechaFin = FechaFin;
-                objPeriodoLectivo.Estado = Estado;
-
-                if (IdPeriodoLectivo == 0)
-                {
-                    List<PeriodoLectivo> profesores = new List<PeriodoLectivo>();
-                    profesores = db.PeriodoLectivo.AsNoTracking().ToList();
-                    objPeriodoLectivo.IdPeriodoLectivo = profesores.Count() == 0 ? 1 : profesores.Max(x => x.IdPeriodoLectivo) + 1;
-
-                    objPeriodoLectivo.UsuarioCreacion = 1;
-                    objPeriodoLectivo.FechaCreacion = DateTime.Now;
-                    dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Added;
-                }
-                else
-                {
-                    PeriodoLectivo consPeriodoLectivo = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == IdPeriodoLectivo).FirstOrDefault();
-                    objPeriodoLectivo.IdPeriodoLectivo = IdPeriodoLectivo;
-                    objPeriodoLectivo.UsuarioCreacion = consPeriodoLectivo.UsuarioCreacion;
-                    objPeriodoLectivo.FechaCreacion = consPeriodoLectivo.FechaCreacion;
-                    objPeriodoLectivo.UsuarioActualizacion = 1;
-                    objPeriodoLectivo.FechaActualizacion = DateTime.Now;
-                    dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Modified;
-                }
-
-                dbGrabar.SaveChanges();
-
-                bResult = true;
-                strResult = "Datos Grabados Correctamente";
+                bResult = false;
+                strResult = "Ya Existe un Periodo Lectivo Activo";
             }
             else
             {
-                bResult = false;
-                strResult = "Error al grabar el registro: " + error;
+                if (esValido(Descripcion, FechaInicio, FechaFin, Estado))
+                {
+                    PeriodoLectivo objPeriodoLectivo = new PeriodoLectivo();
+                    objPeriodoLectivo.Descripcion = Descripcion;
+                    objPeriodoLectivo.FechaInicio = FechaInicio;
+                    objPeriodoLectivo.FechaFin = FechaFin;
+                    objPeriodoLectivo.Estado = Estado;
+
+                    if (IdPeriodoLectivo == 0)
+                    {
+                        List<PeriodoLectivo> profesores = new List<PeriodoLectivo>();
+                        profesores = db.PeriodoLectivo.AsNoTracking().ToList();
+                        objPeriodoLectivo.IdPeriodoLectivo = profesores.Count() == 0 ? 1 : profesores.Max(x => x.IdPeriodoLectivo) + 1;
+
+                        objPeriodoLectivo.UsuarioCreacion = 1;
+                        objPeriodoLectivo.FechaCreacion = DateTime.Now;
+                        dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Added;
+                    }
+                    else
+                    {
+                        PeriodoLectivo consPeriodoLectivo = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == IdPeriodoLectivo).FirstOrDefault();
+                        objPeriodoLectivo.IdPeriodoLectivo = IdPeriodoLectivo;
+                        objPeriodoLectivo.UsuarioCreacion = consPeriodoLectivo.UsuarioCreacion;
+                        objPeriodoLectivo.FechaCreacion = consPeriodoLectivo.FechaCreacion;
+                        objPeriodoLectivo.UsuarioActualizacion = 1;
+                        objPeriodoLectivo.FechaActualizacion = DateTime.Now;
+                        dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Modified;
+                    }
+
+                    dbGrabar.SaveChanges();
+
+                    bResult = true;
+                    strResult = "Datos Grabados Correctamente";
+                }
+                else
+                {
+                    bResult = false;
+                    strResult = "Error al grabar el registro: " + error;
+                }
+
+
             }
 
             return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
