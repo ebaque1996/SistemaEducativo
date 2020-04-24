@@ -65,8 +65,9 @@ namespace ProyectoFinal.Controllers
             }
 
             var Alumnos = (from alu in db.Alumno.AsNoTracking()
-                           join mat in db.Matricula.AsNoTracking() on alu.IdAlumno equals mat.IdAlumno
-                           where (alu.Cedula.Contains(sValue) || alu.Nombres.Contains(sValue) || alu.Apellidos.Contains(sValue)) && !mat.Estado.Contains("A") 
+                           //join mat in db.Matricula.AsNoTracking() on alu.IdAlumno equals mat.IdAlumno 
+                           where (alu.Cedula.Contains(sValue) || alu.Nombres.Contains(sValue) || alu.Apellidos.Contains(sValue)) &&
+                                 !(from mat in db.Matricula where mat.IdAlumno > 0 select mat.IdAlumno).Contains(alu.IdAlumno) 
                            select new { id = alu.IdAlumno, text = alu.Cedula + " | " + alu.Nombres + " " + alu.Apellidos }
                           ).ToList();
             Alumnos.RemoveAll(item => item == null);
@@ -77,10 +78,13 @@ namespace ProyectoFinal.Controllers
         [HttpGet]
         public JsonResult GetDetalleAlumno(int idAlu)
         {
-            List<Matricula> detsOpciones = new List<Matricula>();
-            detsOpciones = db.Matricula.AsNoTracking().Where(x => x.IdAlumno == idAlu).ToList();
+            //List<Alumno> detsAlumnos = new List<Alumno>();
+            //detsAlumnos = db.Alumno.AsNoTracking().Where(x => x.IdAlumno == idAlu).ToList();
 
-            return Json(new { detsOpciones }, JsonRequestBehavior.AllowGet);
+            Alumno objAlumno = new Alumno();
+            objAlumno = db.Alumno.AsNoTracking().Where(x => x.IdAlumno == idAlu).FirstOrDefault();
+
+            return Json(new { data = objAlumno }, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -99,10 +103,10 @@ namespace ProyectoFinal.Controllers
                            join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo 
                            join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso 
                            join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo 
-                           where (per.Descripcion.Contains(sValue) || cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) /*&& (ofer.Ocupado < ofer.Capacidad)*/
-                           select new { id = ofer.IdOferta, text = per.Descripcion + " | " + cur.Descripcion + " | " + par.Descripcion
-                                        , disabled = true}
-                          ).ToList();
+                           where (per.Descripcion.Contains(sValue) || cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) 
+                           select new { id = ofer.IdOferta, text = per.Descripcion + " | " + cur.Descripcion + " | " + par.Descripcion ,
+                                        disabled = ofer.Ocupado < ofer.Capacidad ? false : true
+                           }).ToList();
             Ofertas.RemoveAll(item => item == null);
 
             return Json(new { items = Ofertas }, JsonRequestBehavior.AllowGet);
@@ -111,10 +115,27 @@ namespace ProyectoFinal.Controllers
         [HttpGet]
         public JsonResult GetDetalleOferta(int idOfer)
         {
-            List<Matricula> detsOpciones = new List<Matricula>();
-            detsOpciones = db.Matricula.AsNoTracking().Where(x => x.IdOferta == idOfer).ToList();
+            //List<Matricula> detsOpciones = new List<Matricula>();
+            //detsOpciones = db.Matricula.AsNoTracking().Where(x => x.IdOferta == idOfer).ToList();
 
-            return Json(new { detsOpciones }, JsonRequestBehavior.AllowGet);
+            //return Json(new { detsOpciones }, JsonRequestBehavior.AllowGet);
+
+            //Oferta objOferta = new Oferta();
+            var objOferta = (from ofer in db.Oferta.AsNoTracking()
+                             join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+                             join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                             join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                             join profe in db.Profesor.AsNoTracking() on ofer.IdProfesor equals profe.IdProfesor
+                             where (ofer.IdOferta == idOfer)
+                             select new
+                             {
+                                 DescPeriodo = per.Descripcion,
+                                 DescCurso = cur.Descripcion,
+                                 DescParalelo = par.Descripcion,
+                                 DescProfesor = profe.Nombres + " " + profe.Apellidos
+                             }).FirstOrDefault();
+
+            return Json(new { data = objOferta }, JsonRequestBehavior.AllowGet);
 
         }
 

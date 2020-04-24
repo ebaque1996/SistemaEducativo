@@ -14,15 +14,80 @@
                 <div class="box-body">
 
                     @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Matricula</label>
-                        @Html.EditorFor(model => model.IdMatricula, new { htmlAttributes = new { @id = "txtIdMatricula", @class = "form-control" } })
-                    </div>*@
+            <label for="CCiMaquina" class="control-label">Id Matricula</label>
+            @Html.EditorFor(model => model.IdMatricula, new { htmlAttributes = new { @id = "txtIdMatricula", @class = "form-control" } })
+        </div>*@
+
                     <div class="box-body">
                         <label for="NNuTonelaje" class="control-label">Alumno</label>
                         <div class="form-group">
                             <input type="text" id="txtSelectAlumno" />
-                            <input type="text" id="txtAlumno" hidden />
+                            <input type="text" id="txtAlumno" hidden/>
                         </div>
+                    </div>
+
+                    <div class="class=" col-md-6">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Datos del Alumno</h3>
+                            </div>
+
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuNombres" class="control-label">Nombres</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtNombre" name="txtNombre" class="form-control" readonly/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuApellidos" class="control-label">Apellidos</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtApellido" name="txApellido" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuTelefono" class="control-label">Teléfono</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuDireccion" class="control-label">Dirección</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                     <div class="box-body">
@@ -40,12 +105,76 @@
                         </label>
                     </div>*@
 
+                    <div class="class=" col-md-6">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Datos de la Oferta Académica</h3>
+                            </div>
+
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuPeriodo" class="control-label">Peíodo Lectivo</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtPeriodo" name="txtPeriodo" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuCurso" class="control-label">Curso</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtCurso" name="txtCurso" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuParalelo" class="control-label">Paralelo</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtParalelo" name="txtParalelo" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuProfesor" class="control-label">Profesor</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtProfesor" name="txtProfesor" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="box-footer">
-                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
-                </div>
-            </form>
+                        <div class="box-footer">
+                            <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                        </div>
+</form>
         </div>
     </div>
 </section>
@@ -82,18 +211,24 @@
     });
 
     $('#txtSelectAlumno').on("change", function (e) {
-        if ($(txtSelectModulo).select2('data') != null) {
+        if ($(txtSelectAlumno).select2('data') != null) {
             $.ajax({
                 type: "GET",
                 url: "/Matricula/GetDetalleAlumno",
-                data: { idMod: document.getElementById('txtAlumno').value },
+                data: { idAlu: document.getElementById('txtAlumno').value },
                 dataType: "json",
                 success: function (data) {
-                    GeneraConsulta(data.detsOpciones);
+                    $("#txtNombre").val(data.data.Nombres);
+                    $("#txtApellido").val(data.data.Apellidos);
+                    $("#txtTelefono").val(data.data.Telefono);
+                    $("#txtDireccion").val(data.data.Direccion);
                 }
             });
         } else {
-            $('#example2').DataTable().clear().draw();
+            $("#txtNombre").val('');
+            $("#txtApellido").val('');
+            $("#txtTelefono").val('');
+            $("#txtDireccion").val('');
         }
 
     });
@@ -133,14 +268,21 @@
             $.ajax({
                 type: "GET",
                 url: "/Matricula/GetDetalleOferta",
-                data: { idMod: document.getElementById('txtAlumno').value },
+                data: { idOfer: document.getElementById('txtOferta').value },
                 dataType: "json",
                 success: function (data) {
-                    GeneraConsulta(data.detsOpciones);
+                    console.log(data.data);
+                    $("#txtPeriodo").val(data.data.DescPeriodo);
+                    $("#txtCurso").val(data.data.DescCurso);
+                    $("#txtParalelo").val(data.data.DescParalelo);
+                    $("#txtProfesor").val(data.data.DescProfesor);
                 }
             });
         } else {
-            $('#example2').DataTable().clear().draw();
+            $("#txtPeriodo").val('');
+            $("#txtCurso").val('');
+            $("#txtParalelo").val('');
+            $("#txtProfesor").val('');
         }
 
     });
