@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ProyectoFinalModel.Usuario>
+
+<p>
+    @Html.ActionLink("Crear Usuario", "Create")
+</p>
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="example2" class="table table-striped table-bordered dt-responsive nowrap">
+                <thead>
+                    <tr>
+                        <th>Id Usuario</th>
+                        <th>Cédula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example2').DataTable().destroy();
+
+        var arr = @Html.Raw(Json.Encode(Model));
+
+        $('#example2').DataTable({
+            "autoWidth": false,
+            "info": false,
+            //"serverSide": true,
+            "JQueryUI": true,
+            "ordering": true,
+            "paging": true,
+            //"scrollY": "500px",
+            //"Select": true,
+            "scrollCollapse": true,
+            "responsive": true,
+            "processing": true,
+            //"data": data.data,
+            "data": arr,
+            "columns": [
+                { "data": "IdUsuario", "className": 'IdUsuario', "title": "Id Usuario" },
+                { "data": "Cedula", "className": 'Cedula', "title": "Cédula" },
+                { "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
+                { "data": "Apellidos", "className": 'Apellidos', "title": "Apellidos" },
+                { "data": "Estado", "className": 'Estado', "title": "Estado" },
+                {
+                    "render": function (data, type, row) {                        
+                        var myUrl = '@Url.Action("Edit", "Usuario")?id=' + row.IdUsuario;
+                        return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    }
+                },
+            ],
+        });
+    });
+
+</script>
+
