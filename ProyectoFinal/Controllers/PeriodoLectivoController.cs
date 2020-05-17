@@ -63,29 +63,29 @@ namespace ProyectoFinal.Controllers
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
-            var model = (from per in db.PeriodoLectivo.AsNoTracking() 
-                         where per.Estado.Contains("A")
-                         select new
-                         {
-                             per.Estado
-                         }).ToList().FirstOrDefault();
+            if (esValido(Descripcion, FechaInicio, FechaFin, Estado))
+            {
+                PeriodoLectivo objPeriodoLectivo = new PeriodoLectivo();
+                objPeriodoLectivo.Descripcion = Descripcion;
+                objPeriodoLectivo.FechaInicio = FechaInicio;
+                objPeriodoLectivo.FechaFin = FechaFin;
+                objPeriodoLectivo.Estado = Estado;
 
-            if (model != null && Estado.Equals("A"))
-            {
-                bResult = false;
-                strResult = "Ya Existe un Periodo Lectivo Activo";
-            }
-            else
-            {
-                if (esValido(Descripcion, FechaInicio, FechaFin, Estado))
+                if (IdPeriodoLectivo == 0)
                 {
-                    PeriodoLectivo objPeriodoLectivo = new PeriodoLectivo();
-                    objPeriodoLectivo.Descripcion = Descripcion;
-                    objPeriodoLectivo.FechaInicio = FechaInicio;
-                    objPeriodoLectivo.FechaFin = FechaFin;
-                    objPeriodoLectivo.Estado = Estado;
+                    var model = (from per in db.PeriodoLectivo.AsNoTracking()
+                                 where per.Estado.Contains("A")
+                                 select new
+                                 {
+                                     per.Estado
+                                 }).ToList().FirstOrDefault();
 
-                    if (IdPeriodoLectivo == 0)
+                    if (model != null && Estado.Equals("A"))
+                    {
+                        bResult = false;
+                        strResult = "Ya Existe un Periodo Lectivo Activo";
+                    }
+                    else
                     {
                         List<PeriodoLectivo> profesores = new List<PeriodoLectivo>();
                         profesores = db.PeriodoLectivo.AsNoTracking().ToList();
@@ -94,6 +94,26 @@ namespace ProyectoFinal.Controllers
                         objPeriodoLectivo.UsuarioCreacion = 1;
                         objPeriodoLectivo.FechaCreacion = DateTime.Now;
                         dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Added;
+
+                        dbGrabar.SaveChanges();
+
+                        bResult = true;
+                        strResult = "Datos Grabados Correctamente";
+                    }
+                }
+                else
+                {
+                    var model = (from per in db.PeriodoLectivo.AsNoTracking()
+                                 where per.Estado.Contains("A") && per.IdPeriodoLectivo != IdPeriodoLectivo
+                                 select new
+                                 {
+                                     per.Estado
+                                 }).ToList().FirstOrDefault();
+
+                    if (model != null && Estado.Equals("A"))
+                    {
+                        bResult = false;
+                        strResult = "Ya Existe un Periodo Lectivo Activo";
                     }
                     else
                     {
@@ -104,20 +124,18 @@ namespace ProyectoFinal.Controllers
                         objPeriodoLectivo.UsuarioActualizacion = 1;
                         objPeriodoLectivo.FechaActualizacion = DateTime.Now;
                         dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Modified;
+
+                        dbGrabar.SaveChanges();
+
+                        bResult = true;
+                        strResult = "Datos Grabados Correctamente";
                     }
-
-                    dbGrabar.SaveChanges();
-
-                    bResult = true;
-                    strResult = "Datos Grabados Correctamente";
                 }
-                else
-                {
-                    bResult = false;
-                    strResult = "Error al grabar el registro: " + error;
-                }
-
-
+            }
+            else
+            {
+                bResult = false;
+                strResult = "Error al grabar el registro: " + error;
             }
 
             return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);

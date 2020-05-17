@@ -7,37 +7,89 @@
     <div class="class=" col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
-                <h3 class="box-title">Registro Periodo Lectivo</h3>
+                <h3 class="box-title">Datos del Periodo Lectivo</h3>
             </div>
 
             <form class="input-horizontal">
                 <div class="box-body">
+                    <div class="class=" col-md-6">
+                        <div class="box">
+                            @*<div class="box-header with-border">
+                                    <h3 class="box-title">Datos del Paralelo</h3>
+                                </div>*@
 
-                    @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id PeriodoLectivo</label>
-                        @Html.EditorFor(model => model.IdPeriodoLectivo, new { htmlAttributes = new { @id = "txtIdPeriodoLectivo", @class = "form-control" } })
-                    </div>*@
+                            <div class="box-body">
+                                <div class="row">
+                                    @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="CCiMaquina" class="control-label">Id PeriodoLectivo</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.IdPeriodoLectivo, new { htmlAttributes = new { @id = "txtIdPeriodoLectivo", @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>*@
 
-                    <label for="NNuTonelaje" class="control-label">Descripción</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
-                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuTonelaje" class="control-label">Descripción</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <label for="FechaInicio" class="control-label">Fecha Inicio</label>
-                    <div class="input-group">
-                        @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaInicio", type = "date" })                        
-                    </div>
+                                <br />
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="FechaInicio" class="control-label">Fecha Inicio</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaInicio", type = "date", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
 
-                    <label for="FechaFin" class="control-label">Fecha Fin</label>
-                    <div class="input-group">
-                        @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaFin", type = "date" })                        
-                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="FechaFin" class="control-label">Fecha Fin</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.FechaInicio, new { id = "FechaFin", type = "date", @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div class="checkbox">
-                        <label class="radio">
-                            <input type="checkbox" name="chkEstado" , checked>
-                            Activo
-                        </label>
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="radio">
+                                                    <input type="checkbox" name="chkEstado" , checked>
+                                                    Activo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>

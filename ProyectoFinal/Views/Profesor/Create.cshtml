@@ -7,74 +7,146 @@
     <div class="class=" col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
-                <h3 class="box-title">Registro Profesor</h3>
+                <h3 class="box-title">Datos del Profesor</h3>
             </div>
 
             <form class="input-horizontal">
                 <div class="box-body">
+                    <div class="class=" col-md-6">
+                        <div class="box">
+                            @*<div class="box-header with-border">
+                                    <h3 class="box-title">Datos del Paralelo</h3>
+                                </div>*@
 
-                    @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Profesor</label>
-                        @Html.EditorFor(model => model.IdProfesor, new { htmlAttributes = new { @id = "txtIdProfesor", @class = "form-control" } })
-                    </div>*@
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuTonelaje" class="control-label">Cédula</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @id = "txtCedula", @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
+                                            </div>
+                                        </div>
+                                    </div>
 
-                    <label for="NNuTonelaje" class="control-label">Cédula</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @id = "txtCedula", @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="Nombres" class="control-label">Nombres</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="Apellidos" class="control-label">Apellidos</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="Email" class="control-label">Email</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "txtEmail", @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="Direccion" class="control-label">Dirección</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "txtDireccion", @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="Telefono" class="control-label">Teléfono</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @id = "txtTelefono", @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="Sexo" class="control-label">Sexo</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="input-group">
+                                                    <select id="cmbSexo" class="form-control">
+                                                        <option value="M">Masculino</option>
+                                                        <option value="F">Femenino</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="radio">
+                                                    <input type="checkbox" name="chkEstado" , checked>
+                                                    Activo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <label for="Nombres" class="control-label">Nombres</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
-                    </div>
+                </div>
 
-                    <label for="Apellidos" class="control-label">Apellidos</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
-                    </div>
-
-                    <label for="Email" class="control-label">Email</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "txtEmail", @class = "form-control" } })
-                    </div>
-
-                    <label for="Direccion" class="control-label">Dirección</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "txtDireccion", @class = "form-control" } })
-                    </div>
-
-                    <label for="Telefono" class="control-label">Teléfono</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @id = "txtTelefono", @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
-                    </div>
-
-                    <label for="Sexo" class="control-label">Sexo</label>
-                    @*<div class="input-group">
-                        @Html.EditorFor(model => model.Sexo, new { htmlAttributes = new { @id = "txtSexo", @class = "form-control" } })
-                    </div>*@
-
-                    <div class="input-group">
-                        <select id="cmbSexo" class="form-control">
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </select>
-                    </div>
-
-                    <div class="checkbox">
-                        <label class="radio">
-                            <input type="checkbox" name="chkEstado" , checked>
-                            Activo
-                        </label>
-                    </div>
-
-                    </div>
-
-                    <div class="box-footer">
-                        <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
-                    </div>
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+                </div>
             </form>
         </div>
     </div>
+
 </section>
 
 <script type="text/javascript">
