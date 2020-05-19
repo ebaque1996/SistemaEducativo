@@ -1,0 +1,171 @@
+﻿@model ProyectoFinal.Models.OfertaExt
+
+<style>
+    .wrap {
+        position: relative;
+        display: inline-block;
+    }
+
+        .wrap span {
+            position: absolute;
+            bottom: 5px;
+            right: 0px;
+        }
+
+    .counter {
+        background-color: #5dc991;
+        color: #fff;
+        font-size: 10px;
+        padding: 2px 5px;
+        line-height: 12px;
+        height: 14px;
+        text-align: center;
+        border-top-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        font-weight: 400;
+    }
+</style>
+
+<form class="form-horizontal" id="lstOF" name="form_of">
+
+    <div class="box-body">
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Id Oferta:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control"
+                                   id="txtIdOfertaMod" placeholder="Id Oferta" disabled value="@Model.IdOferta" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Curso:</label>
+                        </div>
+                        <div class="col-md-8">
+
+                            <input type="text" class="form-control" id="txtCursoMod" placeholder="Capacidad" disabled value="@Model.DescCurso" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Paralelo:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control"
+                                   id="txtParaleloMod" placeholder="Id Oferta" disabled value="@Model.DescParalelo" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Capacidad:</label>
+                        </div>
+                        <div class="col-md-8">
+
+                            @*<input type="text" class="form-control" id="txtCapacidadMod" placeholder="Capacidad" value="@Model.Capacidad" />*@
+                            <input min="0" step="1" class="form-control" id="txtCapacidadMod" type="number" name="txtCapacidadMod" placeholder="Capacidad " value="@Model.Capacidad"  />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Periodo Lectivo:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control"
+                                   id="txtPerLecMod" placeholder="Id Periodo Lectivo" disabled value="@Model.DescPerLec" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="SavePartialOF"
+                    style="font-size:30px;">
+                <i class="fa fa-save"> </i>
+            </button>
+
+            @*<button type="button" id="SavePartialOF" class="btn btn-primary pull-left" data-dismiss="modal">
+                    <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                </button>*@
+            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"
+                    style="font-size:30px;">
+                <i class="fa fa-close"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).on('click', '#SavePartialOF', function (event) {
+        event.preventDefault()
+
+        var txtIdOferta = document.getElementById("txtIdOfertaMod").value;
+        var txtCapacidad = document.getElementById("txtCapacidadMod").value;
+       
+        $.ajax({
+            url: '/Oferta/EditaOferta/',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                IdOferta: txtIdOferta,
+                Capacidad: txtCapacidad
+            }
+        }).done(function (response) {            
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            if (response.bResultado) {
+                $('#lista_productosModal').modal('hide');
+                toastr.success(response.Message, 'Editar Oferta');
+            } else {
+                toastr.error(response.Message, 'Editar Oferta');
+            }            
+        });
+    });
+</script>
+
+<script>
+    $('input[type=number]').blur(function () {
+        var num = parseFloat($(this).val());
+        var cleanNum = num;
+        $(this).val(cleanNum);
+    });
+</script>

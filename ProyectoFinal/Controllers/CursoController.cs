@@ -17,8 +17,8 @@ namespace ProyectoFinal.Controllers
         // GET: Curso
         public ActionResult Index()
         {
-            List<Curso> c = db.Curso.AsNoTracking().ToList();
-            return View(c);
+            List<Curso> c = db.Curso.AsNoTracking().ToList();            
+            return View(c);            
         }
 
         public ActionResult Edit(int id)

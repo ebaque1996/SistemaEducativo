@@ -173,61 +173,106 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
             List<Oferta> listOfertas = new List<Oferta>();
             List<OfertaExt> listOfertaExt = new List<OfertaExt>();
-
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
-            if (esValido(IdPeriodo, IdCurso, IdParalelo, IdProfesor, Capacidad))
+            try
             {
-                Oferta objOferta = new Oferta();
-                objOferta.IdPeriodoLectivo = IdPeriodo;
-                objOferta.IdCurso = IdCurso;
-                objOferta.IdParalelo = IdParalelo;
-                objOferta.IdProfesor = IdProfesor;
-                objOferta.Capacidad = Capacidad;
-                objOferta.Ocupado = 0;
-                objOferta.Estado = "A";
-
-                List<Oferta> ofertas = new List<Oferta>();
-                ofertas = db.Oferta.AsNoTracking().ToList();
-                objOferta.IdOferta = ofertas.Count() == 0 ? 1 : ofertas.Max(x => x.IdOferta) + 1;
-
-                objOferta.UsuarioCreacion = 1;
-                objOferta.FechaCreacion = DateTime.Now;
-                dbGrabar.Entry(objOferta).State = EntityState.Added;
-
-                dbGrabar.SaveChanges();
-
-                listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == IdPeriodo).ToList();
-                
-                foreach (var item in listOfertas)
+                if (esValido(IdPeriodo, IdCurso, IdParalelo, IdProfesor, Capacidad))
                 {
-                    OfertaExt objOferExt = new OfertaExt();
-                    objOferExt.IdOferta = item.IdOferta;
-                    objOferExt.IdPeriodoLectivo = item.IdPeriodoLectivo;
-                    objOferExt.IdCurso = item.IdCurso;
-                    objOferExt.IdParalelo = item.IdParalelo;
-                    objOferExt.IdProfesor = item.IdProfesor;
-                    objOferExt.Capacidad = item.Capacidad;
-                    objOferExt.Ocupado = item.Ocupado;
-                    objOferExt.Disponible = item.Capacidad - item.Ocupado;
-                    objOferExt.Estado = item.Estado;
-                    objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
-                    objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
-                    objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;
-                    objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
-                    listOfertaExt.Add(objOferExt);
-                }
+                    Oferta objOferta = new Oferta();
+                    objOferta.IdPeriodoLectivo = IdPeriodo;
+                    objOferta.IdCurso = IdCurso;
+                    objOferta.IdParalelo = IdParalelo;
+                    objOferta.IdProfesor = IdProfesor;
+                    objOferta.Capacidad = Capacidad;
+                    objOferta.Ocupado = 0;
+                    objOferta.Estado = "A";
 
-                bResult = true;
-                strResult = "Datos Grabados Correctamente";
+                    List<Oferta> ofertas = new List<Oferta>();
+                    ofertas = db.Oferta.AsNoTracking().ToList();
+                    objOferta.IdOferta = ofertas.Count() == 0 ? 1 : ofertas.Max(x => x.IdOferta) + 1;
+
+                    objOferta.UsuarioCreacion = 1;
+                    objOferta.FechaCreacion = DateTime.Now;
+                    dbGrabar.Entry(objOferta).State = EntityState.Added;
+
+                    dbGrabar.SaveChanges();
+
+                    listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == IdPeriodo).ToList();
+
+                    foreach (var item in listOfertas)
+                    {
+                        OfertaExt objOferExt = new OfertaExt();
+                        objOferExt.IdOferta = item.IdOferta;
+                        objOferExt.IdPeriodoLectivo = item.IdPeriodoLectivo;
+                        objOferExt.IdCurso = item.IdCurso;
+                        objOferExt.IdParalelo = item.IdParalelo;
+                        objOferExt.IdProfesor = item.IdProfesor;
+                        objOferExt.Capacidad = item.Capacidad;
+                        objOferExt.Ocupado = item.Ocupado;
+                        objOferExt.Disponible = item.Capacidad - item.Ocupado;
+                        objOferExt.Estado = item.Estado;
+                        objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
+                        objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
+                        objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;
+                        objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
+                        listOfertaExt.Add(objOferExt);
+                    }
+
+                    bResult = true;
+                    strResult = "Datos Grabados Correctamente";
+                }
+                else
+                {
+                    bResult = false;
+                    strResult = "Error al grabar el registro: " + error;
+                }
             }
-            else
+            catch (Exception ex)
             {
                 bResult = false;
-                strResult = "Error al grabar el registro: " + error;
-            }
+                strResult = "Error: " + ex.Message;
+            }            
 
             return Json(new { Message = strResult, bResultado = bResult, listOfertaExt }, JsonRequestBehavior.AllowGet);
+        }
+
+        //[HttpPost]
+        public JsonResult EditaOferta(int IdOferta, int Capacidad)
+        {
+            string strResult = string.Empty;
+            bool bResult = false;            
+            ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+
+            try
+            {
+                if (esValidoEditaOferta(IdOferta, Capacidad))
+                {
+                    Oferta objOferta = db.Oferta.AsNoTracking().Where(x => x.IdOferta == IdOferta).FirstOrDefault();
+                    objOferta.Capacidad = Capacidad;
+
+                    objOferta.UsuarioActualizacion = 1;
+                    objOferta.FechaActualizacion = DateTime.Now;
+                    dbGrabar.Entry(objOferta).State = EntityState.Modified;
+
+                    dbGrabar.SaveChanges();
+
+                    bResult = true;
+                    strResult = "Datos Grabados Correctamente";
+                }
+                else
+                {
+                    bResult = false;
+                    strResult = "Error al grabar el registro: " + error;
+                }
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                strResult = "Error: " + ex.Message;
+            }
+                        
+            return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
         }
 
         public bool esValido(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, int Capacidad)
@@ -265,6 +310,74 @@ namespace ProyectoFinal.Controllers
             return true;
         }
 
+
+        public bool esValidoEditaOferta(int IdOferta, int Capacidad)
+        {
+            if (IdOferta == 0)
+            {
+                error = "Oferta invalida";
+                return false;
+            }
+
+            Oferta consOfer = db.Oferta.AsNoTracking().Where(x => x.IdOferta == IdOferta).FirstOrDefault();
+
+            if (consOfer != null)
+            {
+                if (Capacidad < consOfer.Ocupado)
+                {
+                    error = "La capacidad es insuficiente para los estudiantes ya matriculados en este curso";
+                    return false;
+                }
+            }
+            else
+            {
+                error = "La oferta que desea editar no existe";
+                return false;
+            }            
+
+            return true;
+        }
+
+
+        [HttpGet]
+        public PartialViewResult EditOferta(int IdOferta)
+        {
+            
+            OfertaExt objOfertaExt = new OfertaExt();                        
+            Oferta objOferta = db.Oferta.AsNoTracking().Where(x => x.IdOferta == IdOferta).FirstOrDefault();
+          
+            string PartialUrl = "~/Views/Partial/OfertaP/_EditaOF.cshtml";
+
+            if (objOferta == null)
+            {                
+                return PartialView(PartialUrl, objOfertaExt);
+            }
+
+            try
+            {
+
+                objOfertaExt.IdOferta = objOferta.IdOferta;
+                objOfertaExt.IdPeriodoLectivo = objOferta.IdPeriodoLectivo;
+                objOfertaExt.IdCurso = objOferta.IdCurso;
+                objOfertaExt.IdParalelo = objOferta.IdParalelo;
+                objOfertaExt.IdProfesor = objOferta.IdProfesor;
+                objOfertaExt.Capacidad = objOferta.Capacidad;
+                objOfertaExt.Ocupado = objOferta.Ocupado;
+                objOfertaExt.Disponible = objOferta.Capacidad - objOferta.Ocupado;
+                objOfertaExt.Estado = objOferta.Estado;
+                objOfertaExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == objOferta.IdPeriodoLectivo).FirstOrDefault().Descripcion;
+                objOfertaExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == objOferta.IdCurso).FirstOrDefault().Descripcion;
+                objOfertaExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == objOferta.IdParalelo).FirstOrDefault().Descripcion;
+                objOfertaExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == objOferta.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == objOferta.IdProfesor).FirstOrDefault().Nombres;
+               
+            }
+            catch (Exception)
+            {
+                objOfertaExt = new OfertaExt();
+            }
+
+            return PartialView(PartialUrl, objOfertaExt);            
+        }
 
         public JsonResult DeleteOferta(int IdOferta)
         {

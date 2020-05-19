@@ -3,13 +3,14 @@
 
     <div class="row">
         <div class="box box-default">
-            <div class="box-header with-border">
+            @*<div class="box-header with-border">
                 <h3 class="box-title"> Parametros de Consulta </h3>
-            </div>
+            </div>*@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <input type="button" class="btn btn-primary" id="btnNuevo" value="Nuevo" />
                             <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
                         </div>
                     </div>
@@ -26,6 +27,14 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-6">
+                        <div class="form-group">                            
+                            <input type="text" id="txtSelectPeriodoLectivo" />
+                            <input type="text" id="txtPeriodoLectivo" hidden />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <input type="text" id="txtSelectCurso" />
                             <input type="text" id="txtCurso" hidden />
@@ -34,7 +43,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group">                            
                             <input type="text" id="txtSelectMateria" />
                             <input type="text" id="txtMateria" hidden />
                         </div>
@@ -96,6 +105,7 @@
     $(document).ready(function () {        
         $("#txtSelectCurso").on("select2-selecting", function (e) { document.getElementById('txtCurso').value = e.val; });        
         $("#txtSelectMateria").on("select2-selecting", function (e) { document.getElementById('txtMateria').value = e.val; });
+        $("#txtSelectPeriodoLectivo").on("select2-selecting", function (e) { document.getElementById('txtPeriodoLectivo').value = e.val; });
 
         $('#txtSelectCurso').select2({
             width: '100%',
@@ -147,14 +157,39 @@
             escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
         });
 
+        $('#txtSelectPeriodoLectivo').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Periodo Lectivo",
+
+            ajax: {
+                url: '/Notas/GetPeriodos',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term//, idOferta: document.getElementById('txtCurso').value search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
     });
 
-    $('#txtSelectCurso, #txtSelectMateria').on("change", function (e) {
-        if ($(txtSelectCurso).select2('data') != null && $(txtSelectMateria).select2('data') != null) {
+    $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').on("change", function (e) {
+        if ($(txtSelectCurso).select2('data') != null && $(txtSelectMateria).select2('data') != null && $(txtSelectPeriodoLectivo).select2('data') != null) {
             $.ajax({
                 type: "GET",
                 url: "/Notas/GetNotas",
-                data: { idoferta: document.getElementById('txtCurso').value, idcl: document.getElementById('txtMateria').value },
+                data: { idoferta: document.getElementById('txtCurso').value, idcl: document.getElementById('txtMateria').value, idperiodo: document.getElementById('txtPeriodoLectivo').value },
                 dataType: "json",
                 success: function (data) {
 
@@ -329,10 +364,15 @@
 
                         }
                     });
+
+                    $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('disable');
+                    //$('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('enable');
                 }
             });
         }
     });
+
+    $('#btnNuevo').on('click', function () { nuevo(); });
 
     $('#btnGenerar').on('click', function () {
         var tblNotas = $('#example2').DataTable().rows().data().toArray();
@@ -340,6 +380,9 @@
 
         $.each(tblNotas, function (index, value) {
             var nota = {};
+            nota.IdOferta = document.getElementById('txtCurso').value;
+            nota.IdCargaLectiva = document.getElementById('txtMateria').value;
+            nota.IdPeriodoLectivo = document.getElementById('txtPeriodoLectivo').value;
             nota.IdAlumno = value.IdAlumno;
             nota.PpQ1 = value.PpQ1;
             nota.SpQ1 = value.SpQ1;
@@ -359,6 +402,7 @@
             nota.ExQ2 = value.ExQ2;
             nota.VeinQ2 = value.VeinQ2;
             nota.PromTotQ2 = value.PromTotQ2;
+            nota.Total = value.Total;
 
             dataNotas.push(nota);
         });
@@ -388,7 +432,7 @@
                             swal("Saved", data.Message, "success");
 
                                 window.setTimeout(function () {
-                                    location.href = '@Url.Action("Index", "Recibo")';
+                                    location.href = '@Url.Action("Index", "Notas")';
                                 }, 1500);
                             }
                             else {
@@ -399,6 +443,16 @@
             }
         });
     });
+
+    function nuevo() {
+        //Bloqueo todos los elementos, encero los campos y activo el select2 se consultar
+        //$('.clsBoxCab, .clsBoxPar, .clsBoxDet, .clsBoxCalcProd').hide(100);
+        //bloquear();
+        //encerar();
+        $('#example2').DataTable().clear().draw();
+        $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('data', null);
+        $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('enable');
+    }
 
     function recalcularQ1($row, rowData, cell) {        
         rowData.SumQ1 = parseFloat(parseFloat(rowData.PpQ1) + parseFloat(rowData.SpQ1) + parseFloat(rowData.TpQ1)).toFixed(2);

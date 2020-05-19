@@ -12,15 +12,19 @@
 
             <form class="input-horizontal">
                 <div class="box-body">
+                   
 
-                    @*<div class="input-group">
-                            <label for="CCiMaquina" class="control-label">Id Paralelo</label>
-                            @Html.EditorFor(model => model.IdParalelo, new { htmlAttributes = new { @id = "txtIdParalelo", @class = "form-control" } })
-                        </div>*@
-
-                    <label for="NNuTonelaje" class="control-label">Descripción</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="CCiMaquina" class="control-label">Descripción</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })                                    
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="checkbox">

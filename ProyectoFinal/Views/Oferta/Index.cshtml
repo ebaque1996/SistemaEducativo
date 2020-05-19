@@ -68,8 +68,10 @@
                                     <label class="form-control no-border">Capacidad:</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control"
-                                           id="txtCapacidad" placeholder="Capacidad" />
+                                    @*<input type="text" class="form-control"
+                                           id="txtCapacidad" placeholder="Capacidad" />*@
+
+                                    <input min="0" step="1" class="form-control" id="txtCapacidad" type="number" name="txtCapacidad" placeholder="Capacidad " />
                                 </div>
                             </div>
                         </div>
@@ -104,10 +106,25 @@
                             <th>Disponible</th>
                             <th>Estado</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="lista_productosModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"> Editar Oferta</h4>
+            </div>
+            <div class="modal-body table-placeholder2"></div>
         </div>
     </div>
 </div>
@@ -240,6 +257,12 @@
         }
     });
 
+    $('input[type=number]').blur(function () {
+        var num = parseFloat($(this).val());
+        var cleanNum = num;
+        $(this).val(cleanNum);
+    });
+
     $('#btnAddRow').on('click', function () {
 
         var IdPeriodo = document.getElementById("txtPeriodo").value;
@@ -316,6 +339,20 @@
                 { "data": "Ocupado", "className": 'Ocupado', "title": "Ocupado" },
                 { "data": "Disponible", "className": 'Disponible', "title": "Disponible" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
+
+                {
+                    "data": "btnEdit", "className": 'btnEdit', "title": "",
+                    "render": function (data, type, row) {
+                        var sCad = '<button type="button" class="btn btn-info btn-sm btnEditRow"> ';
+                        sCad = sCad + '<i class="fa fas fa-edit" aria - hidden="true" ></i >';
+                        sCad = sCad + '</button>';
+
+                        return sCad;
+                    }
+                    //, orderable: false, "width": "5%"
+
+                },
+
                 {
                     "data": "btnElim", "className": 'btnElim', "title": "",
                     "render": function (data, type, row) {
@@ -329,9 +366,72 @@
                 }
             ],
         });
-    }    
+    }
 
-    $('#example2').DataTable().on('click', '.btnDeleteRow', function () {    
+
+
+    $('#example2').DataTable().on('click', '.btnEditRow', function () {
+        var table = $('#example2').DataTable();
+        var data = table.row($(this).parents('tr')).data();
+        /*var newData = new Array();
+
+        newData.push(data);
+        var myJsonData = { detOrdens: newData };
+        var jsonCad = "{'NNuIdOF':'" + data.NNuIdOF + "'}"*/
+        var rowIndexSelected;
+
+        $.ajax({
+            type: 'GET',
+            url: "/Oferta/EditOferta",
+            data: { IdOferta: data.IdOferta },
+            dataType: 'html',
+
+        }).done(function (response) {
+            $('.table-placeholder2').html(response);
+            $('#lista_productosModal').modal('show');
+
+            //if (iRow == 0) { iRow = (this).closest('tr').index(); }
+
+            //table
+            //    .row($(this).parents('tr'))
+            //    .remove()
+            //    .draw();
+
+            //table.ajax.reload;
+        }
+        ).fail(function () {
+            alert("error");
+        });
+
+        //GeneraConsulta(data.listOfertaExt);
+
+        //table
+        //    .row($(this).parents('tr'))
+        //    .draw();
+
+        //rowIndexSelected = $(this).closest('tr').index();
+        ////if (iRow == 0) { iRow = rowIndexSelected; }
+        //table.ajax.reload;
+    });
+
+    $("#lista_productosModal").on("hidden.bs.modal", function () {
+        if ($(txtSelectPeriodo).select2('data') != null) {
+            $.ajax({
+                type: "GET",
+                url: "/Oferta/GetDetalle",
+                data: { idPer: document.getElementById('txtPeriodo').value },
+                dataType: "json",
+                success: function (data) {
+                    GeneraConsulta(data.listOfertaExt);
+                }
+            });
+        } else {
+            $('#example2').DataTable().clear().draw();
+        }
+    });
+
+
+    $('#example2').DataTable().on('click', '.btnDeleteRow', function () {
         var table = $('#example2').DataTable();
         var data = table.row($(this).parents('tr')).data();
         var txtIdOferta = data.IdOferta;
@@ -374,5 +474,3 @@
     });
 
 </script>
-
-
