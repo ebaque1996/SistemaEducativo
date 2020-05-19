@@ -799,6 +799,9 @@
     <Content Include="fonts\iconic\fonts\Material-Design-Iconic-Font.ttf" />
     <Content Include="fonts\iconic\fonts\Material-Design-Iconic-Font.woff" />
     <Content Include="fonts\iconic\fonts\Material-Design-Iconic-Font.woff2" />
+    <None Include="Properties\PublishProfiles\uezrgm - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\uezrgm - ReadOnly - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\uezrgm - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

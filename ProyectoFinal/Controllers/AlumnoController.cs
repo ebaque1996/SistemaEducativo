@@ -130,11 +130,12 @@ namespace ProyectoFinal.Controllers
                 error = "Debe ingresar la Cédula";
                 return false;
             }
-            /*else if (VerificaIdentificacion(Cedula)) 
+
+            if (!VerificaIdentificacion(Cedula)) 
             {
                 error = "Cédula Inválida";
                 return false;
-            }*/
+            }
 
 
             if (String.IsNullOrEmpty(Nombres))
