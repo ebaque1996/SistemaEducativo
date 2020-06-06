@@ -40,7 +40,7 @@
                                                 <label for="NNuNombres" class="control-label">Nombres</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="text" id="txtNombre" name="txtNombre" class="form-control" readonly/>
+                                                <input type="text" id="txtNombre" name="txtNombre" class="form-control" readonly />
                                             </div>
                                         </div>
                                     </div>
@@ -80,6 +80,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuColegio" class="control-label">Colegio Anterior</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtColegio" name="txtColegio" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuCurso" class="control-label">Curso Anterior</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtCurso" name="txtCurso" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>*@
                                 </div>
 
                                 <br />
@@ -163,6 +188,31 @@
 
                                 <br />
 
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuDisponibles" class="control-label">Cupos Disponibles</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtDisponibles" name="txtDisponibles" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label for="NNuProfesor" class="control-label">Profesor</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" id="txtProfesor" name="txtProfesor" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                </div>
+
+                                <br />
+
                             </div>
 
                         </div>
@@ -222,6 +272,7 @@
                     $("#txtApellido").val(data.data.Apellidos);
                     $("#txtTelefono").val(data.data.Telefono);
                     $("#txtDireccion").val(data.data.Direccion);
+                    $("#txtColegio").val(data.data.ColegioAnterior);
                 }
             });
         } else {
@@ -229,6 +280,7 @@
             $("#txtApellido").val('');
             $("#txtTelefono").val('');
             $("#txtDireccion").val('');
+            $("#txtColegio").val('');
         }
 
     });
@@ -276,6 +328,7 @@
                     $("#txtCurso").val(data.data.DescCurso);
                     $("#txtParalelo").val(data.data.DescParalelo);
                     $("#txtProfesor").val(data.data.DescProfesor);
+                    $("#txtDisponibles").val(data.data.DescDisponible);
                 }
             });
         } else {
@@ -283,6 +336,7 @@
             $("#txtCurso").val('');
             $("#txtParalelo").val('');
             $("#txtProfesor").val('');
+            $("#txtDisponibles").val('');            
         }
 
     });

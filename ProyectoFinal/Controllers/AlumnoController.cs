@@ -137,6 +137,12 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
+            if (cedulaRegistrada(Cedula))
+            {
+                error = "Ya Existe un Alumno registrado con esta Cédula";
+                return false;
+            }
+
 
             if (String.IsNullOrEmpty(Nombres))
             {
@@ -216,6 +222,21 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
             
+            return true;
+        }
+
+        public bool cedulaRegistrada(string Cedula)
+        {
+            var model = (from alu in db.Alumno.AsNoTracking()
+                         where alu.Cedula.Contains(Cedula)
+                         select new { id = alu.IdAlumno }
+                        ).ToList().FirstOrDefault();
+
+            if (model == null)
+            {
+                return false;
+            }
+
             return true;
         }
 

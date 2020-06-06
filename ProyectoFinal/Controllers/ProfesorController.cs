@@ -119,6 +119,12 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
+            if (cedulaRegistrada(Cedula))
+            {
+                error = "Ya Existe un Profesor registrado con esta Cédula";
+                return false;
+            }
+
             if (String.IsNullOrEmpty(Nombres))
             {
                 error = "Debe ingresar los nombres";
@@ -156,6 +162,21 @@ namespace ProyectoFinal.Controllers
             if (String.IsNullOrEmpty(Sexo))
             {
                 error = "Debe ingresar la sexo";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool cedulaRegistrada(string Cedula)
+        {
+            var model = (from prof in db.Profesor.AsNoTracking()
+                         where prof.Cedula.Contains(Cedula)
+                         select new { id = prof.IdProfesor }
+                        ).ToList().FirstOrDefault();
+
+            if (model == null)
+            {
                 return false;
             }
 
