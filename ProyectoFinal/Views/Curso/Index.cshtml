@@ -4,6 +4,8 @@
     @Html.ActionLink("Crear Curso", "Create")
 </p>
 
+<input type="button" class="btn btn-primary" id="btnNuevo" value="Nuevo" />
+
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -56,6 +58,17 @@
                 },
             ],
         });     
+    });
+
+    $('#btnNuevo').on('click', function () {
+        $.ajax({
+            type: "GET",
+            url: "/Curso/ExportDataProduccion",
+            dataType: "json",
+            success: function (data3) {
+                //$('#txtIdRecibo').val(data3.maxsec);
+            }
+        });
     });
 
 </script>

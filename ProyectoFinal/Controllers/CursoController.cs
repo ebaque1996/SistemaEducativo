@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 
 namespace ProyectoFinal.Controllers
 {
@@ -21,7 +23,16 @@ namespace ProyectoFinal.Controllers
             return View(c);            
         }
 
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public void ExportDataProduccion()
+        {
+            ReportDocument reportDocument = new ReportDocument();
+            string filePath = "C:\\Users\\ebaque\\Documents";
+            reportDocument.Load(filePath);
+            //CrystalReportViewer1.ReportSource = reportDocument;
+        }
+
+            public ActionResult Edit(int id)
         {
             Curso objCurso = new Curso();
             objCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == id).FirstOrDefault();

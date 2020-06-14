@@ -306,7 +306,7 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
-            if (ofertaOcupada(IdOferta))
+            if (!ofertaDisponible(IdOferta))
             {
                 error = "La Oferta no tiene cupos disponibles";
                 return false;
@@ -330,7 +330,7 @@ namespace ProyectoFinal.Controllers
             return true;
         }
 
-        public bool ofertaOcupada(int IdOferta)
+        public bool ofertaDisponible(int IdOferta)
         {
             var model = (from ofer in db.Oferta.AsNoTracking()
                          where ofer.IdOferta == IdOferta && (ofer.Ocupado < ofer.Capacidad)
