@@ -18,15 +18,41 @@ namespace ProyectoFinal.Controllers
             return View();
         }
 
-        public JsonResult GetCursos(string q)
+        public JsonResult GetCursos(string q, int? idPerLec)
         {
 
-            var FatherItems = (from maq in db.Oferta.AsNoTracking()
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)                                
+            }).ToList();
+          
+            int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
+
+            //Si es un profesor solo carga los cursos a los que el esta asignado, si no carga todos
+            if (idrol == 3)
+            {
+                string IdUsuario = Request.Cookies["UserID"].Value.ToString();
+
+                FatherItems = (from usu in db.Usuario.AsNoTracking()
+                               join prof in db.Profesor.AsNoTracking() on usu.Cedula equals prof.Cedula
+                               join clec in db.CargaLectiva.AsNoTracking() on prof.IdProfesor equals clec.IdProfesor
+                               join ofer in db.Oferta.AsNoTracking() on clec.IdOferta equals ofer.IdOferta
+                               join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                               join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                               where ofer.Estado == "A" && ofer.IdPeriodoLectivo == idPerLec && usu.IdUsuario == IdUsuario
+                               select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion}
+                ).Distinct().ToList();
+
+            }
+            else
+            {
+                FatherItems = (from maq in db.Oferta.AsNoTracking()                                       
                                join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
-                               where maq.Estado == "A"
+                               where maq.Estado == "A" && maq.IdPeriodoLectivo == idPerLec
                                select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion }
-                   ).ToList();
+                ).Distinct().ToList();
+            }
 
             FatherItems.RemoveAll(item => item == null);
 
@@ -49,14 +75,51 @@ namespace ProyectoFinal.Controllers
 
         }
 
-        public JsonResult GetMateriasPorOferta(string q, int idOferta)
+        public JsonResult GetMateriasPorOferta(string q, int? idOferta, int? idPerLec)
         {
 
-            var FatherItems = (from maq in db.CargaLectiva.AsNoTracking()
-                               join cur in db.Materia.AsNoTracking() on maq.IdMateria equals cur.IdMateria                               
-                               where maq.Estado == "A" && maq.IdOferta == idOferta
-                               select new { id = maq.IdCargaLectiva, text = cur.Descripcion}
-                   ).ToList();
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
+
+            //Si es un profesor solo carga los cursos a los que el esta asignado, si no carga todos
+            if (idrol == 3)
+            {
+                string IdUsuario = Request.Cookies["UserID"].Value.ToString();
+
+                FatherItems = (from usu in db.Usuario.AsNoTracking()
+                               join prof in db.Profesor.AsNoTracking() on usu.Cedula equals prof.Cedula
+                               join clec in db.CargaLectiva.AsNoTracking() on prof.IdProfesor equals clec.IdProfesor
+                               join mat in db.Materia.AsNoTracking() on clec.IdMateria equals mat.IdMateria
+                               //join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                               //join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                               where clec.Estado == "A" && clec.IdOferta == idOferta && clec.IdPeriodoLectivo == idPerLec && usu.IdUsuario == IdUsuario
+                               select new { id = clec.IdCargaLectiva, text = mat.Descripcion }
+                ).ToList();
+
+            }
+            else
+            {   
+                FatherItems = (from maq in db.CargaLectiva.AsNoTracking()
+                               join cur in db.Materia.AsNoTracking() on maq.IdMateria equals cur.IdMateria
+                               where maq.Estado == "A" && maq.IdOferta == idOferta && maq.IdPeriodoLectivo == idPerLec
+                               select new { id = maq.IdCargaLectiva, text = cur.Descripcion }
+                ).ToList();
+            }
+
+
+
+
+
+
+            //var FatherItems = (from maq in db.CargaLectiva.AsNoTracking()
+            //                   join cur in db.Materia.AsNoTracking() on maq.IdMateria equals cur.IdMateria                               
+            //                   where maq.Estado == "A" && maq.IdOferta == idOferta && maq.IdPeriodoLectivo == idPerLec
+            //                   select new { id = maq.IdCargaLectiva, text = cur.Descripcion}
+            //       ).ToList();
 
             FatherItems.RemoveAll(item => item == null);
 

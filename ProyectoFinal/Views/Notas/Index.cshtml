@@ -27,7 +27,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <input type="text" id="txtSelectPeriodoLectivo" />
                             <input type="text" id="txtPeriodoLectivo" hidden />
                         </div>
@@ -43,12 +43,15 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <input type="text" id="txtSelectMateria" />
                             <input type="text" id="txtMateria" hidden />
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="box-footer with-border">
+                <input type="button" class="btn btn-primary" id="btnConsultar" value="Consultar" />
             </div>
         </div>
     </div>
@@ -103,6 +106,24 @@
 
 <script>
     $(document).ready(function () {        
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
         $("#txtSelectCurso").on("select2-selecting", function (e) { document.getElementById('txtCurso').value = e.val; });        
         $("#txtSelectMateria").on("select2-selecting", function (e) { document.getElementById('txtMateria').value = e.val; });
         $("#txtSelectPeriodoLectivo").on("select2-selecting", function (e) { document.getElementById('txtPeriodoLectivo').value = e.val; });
@@ -119,7 +140,7 @@
 
                 data: function (term, page) {
                     return {
-                        q: term // search term
+                        q: term, idPerLec: document.getElementById('txtPeriodoLectivo').value // search term
                     };
                 },
                 results: function (data, page) { // parse the results into the format expected by Select2.
@@ -144,7 +165,7 @@
 
                 data: function (term, page) {
                     return {
-                        q: term, idOferta: document.getElementById('txtCurso').value // search term
+                        q: term, idOferta: document.getElementById('txtCurso').value, idPerLec: document.getElementById('txtPeriodoLectivo').value // search term
                     };
                 },
                 results: function (data, page) { // parse the results into the format expected by Select2.
@@ -184,7 +205,153 @@
 
     });
 
-    $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').on("change", function (e) {
+    $('#txtSelectPeriodoLectivo').on("change", function (e) {
+        if ($(txtSelectPeriodoLectivo).select2('data') == null) {
+            document.getElementById('txtPeriodoLectivo').value = null;
+            document.getElementById('txtCurso').value = null;
+            $('#txtSelectCurso').select2('data', null);
+            document.getElementById('txtMateria').value = null;
+            $('#txtSelectMateria').select2('data', null);
+        }
+    });
+
+    $('#txtSelectCurso').on("change", function (e) {
+        if ($(txtSelectCurso).select2('data') == null) {
+            document.getElementById('txtCurso').value = null;
+            document.getElementById('txtMateria').value = null;
+            $('#txtSelectMateria').select2('data', null);
+        }
+    });    
+
+    $('#txtSelectMateria').on("change", function (e) {
+        if ($(txtSelectMateria).select2('data') == null) {
+            document.getElementById('txtMateria').value = null;
+        }
+    });    
+
+    $('#btnNuevo').on('click', function () { nuevo(); });
+
+    $('#btnConsultar').on('click', function () { consultarNotas(); });
+
+    $('#btnGenerar').on('click', function () {
+        var tblNotas = $('#example2').DataTable().rows().data().toArray();
+        var dataNotas = new Array();
+
+        $.each(tblNotas, function (index, value) {
+            var nota = {};
+            nota.IdOferta = document.getElementById('txtCurso').value;
+            nota.IdCargaLectiva = document.getElementById('txtMateria').value;
+            nota.IdPeriodoLectivo = document.getElementById('txtPeriodoLectivo').value;
+            nota.IdAlumno = value.IdAlumno;
+            nota.PpQ1 = value.PpQ1;
+            nota.SpQ1 = value.SpQ1;
+            nota.TpQ1 = value.TpQ1;
+            nota.SumQ1 = value.SumQ1;
+            nota.PromQ1 = value.PromQ1;
+            nota.OchenPorQ1 = value.OchenPorQ1;
+            nota.ExQ1 = value.ExQ1;
+            nota.VeinQ1 = value.VeinQ1;
+            nota.PromTotQ1 = value.PromTotQ1;
+            nota.PpQ2 = value.PpQ2;
+            nota.SpQ2 = value.SpQ2;
+            nota.TpQ2 = value.TpQ2;
+            nota.SumQ2 = value.SumQ2;
+            nota.PromQ2 = value.PromQ2;
+            nota.OchenPorQ2 = value.OchenPorQ2;
+            nota.ExQ2 = value.ExQ2;
+            nota.VeinQ2 = value.VeinQ2;
+            nota.PromTotQ2 = value.PromTotQ2;
+            nota.Total = value.Total;
+
+            dataNotas.push(nota);
+        });
+
+        var myJsonData = { dataNotas: dataNotas };
+        var previousWindowKeyDown = window.onkeydown;
+
+        swal({
+            title: "Notas ",
+            text: "Desea generar las notas?",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            window.onkeydown = previousWindowKeyDown;
+            if (isConfirm) {                
+
+                $.ajax({
+                    url: "/Notas/GrabarNotas",
+                    type: "POST",
+                    data: JSON.stringify(myJsonData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.bResultado) {
+                            swal("Saved", data.Message, "success");
+
+                                window.setTimeout(function () {
+                                    location.href = '@Url.Action("Index", "Notas")';
+                                }, 1500);
+                            }
+                            else {
+                                swal("Cancelled", data.Message, "error");
+                            }
+                    }
+                });
+            }
+        });
+    });    
+
+    function nuevo() {
+        //Bloqueo todos los elementos, encero los campos y activo el select2 se consultar
+        //$('.clsBoxCab, .clsBoxPar, .clsBoxDet, .clsBoxCalcProd').hide(100);
+        //bloquear();
+        //encerar();
+        $('#example2').DataTable().clear().draw();
+        $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('data', null);
+        $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('enable');
+    }
+
+    function recalcularQ1($row, rowData, cell) {        
+        rowData.SumQ1 = parseFloat(parseFloat(rowData.PpQ1) + parseFloat(rowData.SpQ1) + parseFloat(rowData.TpQ1)).toFixed(2);
+        rowData.PromQ1 = parseFloat(rowData.SumQ1 / 3).toFixed(2);
+        rowData.OchenPorQ1 = parseFloat(rowData.PromQ1 * 0.8).toFixed(2);
+        rowData.VeinQ1 = parseFloat(parseFloat(rowData.ExQ1) * 0.2).toFixed(2);
+
+        rowData.PromTotQ1 = parseFloat(parseFloat(rowData.OchenPorQ1) + parseFloat(rowData.VeinQ1)).toFixed(2);
+        rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
+
+        var index = $('#example2').DataTable().row($row).index();
+        $('#example2').DataTable().row(index).data(rowData).draw();
+
+        var nextCell = $('#example2').DataTable().cell($('#example2').DataTable().cell(cell).index().row + 1,
+            $('#example2').DataTable().cell(cell).index().column)
+            .node();
+        // Focus that cell
+        $(nextCell).find('input').focus();
+    }
+
+    function recalcularQ2($row, rowData, cell) {
+        rowData.SumQ2 = parseFloat(parseFloat(rowData.PpQ2) + parseFloat(rowData.SpQ2) + parseFloat(rowData.TpQ2)).toFixed(2);
+        rowData.PromQ2 = parseFloat(rowData.SumQ2 / 3).toFixed(2);
+        rowData.OchenPorQ2 = parseFloat(rowData.PromQ2 * 0.8).toFixed(2);
+        rowData.VeinQ2 = parseFloat(parseFloat(rowData.ExQ2) * 0.2).toFixed(2);
+
+        rowData.PromTotQ2 = parseFloat(parseFloat(rowData.OchenPorQ2) + parseFloat(rowData.VeinQ2)).toFixed(2);
+        rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
+
+        var index = $('#example2').DataTable().row($row).index();
+        $('#example2').DataTable().row(index).data(rowData).draw();
+
+        var nextCell = $('#example2').DataTable().cell($('#example2').DataTable().cell(cell).index().row + 1,
+            $('#example2').DataTable().cell(cell).index().column)
+            .node();
+        // Focus that cell
+        $(nextCell).find('input').focus();
+    }
+
+    function consultarNotas() {
         if ($(txtSelectCurso).select2('data') != null && $(txtSelectMateria).select2('data') != null && $(txtSelectPeriodoLectivo).select2('data') != null) {
             $.ajax({
                 type: "GET",
@@ -212,7 +379,7 @@
                             { "data": "Alumno", "className": 'Alumno', "title": "Alumno" },
                             {
                                 "data": "PpQ1", "className": 'PpQ1', "title": "1PQ1",
-                                "render": function (data, type, row) {                                    
+                                "render": function (data, type, row) {
                                     return '<input type="number" step="any" id="PpQ1" class="form-control trackInputPpQ1" name="PpQ1" value = "' + row.PpQ1 + '" style="width: 75px;"" />';
                                 }
                             },
@@ -279,8 +446,8 @@
 
                                 if (rowData != undefined) {
                                     rowData.PpQ1 = parseFloat($(this).val()).toFixed(2)
-                                    recalcularQ1($row, rowData, cell)      
-                                }                                                          
+                                    recalcularQ1($row, rowData, cell)
+                                }
 
                             });
 
@@ -369,127 +536,18 @@
                     //$('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('enable');
                 }
             });
-        }
-    });
+        } else {
 
-    $('#btnNuevo').on('click', function () { nuevo(); });
-
-    $('#btnGenerar').on('click', function () {
-        var tblNotas = $('#example2').DataTable().rows().data().toArray();
-        var dataNotas = new Array();
-
-        $.each(tblNotas, function (index, value) {
-            var nota = {};
-            nota.IdOferta = document.getElementById('txtCurso').value;
-            nota.IdCargaLectiva = document.getElementById('txtMateria').value;
-            nota.IdPeriodoLectivo = document.getElementById('txtPeriodoLectivo').value;
-            nota.IdAlumno = value.IdAlumno;
-            nota.PpQ1 = value.PpQ1;
-            nota.SpQ1 = value.SpQ1;
-            nota.TpQ1 = value.TpQ1;
-            nota.SumQ1 = value.SumQ1;
-            nota.PromQ1 = value.PromQ1;
-            nota.OchenPorQ1 = value.OchenPorQ1;
-            nota.ExQ1 = value.ExQ1;
-            nota.VeinQ1 = value.VeinQ1;
-            nota.PromTotQ1 = value.PromTotQ1;
-            nota.PpQ2 = value.PpQ2;
-            nota.SpQ2 = value.SpQ2;
-            nota.TpQ2 = value.TpQ2;
-            nota.SumQ2 = value.SumQ2;
-            nota.PromQ2 = value.PromQ2;
-            nota.OchenPorQ2 = value.OchenPorQ2;
-            nota.ExQ2 = value.ExQ2;
-            nota.VeinQ2 = value.VeinQ2;
-            nota.PromTotQ2 = value.PromTotQ2;
-            nota.Total = value.Total;
-
-            dataNotas.push(nota);
-        });
-
-        var myJsonData = { dataNotas: dataNotas };
-        var previousWindowKeyDown = window.onkeydown;
-
-        swal({
-            title: "Notas ",
-            text: "Desea generar las notas?",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-        }, function (isConfirm) {
-            window.onkeydown = previousWindowKeyDown;
-            if (isConfirm) {                
-
-                $.ajax({
-                    url: "/Notas/GrabarNotas",
-                    type: "POST",
-                    data: JSON.stringify(myJsonData),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.bResultado) {
-                            swal("Saved", data.Message, "success");
-
-                                window.setTimeout(function () {
-                                    location.href = '@Url.Action("Index", "Notas")';
-                                }, 1500);
-                            }
-                            else {
-                                swal("Cancelled", data.Message, "error");
-                            }
-                    }
-                });
+            if ($(txtSelectPeriodoLectivo).select2('data') == null) {
+                toastr.error("Debe ingresar periodo lectivo", 'Registro de notas');
+            } else if ($(txtSelectCurso).select2('data') == null) {
+                toastr.error("Debe ingresar curso", 'Registro de notas');
+            } else if ($(txtSelectMateria).select2('data') == null) {
+                toastr.error("Debe ingresar materia", 'Registro de notas');
             }
-        });
-    });
-
-    function nuevo() {
-        //Bloqueo todos los elementos, encero los campos y activo el select2 se consultar
-        //$('.clsBoxCab, .clsBoxPar, .clsBoxDet, .clsBoxCalcProd').hide(100);
-        //bloquear();
-        //encerar();
-        $('#example2').DataTable().clear().draw();
-        $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('data', null);
-        $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('enable');
+            
+        }
     }
 
-    function recalcularQ1($row, rowData, cell) {        
-        rowData.SumQ1 = parseFloat(parseFloat(rowData.PpQ1) + parseFloat(rowData.SpQ1) + parseFloat(rowData.TpQ1)).toFixed(2);
-        rowData.PromQ1 = parseFloat(rowData.SumQ1 / 3).toFixed(2);
-        rowData.OchenPorQ1 = parseFloat(rowData.PromQ1 * 0.8).toFixed(2);
-        rowData.VeinQ1 = parseFloat(parseFloat(rowData.ExQ1) * 0.2).toFixed(2);
-
-        rowData.PromTotQ1 = parseFloat(parseFloat(rowData.OchenPorQ1) + parseFloat(rowData.VeinQ1)).toFixed(2);
-        rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
-
-        var index = $('#example2').DataTable().row($row).index();
-        $('#example2').DataTable().row(index).data(rowData).draw();
-
-        var nextCell = $('#example2').DataTable().cell($('#example2').DataTable().cell(cell).index().row + 1,
-            $('#example2').DataTable().cell(cell).index().column)
-            .node();
-        // Focus that cell
-        $(nextCell).find('input').focus();
-    }
-
-    function recalcularQ2($row, rowData, cell) {
-        rowData.SumQ2 = parseFloat(parseFloat(rowData.PpQ2) + parseFloat(rowData.SpQ2) + parseFloat(rowData.TpQ2)).toFixed(2);
-        rowData.PromQ2 = parseFloat(rowData.SumQ2 / 3).toFixed(2);
-        rowData.OchenPorQ2 = parseFloat(rowData.PromQ2 * 0.8).toFixed(2);
-        rowData.VeinQ2 = parseFloat(parseFloat(rowData.ExQ2) * 0.2).toFixed(2);
-
-        rowData.PromTotQ2 = parseFloat(parseFloat(rowData.OchenPorQ2) + parseFloat(rowData.VeinQ2)).toFixed(2);
-        rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
-
-        var index = $('#example2').DataTable().row($row).index();
-        $('#example2').DataTable().row(index).data(rowData).draw();
-
-        var nextCell = $('#example2').DataTable().cell($('#example2').DataTable().cell(cell).index().row + 1,
-            $('#example2').DataTable().cell(cell).index().column)
-            .node();
-        // Focus that cell
-        $(nextCell).find('input').focus();
-    }
 </script>
 
