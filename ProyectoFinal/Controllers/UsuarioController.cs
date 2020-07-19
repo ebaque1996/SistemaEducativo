@@ -127,6 +127,10 @@ namespace ProyectoFinal.Controllers
                 return false;
             }*/
 
+
+
+
+
             if (String.IsNullOrEmpty(Nombres))
             {
                 error = "Debe ingresar los Nombres";

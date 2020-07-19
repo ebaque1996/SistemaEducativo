@@ -62,7 +62,7 @@ namespace ProyectoFinal.Controllers
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
-            if (esValido(Cedula, Nombres, Apellidos, Email, Direccion, Telefono, Sexo, Estado))
+            if (esValido(IdProfesor, Cedula, Nombres, Apellidos, Email, Direccion, Telefono, Sexo, Estado))
             {
                 Profesor objProfesor = new Profesor();
                 objProfesor.Cedula = Cedula;
@@ -110,7 +110,7 @@ namespace ProyectoFinal.Controllers
 
         }
 
-        public bool esValido(string Cedula, string Nombres, string Apellidos, string Email, 
+        public bool esValido(int IdProfesor, string Cedula, string Nombres, string Apellidos, string Email, 
             string Direccion, string Telefono, string Sexo, string Estado)
         {
             if (String.IsNullOrEmpty(Cedula))
@@ -119,11 +119,57 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
-            if (cedulaRegistrada(Cedula))
+            //Si es creacion siempre va a verificar la cedula y si ya existe en otro alumno, si es edicion consulto la cedula grabada actualmente y si es la
+            //misma que la que ingresa en la pantalla no ejecuta metodo (xq no la ha cambiado), si es que no es la misma (la cambio) ahi va a verificar si la
+            //cedula ya pertenece a otro alumno y si es valida
+
+            if (IdProfesor == 0)
             {
-                error = "Ya Existe un Profesor registrado con esta Cédula";
-                return false;
+
+                if (cedulaRegistrada(Cedula))
+                {
+                    error = "Ya Existe un Profesor registrado con esta Cédula";
+                    return false;
+                }
+
+                if (!VerificaIdentificacion(Cedula))
+                {
+                    error = "Cédula Inválida";
+                    return false;
+                }
             }
+            else
+            {
+                Profesor objProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == IdProfesor).FirstOrDefault();
+                if (objProfesor != null)
+                {
+                    if (Cedula != objProfesor.Cedula)
+                    {
+                        if (cedulaRegistrada(Cedula))
+                        {
+                            error = "Ya Existe un Profesor registrado con esta Cédula";
+                            return false;
+                        }
+
+                        if (!VerificaIdentificacion(Cedula))
+                        {
+                            error = "Cédula Inválida";
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    error = "El Profesor no existe";
+                    return false;
+                }
+            }
+
+            //if (cedulaRegistrada(Cedula))
+            //{
+            //    error = "Ya Existe un Profesor registrado con esta Cédula";
+            //    return false;
+            //}
 
             if (String.IsNullOrEmpty(Nombres))
             {
@@ -166,6 +212,62 @@ namespace ProyectoFinal.Controllers
             }
 
             return true;
+        }
+
+        internal static bool VerificaIdentificacion(string identificacion)
+        {
+            bool estado = false;
+            char[] valced = new char[13];
+            int provincia;
+            if (identificacion.Length >= 10)
+            {
+                valced = identificacion.Trim().ToCharArray();
+                provincia = int.Parse((valced[0].ToString() + valced[1].ToString()));
+                if (provincia > 0 && provincia < 25)
+                {
+                    if (int.Parse(valced[2].ToString()) < 6)
+                    {
+                        estado = VerificaCedula(valced);
+                    }
+                    /*else if (int.Parse(valced[2].ToString()) == 6)
+                    {
+                        estado = VerificaSectorPublico(valced);
+                    }
+                    else if (int.Parse(valced[2].ToString()) == 9)
+                    {
+                        estado = VerificaPersonaJuridica(valced);
+                    }*/
+                }
+            }
+            return estado;
+        }
+
+        public static bool VerificaCedula(char[] validarCedula)
+        {
+            int aux = 0, par = 0, impar = 0, verifi;
+            for (int i = 0; i < 9; i += 2)
+            {
+                aux = 2 * int.Parse(validarCedula[i].ToString());
+                if (aux > 9)
+                    aux -= 9;
+                par += aux;
+            }
+            for (int i = 1; i < 9; i += 2)
+            {
+                impar += int.Parse(validarCedula[i].ToString());
+            }
+
+            aux = par + impar;
+            if (aux % 10 != 0)
+            {
+                verifi = 10 - (aux % 10);
+            }
+            else
+                verifi = 0;
+            if (verifi == int.Parse(validarCedula[9].ToString()))
+                return true;
+            else
+                return false;
         }
 
         public bool cedulaRegistrada(string Cedula)

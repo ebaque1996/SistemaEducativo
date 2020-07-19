@@ -64,7 +64,7 @@ namespace ProyectoFinal.Controllers
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
-            if (esValido(Cedula, Nombres, Apellidos, FechaNac, Sexo, Direccion, Telefono, UltimoNivel, CedulaRepresentante, 
+            if (esValido(IdAlumno, Cedula, Nombres, Apellidos, FechaNac, Sexo, Direccion, Telefono, UltimoNivel, CedulaRepresentante, 
                 NombresRepresentante, ApellidosRepresentante, TelefonoRepresentante, DireccionRepresentante, ColegioAnterior, Estado))
             {
                 Alumno objAlumno = new Alumno();
@@ -120,28 +120,75 @@ namespace ProyectoFinal.Controllers
 
         }
 
-        public bool esValido(string Cedula, string Nombres, string Apellidos, DateTime FechaNac,
+        public bool esValido(int IdAlumno, string Cedula, string Nombres, string Apellidos, DateTime FechaNac,
                             string Sexo, string Direccion, string Telefono, int UltimoNivel, string CedulaRepresentante,
                             string NombresRepresentante, string ApellidosRepresentante, string TelefonoRepresentante,
                             string DireccionRepresentante, string ColegioAnterior, string Estado)
         {
+
             if (String.IsNullOrEmpty(Cedula))
             {
                 error = "Debe ingresar la Cédula";
                 return false;
             }
 
-            if (!VerificaIdentificacion(Cedula)) 
-            {
-                error = "Cédula Inválida";
-                return false;
-            }
+            //Si es creacion siempre va a verificar la cedula y si ya existe en otro alumno, si es edicion consulto la cedula grabada actualmente y si es la
+            //misma que la que ingresa en la pantalla no ejecuta metodo (xq no la ha cambiado), si es que no es la misma (la cambio) ahi va a verificar si la
+            //cedula ya pertenece a otro alumno y si es valida
 
-            if (cedulaRegistrada(Cedula))
-            {
-                error = "Ya Existe un Alumno registrado con esta Cédula";
-                return false;
+            if (IdAlumno == 0)
+            {                
+
+                if (cedulaRegistrada(Cedula))
+                {
+                    error = "Ya Existe un Alumno registrado con esta Cédula";
+                    return false;
+                }
+
+                if (!VerificaIdentificacion(Cedula))
+                {
+                    error = "Cédula Inválida";
+                    return false;
+                }
             }
+            else
+            {
+                Alumno objAlumno = db.Alumno.AsNoTracking().Where(x => x.IdAlumno == IdAlumno).FirstOrDefault();
+                if (objAlumno != null)
+                {
+                    if (Cedula != objAlumno.Cedula)
+                    {
+                        if (cedulaRegistrada(Cedula))
+                        {
+                            error = "Ya Existe un Alumno registrado con esta Cédula";
+                            return false;
+                        }
+
+                        if (!VerificaIdentificacion(Cedula))
+                        {
+                            error = "Cédula Inválida";
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    error = "El Alumno no existe";
+                    return false;
+                }
+            }            
+
+            //if (!VerificaIdentificacion(Cedula)) 
+            //{
+            //    error = "Cédula Inválida";
+            //    return false;
+            //}
+
+            //if (cedulaRegistrada(Cedula))
+            //{
+            //    error = "Ya Existe un Alumno registrado con esta Cédula";
+            //    return false;
+            //}
 
 
             if (String.IsNullOrEmpty(Nombres))
