@@ -54,7 +54,7 @@ namespace ProyectoFinal.Controllers
                              deta.IdPeriodoLectivo,
                              deta.IdProfesor,
                              deta.Estado,
-                             DescOferta = cur.Descripcion + " " + par.Descripcion,
+                             DescOferta = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"),
                              DescMateria = mat.Descripcion,
                              DescPerLec = perlec.Descripcion,
                              DescProfesor = prof.Nombres + " " + prof.Apellidos
@@ -125,7 +125,7 @@ namespace ProyectoFinal.Controllers
                              deta.IdPeriodoLectivo,
                              deta.IdProfesor,
                              deta.Estado,
-                             DescOferta = cur.Descripcion + " " + par.Descripcion,
+                             DescOferta = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"),
                              DescMateria = mat.Descripcion,
                              DescPerLec = perlec.Descripcion,
                              DescProfesor = prof.Nombres + " " + prof.Apellidos
@@ -194,7 +194,7 @@ namespace ProyectoFinal.Controllers
                                join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
                                where maq.Estado == "A"
-                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion }
+                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
                    ).ToList();
 
             FatherItems.RemoveAll(item => item == null);
@@ -322,15 +322,15 @@ namespace ProyectoFinal.Controllers
 
         public bool esValido(CargaLectiva objCargaLectiva)
         {
-            //if (objCargaLectiva.IdCurso == 0)
-            //{
-            //    error = "Debe ingresar el curso";
-            //    return false;
-            //}
-
-            if (objCargaLectiva.IdProfesor == 0)
+            if (objCargaLectiva.IdPeriodoLectivo == 0)
             {
-                error = "Debe ingresar el profesor";
+                error = "Debe ingresar el periodo lectivo";
+                return false;
+            }
+
+            if (objCargaLectiva.IdOferta == 0)
+            {
+                error = "Debe ingresar el curso";
                 return false;
             }
 
@@ -340,11 +340,11 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
-            if (objCargaLectiva.IdPeriodoLectivo == 0)
+            if (objCargaLectiva.IdProfesor == 0)
             {
-                error = "Debe ingresar el periodo lectivo";
+                error = "Debe ingresar el profesor";
                 return false;
-            }
+            }                     
 
             return true;
         }

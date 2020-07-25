@@ -12,6 +12,7 @@ namespace ProyectoFinal.Models
         public string DescCurso { get; set; }       
         public string DescParalelo { get; set; }
         public string DescProfesor { get; set; }
+        public string DescJornada { get; set; }
         public int Disponible { get; set; }
     }
 }

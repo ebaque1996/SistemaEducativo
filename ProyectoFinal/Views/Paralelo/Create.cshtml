@@ -20,17 +20,7 @@
 
                             <div class="box-body">
                                 <div class="row">
-                                    @*<div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="col-md-4">
-                                                <label for="CCiMaquina" class="control-label">Id Paralelo</label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                @Html.EditorFor(model => model.IdParalelo, new { htmlAttributes = new { @id = "txtIdParalelo", @class = "form-control" } })
-                                            </div>
-                                        </div>
-                                    </div>*@
-
+                                 
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="col-md-4">
@@ -118,7 +108,7 @@
 
                                 window.setTimeout(function () {
                                     location.href = '@Url.Action("Index", "Paralelo")';
-                                }, 4000);
+                                }, 1000);
 
                             }else {
                                 swal("Cancelled", data.Message, "error");

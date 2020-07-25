@@ -13,34 +13,111 @@
             <form class="input-horizontal">
                 <div class="box-body">
 
-                    <div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Carga Lectiva</label>
-                        @Html.EditorFor(model => model.IdCargaLectiva, new { htmlAttributes = new { @id = "txtIdCargaLectiva", @class = "form-control", disabled = "disabled" } })
+                    @*<div class="input-group">
+            <label for="CCiMaquina" class="control-label">Id Carga Lectiva</label>
+            @Html.EditorFor(model => model.IdCargaLectiva, new { htmlAttributes = new { @id = "txtIdCargaLectiva", @class = "form-control", disabled = "disabled" } })
+        </div>*@
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="IdCL" class="control-label">Id Carga Lectiva:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.IdCargaLectiva, new { htmlAttributes = new { @id = "txtIdCargaLectiva", @class = "form-control", disabled = "disabled" } })
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="CDsMaquina" class="control-label">Profesor</label>
-                        <input type="text" id="txtSelectProfesor" style="width: 100%;" />
-                        <input type="text" id="txtProfesor" hidden />
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="Periodo" class="control-label">Periodo:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="txtSelectPeriodo" style="width: 100%;" />
+                                    <input type="text" id="txtPeriodo" hidden />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="CDsMaquina" class="control-label">Curso</label>
-                        <input type="text" id="txtSelectCurso" style="width: 100%;" />
-                        <input type="text" id="txtCurso" hidden />
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="Curso" class="control-label">Curso:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="txtSelectCurso" style="width: 100%;" />
+                                    <input type="text" id="txtCurso" hidden />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="CDsMaquina" class="control-label">Periodo</label>
-                        <input type="text" id="txtSelectPeriodo" style="width: 100%;" />
-                        <input type="text" id="txtPeriodo" hidden />
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="Materia" class="control-label">Materia:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="txtSelectMateria" style="width: 100%;" />
+                                    <input type="text" id="txtMateria" hidden />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="input-group">
-                        <label for="CDsMaquina" class="control-label">Materia</label>
-                        <input type="text" id="txtSelectMateria" style="width: 100%;" />
-                        <input type="text" id="txtMateria" hidden />
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="Profesor" class="control-label">Profesor:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="txtSelectProfesor" style="width: 100%;" />
+                                    <input type="text" id="txtProfesor" hidden />
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    @*<div class="input-group">
+            <label for="CDsMaquina" class="control-label">Profesor</label>
+            <input type="text" id="txtSelectProfesor" style="width: 100%;" />
+            <input type="text" id="txtProfesor" hidden />
+        </div>
+
+        <div class="input-group">
+            <label for="CDsMaquina" class="control-label">Curso</label>
+            <input type="text" id="txtSelectCurso" style="width: 100%;" />
+            <input type="text" id="txtCurso" hidden />
+        </div>
+
+        <div class="input-group">
+            <label for="CDsMaquina" class="control-label">Periodo</label>
+            <input type="text" id="txtSelectPeriodo" style="width: 100%;" />
+            <input type="text" id="txtPeriodo" hidden />
+        </div>
+
+        <div class="input-group">
+            <label for="CDsMaquina" class="control-label">Materia</label>
+            <input type="text" id="txtSelectMateria" style="width: 100%;" />
+            <input type="text" id="txtMateria" hidden />
+        </div>*@
 
                     <div class="checkbox">
                         <label class="radio">
@@ -259,7 +336,7 @@
 
                                 window.setTimeout(function () {
                                     location.href = '@Url.Action("Index", "CargaLectiva")';
-                                }, 1500);
+                                }, 1000);
                             }
                             else {
                                 swal("Cancelled", data.Message, "error");

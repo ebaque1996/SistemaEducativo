@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -69,12 +69,26 @@
                                 </div>
                                 <div class="col-md-8">
                                     @*<input type="text" class="form-control"
-                                           id="txtCapacidad" placeholder="Capacidad" />*@
+                        id="txtCapacidad" placeholder="Capacidad" />*@
 
                                     <input min="0" step="1" class="form-control" id="txtCapacidad" type="number" name="txtCapacidad" placeholder="Capacidad " />
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="form-control no-border">Jornada:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="txtSelectJornada" />
+                                    <input type="text" id="txtJornada" hidden />
+                                </div>
+                            </div>
+                        </div>                        
                     </div>
 
                     <br />
@@ -96,11 +110,12 @@
                             <th>Id Periodo Lectivo</th>
                             <th>Id Curso</th>
                             <th>Id Paralelo</th>
-                            <th>Id Profesor</th>
+                            <th>Id Dirigente</th>
                             <th>Periodo Lectivo</th>
                             <th>Curso</th>
                             <th>Paralelo</th>
-                            <th>Profesor</th>
+                            <th>Dirigente</th>
+                            <th>Jornada</th>
                             <th>Capacidad</th>
                             <th>Ocupado</th>
                             <th>Disponible</th>
@@ -239,6 +254,34 @@
             dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
             escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
         });
+
+        $("#txtSelectJornada").on("select2-selecting", function (e) { document.getElementById('txtJornada').value = e.val; });
+
+        $('#txtSelectJornada').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Jornada",
+
+            ajax: {
+                url: '/Oferta/GetJornadas',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
     });
 
     $('#txtSelectPeriodo').on("change", function (e) {
@@ -254,6 +297,31 @@
             });
         } else {
             $('#example2').DataTable().clear().draw();
+            document.getElementById('txtPeriodo').value = null;
+        }
+    });
+
+    $('#txtSelectCurso').on("change", function (e) {
+        if ($(txtSelectCurso).select2('data') == null) {
+            document.getElementById('txtCurso').value = null;
+        }
+    });
+
+    $('#txtSelectParalelo').on("change", function (e) {
+        if ($(txtSelectParalelo).select2('data') == null) {
+            document.getElementById('txtParalelo').value = null;
+        }
+    });
+
+    $('#txtSelectDirigente').on("change", function (e) {
+        if ($(txtSelectDirigente).select2('data') == null) {
+            document.getElementById('txtDirigente').value = null;
+        }
+    });
+
+    $('#txtSelectJornada').on("change", function (e) {
+        if ($(txtSelectJornada).select2('data') == null) {
+            document.getElementById('txtJornada').value = null;
         }
     });
 
@@ -269,12 +337,20 @@
         var IdCurso = document.getElementById("txtCurso").value;
         var IdParalelo = document.getElementById("txtParalelo").value;
         var IdProfesor = document.getElementById("txtDirigente").value;
+        var Jornada = document.getElementById("txtJornada").value;
         var Capacidad = document.getElementById("txtCapacidad").value;
+
+        if (document.getElementById("txtPeriodo").value == null || document.getElementById("txtPeriodo").value == '') { IdPeriodo = 0;}
+        if (document.getElementById("txtCurso").value == null || document.getElementById("txtCurso").value == '') { IdCurso = 0; }
+        if (document.getElementById("txtParalelo").value == null || document.getElementById("txtParalelo").value == '') {IdParalelo = 0;}
+        if (document.getElementById("txtDirigente").value == null || document.getElementById("txtDirigente").value == '') {IdProfesor = 0;}
+        if (document.getElementById("txtCapacidad").value == null || document.getElementById("txtCapacidad").value == '') {Capacidad = 0;}
 
         var jsonCad = "{'IdPeriodo':'" + IdPeriodo + "'";
         jsonCad = jsonCad + ", 'IdCurso': '" + IdCurso + "'";
         jsonCad = jsonCad + ", 'IdParalelo': '" + IdParalelo + "'";
         jsonCad = jsonCad + ", 'IdProfesor': '" + IdProfesor + "'";
+        jsonCad = jsonCad + ", 'Jornada': '" + Jornada + "'";
         jsonCad = jsonCad + ", 'Capacidad': '" + Capacidad + "'";
         jsonCad = jsonCad + "}";
 
@@ -300,6 +376,7 @@
                             if (data.bResultado) {
                                 swal("Saved", data.Message, "success");
                                 GeneraConsulta(data.listOfertaExt);
+                                limpiar();
                             }
                             else {
                                 swal("Cancelled", data.Message, "error");
@@ -334,14 +411,15 @@
                 { "data": "DescPerLec", "className": 'DescPerLec', "title": "Periodo Lectivo" },
                 { "data": "DescCurso", "className": 'DescCurso', "title": "Curso" },
                 { "data": "DescParalelo", "className": 'DescParalelo', "title": "Paralelo" },
-                { "data": "DescProfesor", "className": 'DescProfesor', "title": "Profesor" },
+                { "data": "DescProfesor", "className": 'DescProfesor', "title": "Dirigente" },
+                { "data": "DescJornada", "className": 'DescJornada', "title": "Jornada" },
                 { "data": "Capacidad", "className": 'Capacidad', "title": "Capacidad" },
                 { "data": "Ocupado", "className": 'Ocupado', "title": "Ocupado" },
                 { "data": "Disponible", "className": 'Disponible', "title": "Disponible" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
 
                 {
-                    "data": "btnEdit", "className": 'btnEdit', "title": "",
+                    "data": "btnEdit", "className": 'btnEdit', "title": "", "width": "5%",
                     "render": function (data, type, row) {
                         var sCad = '<button type="button" class="btn btn-info btn-sm btnEditRow"> ';
                         sCad = sCad + '<i class="fa fas fa-edit" aria - hidden="true" ></i >';
@@ -354,7 +432,7 @@
                 },
 
                 {
-                    "data": "btnElim", "className": 'btnElim', "title": "",
+                    "data": "btnElim", "className": 'btnElim', "title": "", "width": "5%",
                     "render": function (data, type, row) {
                         var sCad = '<button type="button" class="btn btn-danger btn-sm btnDeleteRow"> ';
                         sCad = sCad + '<i class="fa fas fa-trash" aria - hidden="true" ></i >';
@@ -368,16 +446,21 @@
         });
     }
 
-
+    function limpiar() {
+        $('#txtSelectCurso').select2('data', null);
+        $('#txtSelectParalelo').select2('data', null);
+        $('#txtSelectDirigente').select2('data', null);
+        $('#txtSelectJornada').select2('data', null);
+        document.getElementById('txtCurso').value = null;
+        document.getElementById('txtParalelo').value = null;
+        document.getElementById('txtDirigente').value = null;
+        document.getElementById('txtJornada').value = null;
+        $('#txtCapacidad').val("");
+    }
 
     $('#example2').DataTable().on('click', '.btnEditRow', function () {
         var table = $('#example2').DataTable();
         var data = table.row($(this).parents('tr')).data();
-        /*var newData = new Array();
-
-        newData.push(data);
-        var myJsonData = { detOrdens: newData };
-        var jsonCad = "{'NNuIdOF':'" + data.NNuIdOF + "'}"*/
         var rowIndexSelected;
 
         $.ajax({
@@ -389,29 +472,12 @@
         }).done(function (response) {
             $('.table-placeholder2').html(response);
             $('#lista_productosModal').modal('show');
-
-            //if (iRow == 0) { iRow = (this).closest('tr').index(); }
-
-            //table
-            //    .row($(this).parents('tr'))
-            //    .remove()
-            //    .draw();
-
-            //table.ajax.reload;
+            limpiar();
         }
         ).fail(function () {
             alert("error");
         });
 
-        //GeneraConsulta(data.listOfertaExt);
-
-        //table
-        //    .row($(this).parents('tr'))
-        //    .draw();
-
-        //rowIndexSelected = $(this).closest('tr').index();
-        ////if (iRow == 0) { iRow = rowIndexSelected; }
-        //table.ajax.reload;
     });
 
     $("#lista_productosModal").on("hidden.bs.modal", function () {
@@ -459,6 +525,7 @@
                             if (data.bResultado) {
                                 swal("Saved", data.Message, "success");
                                 GeneraConsulta(data.listOfertaExt);
+                                limpiar();
                             }
                             else {
                                 swal("Cancelled", data.Message, "error");

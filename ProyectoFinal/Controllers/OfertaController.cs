@@ -136,6 +136,22 @@ namespace ProyectoFinal.Controllers
 
         }
 
+        public JsonResult GetJornadas(string q)
+        {
+
+            var Jornadas = new List<object>().Select(t => new {
+                id = default(string),
+                text = default(string)
+            }).ToList();
+
+            Jornadas.Add(new { id = "MAT", text = "MATUTINA" });
+            Jornadas.Add(new { id = "VES", text = "VESPERTINA" });
+
+            var FatherItem = Jornadas.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);            
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);          
+        }
+
         [HttpGet]
         public JsonResult GetDetalle(int idPer)
         {
@@ -157,7 +173,8 @@ namespace ProyectoFinal.Controllers
                 objOferExt.Estado = item.Estado;
                 objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
                 objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
-                objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;                
+                objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;
+                objOferExt.DescJornada = item.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA";
                 objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
                 listOfertaExt.Add(objOferExt);
             }
@@ -167,7 +184,7 @@ namespace ProyectoFinal.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, int Capacidad)
+        public JsonResult Create(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, string Jornada, int Capacidad)
         {
             string strResult = string.Empty;
             bool bResult = false;
@@ -177,13 +194,14 @@ namespace ProyectoFinal.Controllers
 
             try
             {
-                if (esValido(IdPeriodo, IdCurso, IdParalelo, IdProfesor, Capacidad))
+                if (esValido(IdPeriodo, IdCurso, IdParalelo, IdProfesor, Jornada, Capacidad))
                 {
                     Oferta objOferta = new Oferta();
                     objOferta.IdPeriodoLectivo = IdPeriodo;
                     objOferta.IdCurso = IdCurso;
                     objOferta.IdParalelo = IdParalelo;
                     objOferta.IdProfesor = IdProfesor;
+                    objOferta.Jornada = Jornada;
                     objOferta.Capacidad = Capacidad;
                     objOferta.Ocupado = 0;
                     objOferta.Estado = "A";
@@ -215,6 +233,7 @@ namespace ProyectoFinal.Controllers
                         objOferExt.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == item.IdPeriodoLectivo).FirstOrDefault().Descripcion;
                         objOferExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == item.IdCurso).FirstOrDefault().Descripcion;
                         objOferExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == item.IdParalelo).FirstOrDefault().Descripcion;
+                        objOferExt.DescJornada = item.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA";
                         objOferExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == item.IdProfesor).FirstOrDefault().Nombres;
                         listOfertaExt.Add(objOferExt);
                     }
@@ -275,7 +294,7 @@ namespace ProyectoFinal.Controllers
             return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
         }
 
-        public bool esValido(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, int Capacidad)
+        public bool esValido(int IdPeriodo, int IdCurso, int IdParalelo, int IdProfesor, string Jornada, int Capacidad)
         {
             if (IdPeriodo == 0)
             {
@@ -298,6 +317,12 @@ namespace ProyectoFinal.Controllers
             if (IdProfesor == 0)
             {
                 error = "Debe ingresar el profesor";
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(Jornada))
+            {
+                error = "Debe ingresar la jornada";
                 return false;
             }
 

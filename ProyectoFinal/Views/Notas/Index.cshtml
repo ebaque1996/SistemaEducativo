@@ -91,7 +91,7 @@
                                     <th>ExQ2</th>
                                     <th>20% Q2</th>
                                     <th>TotalQ2</th>
-                                    <th>Total Q1+Q2</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -243,30 +243,54 @@
             nota.IdCargaLectiva = document.getElementById('txtMateria').value;
             nota.IdPeriodoLectivo = document.getElementById('txtPeriodoLectivo').value;
             nota.IdAlumno = value.IdAlumno;
-            nota.PpQ1 = value.PpQ1;
-            nota.SpQ1 = value.SpQ1;
-            nota.TpQ1 = value.TpQ1;
-            nota.SumQ1 = value.SumQ1;
-            nota.PromQ1 = value.PromQ1;
-            nota.OchenPorQ1 = value.OchenPorQ1;
-            nota.ExQ1 = value.ExQ1;
-            nota.VeinQ1 = value.VeinQ1;
-            nota.PromTotQ1 = value.PromTotQ1;
-            nota.PpQ2 = value.PpQ2;
-            nota.SpQ2 = value.SpQ2;
-            nota.TpQ2 = value.TpQ2;
-            nota.SumQ2 = value.SumQ2;
-            nota.PromQ2 = value.PromQ2;
-            nota.OchenPorQ2 = value.OchenPorQ2;
-            nota.ExQ2 = value.ExQ2;
-            nota.VeinQ2 = value.VeinQ2;
-            nota.PromTotQ2 = value.PromTotQ2;
-            nota.Total = value.Total;
+            //var a = parseFloat(String(value.PpQ1)).toFixed(2);
+            //nota.PpQ1 = parseFloat(value.PpQ1);
+
+            //nota.PpQ1 = value.PpQ1;
+            //nota.SpQ1 = value.SpQ1;
+            //nota.TpQ1 = value.TpQ1;
+            //nota.SumQ1 = value.SumQ1;
+            //nota.PromQ1 = value.PromQ1;
+            //nota.OchenPorQ1 = value.OchenPorQ1;
+            //nota.ExQ1 = value.ExQ1;
+            //nota.VeinQ1 = value.VeinQ1;
+            //nota.PromTotQ1 = value.PromTotQ1;
+            //nota.PpQ2 = value.PpQ2;
+            //nota.SpQ2 = value.SpQ2;
+            //nota.TpQ2 = value.TpQ2;
+            //nota.SumQ2 = value.SumQ2;
+            //nota.PromQ2 = value.PromQ2;
+            //nota.OchenPorQ2 = value.OchenPorQ2;
+            //nota.ExQ2 = value.ExQ2;
+            //nota.VeinQ2 = value.VeinQ2;
+            //nota.PromTotQ2 = value.PromTotQ2;
+            //nota.Total = value.Total;
+
+            nota.PpQ1 = parseFloat(value.PpQ1);
+            nota.SpQ1 = parseFloat(value.SpQ1);
+            nota.TpQ1 = parseFloat(value.TpQ1);
+            nota.SumQ1 = parseFloat(value.SumQ1);
+            nota.PromQ1 = parseFloat(value.PromQ1);
+            nota.OchenPorQ1 = parseFloat(value.OchenPorQ1);
+            nota.ExQ1 = parseFloat(value.ExQ1);
+            nota.VeinQ1 = parseFloat(value.VeinQ1);
+            nota.PromTotQ1 = parseFloat(value.PromTotQ1);
+            nota.PpQ2 = parseFloat(value.PpQ2);
+            nota.SpQ2 = parseFloat(value.SpQ2);
+            nota.TpQ2 = parseFloat(value.TpQ2);
+            nota.SumQ2 = parseFloat(value.SumQ2);
+            nota.PromQ2 = parseFloat(value.PromQ2);
+            nota.OchenPorQ2 = parseFloat(value.OchenPorQ2);
+            nota.ExQ2 = parseFloat(value.ExQ2);
+            nota.VeinQ2 = parseFloat(value.VeinQ2);
+            nota.PromTotQ2 = parseFloat(value.PromTotQ2);
+            nota.Total = parseFloat(value.Total);
 
             dataNotas.push(nota);
         });
 
         var myJsonData = { dataNotas: dataNotas };
+        //var myJsonData = JSON.stringify({ dataNotas: dataNotas });
         var previousWindowKeyDown = window.onkeydown;
 
         swal({
@@ -313,14 +337,19 @@
         $('#txtSelectCurso, #txtSelectMateria, #txtSelectPeriodoLectivo').select2('enable');
     }
 
-    function recalcularQ1($row, rowData, cell) {        
-        rowData.SumQ1 = parseFloat(parseFloat(rowData.PpQ1) + parseFloat(rowData.SpQ1) + parseFloat(rowData.TpQ1)).toFixed(2);
-        rowData.PromQ1 = parseFloat(rowData.SumQ1 / 3).toFixed(2);
-        rowData.OchenPorQ1 = parseFloat(rowData.PromQ1 * 0.8).toFixed(2);
-        rowData.VeinQ1 = parseFloat(parseFloat(rowData.ExQ1) * 0.2).toFixed(2);
+    function recalcularQ1($row, rowData, cell) {
+        //roundToTwo(
+        //rowData.SumQ1 = parseFloat(parseFloat(rowData.PpQ1) + parseFloat(rowData.SpQ1) + parseFloat(rowData.TpQ1)).toFixed(2);
+        rowData.SumQ1 = parseFloat(roundToTwo(parseFloat(rowData.PpQ1) + parseFloat(rowData.SpQ1) + parseFloat(rowData.TpQ1))).toFixed(2);
+        //rowData.PromQ1 = parseFloat(rowData.SumQ1 / 3).toFixed(2);
+        rowData.PromQ1 = parseFloat(roundToTwo(rowData.SumQ1 / 3)).toFixed(2);
+        //rowData.OchenPorQ1 = parseFloat(rowData.PromQ1 * 0.8).toFixed(2);
+        rowData.OchenPorQ1 = parseFloat(roundToTwo(rowData.PromQ1 * 0.8)).toFixed(2);
+        //rowData.VeinQ1 = parseFloat(parseFloat(rowData.ExQ1) * 0.2).toFixed(2);
+        rowData.VeinQ1 = parseFloat(roundToTwo(parseFloat(rowData.ExQ1) * 0.2)).toFixed(2);
 
         rowData.PromTotQ1 = parseFloat(parseFloat(rowData.OchenPorQ1) + parseFloat(rowData.VeinQ1)).toFixed(2);
-        rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
+        rowData.Total = parseFloat(roundToTwo((parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2))/2)).toFixed(2);
 
         var index = $('#example2').DataTable().row($row).index();
         $('#example2').DataTable().row(index).data(rowData).draw();
@@ -333,13 +362,19 @@
     }
 
     function recalcularQ2($row, rowData, cell) {
-        rowData.SumQ2 = parseFloat(parseFloat(rowData.PpQ2) + parseFloat(rowData.SpQ2) + parseFloat(rowData.TpQ2)).toFixed(2);
-        rowData.PromQ2 = parseFloat(rowData.SumQ2 / 3).toFixed(2);
-        rowData.OchenPorQ2 = parseFloat(rowData.PromQ2 * 0.8).toFixed(2);
-        rowData.VeinQ2 = parseFloat(parseFloat(rowData.ExQ2) * 0.2).toFixed(2);
+        //rowData.SumQ2 = parseFloat(parseFloat(rowData.PpQ2) + parseFloat(rowData.SpQ2) + parseFloat(rowData.TpQ2)).toFixed(2);
+        //rowData.PromQ2 = parseFloat(rowData.SumQ2 / 3).toFixed(2);
+        //rowData.OchenPorQ2 = parseFloat(rowData.PromQ2 * 0.8).toFixed(2);
+        //rowData.VeinQ2 = parseFloat(parseFloat(rowData.ExQ2) * 0.2).toFixed(2);
+
+        rowData.SumQ2 = parseFloat(roundToTwo(parseFloat(rowData.PpQ2) + parseFloat(rowData.SpQ2) + parseFloat(rowData.TpQ2))).toFixed(2);
+        rowData.PromQ2 = parseFloat(roundToTwo(rowData.SumQ2 / 3)).toFixed(2);
+        rowData.OchenPorQ2 = parseFloat(roundToTwo(rowData.PromQ2 * 0.8)).toFixed(2);
+        rowData.VeinQ2 = parseFloat(parseFloat(roundToTwo(rowData.ExQ2) * 0.2)).toFixed(2);
 
         rowData.PromTotQ2 = parseFloat(parseFloat(rowData.OchenPorQ2) + parseFloat(rowData.VeinQ2)).toFixed(2);
-        rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
+        //rowData.Total = parseFloat(parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)).toFixed(2);
+        rowData.Total = parseFloat(roundToTwo((parseFloat(rowData.PromTotQ1) + parseFloat(rowData.PromTotQ2)) / 2)).toFixed(2);
 
         var index = $('#example2').DataTable().row($row).index();
         $('#example2').DataTable().row(index).data(rowData).draw();
@@ -380,62 +415,124 @@
                             {
                                 "data": "PpQ1", "className": 'PpQ1', "title": "1PQ1",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="PpQ1" class="form-control trackInputPpQ1" name="PpQ1" value = "' + row.PpQ1 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="PpQ1" class="form-control trackInputPpQ1" name="PpQ1" value = "' + row.PpQ1 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="PpQ1" class="form-control trackInputPpQ1" name="PpQ1" value = "' + parseFloat(row.PpQ1).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
                             {
                                 "data": "SpQ1", "className": 'SpQ1', "title": "2PQ1",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="SpQ1" class="form-control trackInputSpQ1" name="SpQ1" value = "' + row.SpQ1 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="SpQ1" class="form-control trackInputSpQ1" name="SpQ1" value = "' + row.SpQ1 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="SpQ1" class="form-control trackInputSpQ1" name="SpQ1" value = "' + parseFloat(row.SpQ1).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
                             {
                                 "data": "TpQ1", "className": 'TpQ1', "title": "3PQ1",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="TpQ1" class="form-control trackInputTpQ1" name="TpQ1" value = "' + row.TpQ1 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="TpQ1" class="form-control trackInputTpQ1" name="TpQ1" value = "' + row.TpQ1 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="TpQ1" class="form-control trackInputTpQ1" name="TpQ1" value = "' + parseFloat(row.TpQ1).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
-                            { "data": "SumQ1", "className": 'SumQ1', "title": "SumQ1" },
-                            { "data": "PromQ1", "className": 'PromQ1', "title": "PromQ1" },
-                            { "data": "OchenPorQ1", "className": 'OchenPorQ1', "title": "80% Q1" },
+                            {
+                                "data": "SumQ1", "className": 'SumQ1', "title": "SumQ1",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.SumQ1).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "PromQ1", "className": 'PromQ1', "title": "PromQ1",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.PromQ1).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "OchenPorQ1", "className": 'OchenPorQ1', "title": "80% Q1",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.OchenPorQ1).toFixed(2);
+                                }
+                            },
                             {
                                 "data": "ExQ1", "className": 'ExQ1', "title": "ExQ1",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="ExQ1" class="form-control trackInputExQ1" name="ExQ1" value = "' + row.ExQ1 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="ExQ1" class="form-control trackInputExQ1" name="ExQ1" value = "' + parseFloat(row.ExQ1).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
-                            { "data": "VeinQ1", "className": 'VeinQ1', "title": "20% Q1" },
-                            { "data": "PromTotQ1", "className": 'PromTotQ1', "title": "TotalQ1" },
+                            {
+                                "data": "VeinQ1", "className": 'VeinQ1', "title": "20% Q1",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.VeinQ1).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "PromTotQ1", "className": 'PromTotQ1', "title": "TotalQ1",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.PromTotQ1).toFixed(2);
+                                }
+                            },
                             {
                                 "data": "PpQ2", "className": 'PpQ2', "title": "1PQ2",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="PpQ2" class="form-control trackInputPpQ2" name="PpQ2" value = "' + row.PpQ2 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="PpQ2" class="form-control trackInputPpQ2" name="PpQ2" value = "' + row.PpQ2 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="PpQ2" class="form-control trackInputPpQ2" name="PpQ2" value = "' + parseFloat(row.PpQ2).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
                             {
                                 "data": "SpQ2", "className": 'SpQ2', "title": "2PQ2",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="SpQ2" class="form-control trackInputSpQ2" name="SpQ2" value = "' + row.SpQ2 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="SpQ2" class="form-control trackInputSpQ2" name="SpQ2" value = "' + row.SpQ2 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="SpQ2" class="form-control trackInputSpQ2" name="SpQ2" value = "' + parseFloat(row.SpQ2).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
                             {
                                 "data": "TpQ2", "className": 'TpQ2', "title": "3PQ2",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="TpQ2" class="form-control trackInputTpQ2" name="TpQ2" value = "' + row.TpQ2 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="TpQ2" class="form-control trackInputTpQ2" name="TpQ2" value = "' + row.TpQ2 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="TpQ2" class="form-control trackInputTpQ2" name="TpQ2" value = "' + parseFloat(row.TpQ2).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
-                            { "data": "SumQ2", "className": 'SumQ2', "title": "SumQ2" },
-                            { "data": "PromQ2", "className": 'PromQ2', "title": "PromQ2" },
-                            { "data": "OchenPorQ2", "className": 'OchenPorQ2', "title": "80% Q2" },
+                            {
+                                "data": "SumQ2", "className": 'SumQ2', "title": "SumQ2",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.SumQ2).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "PromQ2", "className": 'PromQ2', "title": "PromQ2",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.PromQ2).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "OchenPorQ2", "className": 'OchenPorQ2', "title": "80% Q2",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.OchenPorQ2).toFixed(2);
+                                }
+                            },
                             {
                                 "data": "ExQ2", "className": 'ExQ2', "title": "ExQ2",
                                 "render": function (data, type, row) {
-                                    return '<input type="number" step="any" id="ExQ2" class="form-control trackInputExQ2" name="ExQ2" value = "' + row.ExQ2 + '" style="width: 75px;"" />';
+                                    //return '<input type="number" step="any" id="ExQ2" class="form-control trackInputExQ2" name="ExQ2" value = "' + row.ExQ2 + '" style="width: 75px;"" />';
+                                    return '<input type="number" step="any" id="ExQ2" class="form-control trackInputExQ2" name="ExQ2" value = "' + parseFloat(row.ExQ2).toFixed(2) + '" style="width: 60px;"" />';
                                 }
                             },
-                            { "data": "VeinQ2", "className": 'VeinQ2', "title": "20% Q2" },
-                            { "data": "PromTotQ2", "className": 'PromTotQ2', "title": "TotalQ2" },
-                            { "data": "Total", "className": 'Total', "title": "Total Q1+Q2" }
+                            {
+                                "data": "VeinQ2", "className": 'VeinQ2', "title": "20% Q2",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.VeinQ2).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "PromTotQ2", "className": 'PromTotQ2', "title": "TotalQ2",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.PromTotQ2).toFixed(2);
+                                }
+                            },
+                            {
+                                "data": "Total", "className": 'Total', "title": "Total",
+                                "render": function (data, type, row) {
+                                    return parseFloat(row.Total).toFixed(2);
+                                }
+                            }
 
                         ],
                         "drawCallback": function (row, data) {
@@ -445,8 +542,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.PpQ1 = parseFloat($(this).val()).toFixed(2)
-                                    recalcularQ1($row, rowData, cell)
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.PpQ1 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    recalcularQ1($row, rowData, cell);
                                 }
 
                             });
@@ -457,7 +555,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.SpQ1 = parseFloat($(this).val()).toFixed(2);
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.SpQ1 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.SpQ1 = parseFloat($(this).val()).toFixed(2);
                                     recalcularQ1($row, rowData, cell)
                                 }
                             });
@@ -468,7 +568,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.TpQ1 = parseFloat($(this).val()).toFixed(2);
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.TpQ1 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.TpQ1 = parseFloat($(this).val()).toFixed(2);
                                     recalcularQ1($row, rowData, cell)
                                 }
                             });
@@ -479,7 +581,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.ExQ1 = parseFloat($(this).val()).toFixed(2);
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.ExQ1 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.ExQ1 = parseFloat($(this).val()).toFixed(2);
                                     recalcularQ1($row, rowData, cell)
                                 }
                             });
@@ -490,7 +594,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.PpQ2 = parseFloat($(this).val()).toFixed(2)
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.PpQ2 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.PpQ2 = parseFloat($(this).val()).toFixed(2)
                                     recalcularQ2($row, rowData, cell)
                                 }
 
@@ -502,7 +608,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.SpQ2 = parseFloat($(this).val()).toFixed(2);
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.SpQ2 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.SpQ2 = parseFloat($(this).val()).toFixed(2);
                                     recalcularQ2($row, rowData, cell)
                                 }
                             });
@@ -513,7 +621,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.TpQ2 = parseFloat($(this).val()).toFixed(2);
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.TpQ2 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.TpQ2 = parseFloat($(this).val()).toFixed(2);
                                     recalcularQ2($row, rowData, cell)
                                 }
                             });
@@ -524,7 +634,9 @@
                                 var cell = $(this).closest('td');
 
                                 if (rowData != undefined) {
-                                    rowData.ExQ2 = parseFloat($(this).val()).toFixed(2);
+                                    var IsNum = IsNumeric($(this).val());
+                                    rowData.ExQ2 = IsNum == true ? parseFloat(roundToTwo($(this).val())).toFixed(2) : 0;
+                                    //rowData.ExQ2 = parseFloat($(this).val()).toFixed(2);
                                     recalcularQ2($row, rowData, cell)
                                 }
                             });
@@ -547,6 +659,15 @@
             }
             
         }
+    }
+
+    function roundToTwo(num) {
+        return +(Math.round(num + "e+2") + "e-2");
+    }
+
+    function IsNumeric(input) {
+        var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+        return (RE.test(input));
     }
 
 </script>

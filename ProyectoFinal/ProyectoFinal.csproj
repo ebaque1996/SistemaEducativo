@@ -156,7 +156,7 @@
     </Reference>
     <Reference Include="ProyectoFinalModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\ProyectoFinalModel\ProyectoFinalModel\bin\Debug\ProyectoFinalModel.dll</HintPath>
+      <HintPath>..\..\ProyectoFinalModel\ProyectoFinalModel\bin\Debug\ProyectoFinalModel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

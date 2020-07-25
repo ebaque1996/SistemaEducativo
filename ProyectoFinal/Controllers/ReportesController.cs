@@ -54,7 +54,7 @@ namespace ProyectoFinal.Controllers
                            select new
                            {
                                id = ofer.IdOferta,
-                               text = cur.Descripcion + " " + par.Descripcion
+                               text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
                            }).ToList();
             Ofertas.RemoveAll(item => item == null);
 

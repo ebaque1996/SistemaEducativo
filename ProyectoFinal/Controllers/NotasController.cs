@@ -40,7 +40,8 @@ namespace ProyectoFinal.Controllers
                                join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
                                where ofer.Estado == "A" && ofer.IdPeriodoLectivo == idPerLec && usu.IdUsuario == IdUsuario
-                               select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion}
+                               //select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion}
+                               select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")}
                 ).Distinct().ToList();
 
             }
@@ -50,7 +51,8 @@ namespace ProyectoFinal.Controllers
                                join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
                                where maq.Estado == "A" && maq.IdPeriodoLectivo == idPerLec
-                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion }
+                               //select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion }
+                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
                 ).Distinct().ToList();
             }
 
@@ -221,7 +223,8 @@ namespace ProyectoFinal.Controllers
                                    join alum in db.Alumno.AsNoTracking() on matr.IdAlumno equals alum.IdAlumno
                                    join notas in db.Nota.AsNoTracking() on matr.IdAlumno equals notas.IdAlumno
                                    where matr.Estado == "A" && alum.Estado == "A"
-                                   && nota.IdOferta == idoferta && nota.IdCargaLectiva == idcl && nota.IdPeriodoLectivo == idperiodo
+                                   //&& nota.IdOferta == idoferta && nota.IdCargaLectiva == idcl && nota.IdPeriodoLectivo == idperiodo
+                                   && notas.IdOferta == idoferta && notas.IdCargaLectiva == idcl && notas.IdPeriodoLectivo == idperiodo
                                    select new
                                    {
                                        matr.IdOferta,

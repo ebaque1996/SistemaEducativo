@@ -71,7 +71,7 @@
                 { "data": "DescProfesor", "className": 'DescProfesor', "title": "Profesor" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
-                    "render": function (data, type, row) {
+                    "width": "10%","render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "CargaLectiva")/' + row.IdCargaLectiva;
                     return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';

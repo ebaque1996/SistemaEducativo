@@ -2,7 +2,7 @@
 
 <div class="content">
 
-    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
+    @*<input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />*@
 
     <div class="class=" col-md-6">
         <div class="box box-info">
@@ -13,18 +13,30 @@
             <form class="input-horizontal">
                 <div class="box-body">
 
-                    <label for="NNuTonelaje" class="control-label">Descripción</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Rol.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDescripcion" class="control-label">Descripción:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Rol.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="checkbox">
-                        <label class="radio">                  
+                        <label class="radio">
                             <input type="checkbox" name="chkEstado" , checked>
                             Activo
                         </label>
                     </div>
 
+                </div>
+
+                <div class="box-footer">
+                    <input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />
                 </div>
 
             </form>
@@ -160,7 +172,7 @@
 
                                 window.setTimeout(function () {
                                     location.href = '@Url.Action("Index", "Rol")';
-                                }, 1500);
+                                }, 1000);
 
                             }
                             else {
