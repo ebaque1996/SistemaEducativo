@@ -36,6 +36,20 @@ namespace ProyectoFinal.Controllers
                 return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
             }
 
+            //Si se edita un rol y se lo quiere inactivar, se debe verificar que no existan usuarios asociados al rol
+            if (objRol.Estado == "I" && trans == "U")
+            {
+                Usuario consUsu = db.Usuario.AsNoTracking().Where(x => x.Estado == "A" && x.IdRol == objRol.IdRol).FirstOrDefault();
+
+                if (consUsu != null)
+                {
+                    bResult = false;
+                    strResult = "Error al grabar el registro: No es posible inactivar el rol debido a que hay usuarios asociados al mismo";
+                    return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+
             //Grabar Rol
 
             if (trans == "A")
