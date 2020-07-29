@@ -34,6 +34,11 @@ namespace ProyectoFinal.Controllers
             return View();
         }
 
+        public ActionResult ListadoCalificacionesPorCurso()
+        {
+            return View();
+        }
+
         [HttpGet]
         public JsonResult GetOfertasLPC(string q)
         {
@@ -85,7 +90,29 @@ namespace ProyectoFinal.Controllers
             Alumnos.RemoveAll(item => item == null);
 
             return Json(new { items = Alumnos }, JsonRequestBehavior.AllowGet);
-        }        
+        }
+
+        public JsonResult GetParcialesRCPC(string q)
+        {
+
+            var Jornadas = new List<object>().Select(t => new {
+                id = default(string),
+                text = default(string)
+            }).ToList();
+
+            Jornadas.Add(new { id = "1P 1Q", text = "1ER PARCIAL - 1ER QUIMESTRE" });
+            Jornadas.Add(new { id = "2P 1Q", text = "2DO PARCIAL - 1ER QUIMESTRE" });
+            Jornadas.Add(new { id = "3P 1Q", text = "3ER PARCIAL - 1ER QUIMESTRE" });
+            Jornadas.Add(new { id = "EX 1Q", text = "EXAMEN - 1ER QUIMESTRE" });
+            Jornadas.Add(new { id = "1P 2Q", text = "1ER PARCIAL - 2DO QUIMESTRE" });
+            Jornadas.Add(new { id = "2P 2Q", text = "2DO PARCIAL - 2DO QUIMESTRE" });
+            Jornadas.Add(new { id = "3P 2Q", text = "3ER PARCIAL - 2DO QUIMESTRE" });
+            Jornadas.Add(new { id = "EX 2Q", text = "EXAMEN - 2DO QUIMESTRE" });
+
+            var FatherItem = Jornadas.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult PrintCertPromo(string txtIdAlumno)
         {
@@ -97,6 +124,12 @@ namespace ProyectoFinal.Controllers
         {
             string sQuery = "EXEC SP_LISTADO_POR_CURSO @Oferta = " + txtIdOferta;
             return ExportDataProduccion("ListadoPorCurso", "Listado Por Curso ", sQuery);
+        }
+
+        public ActionResult PrintListadoCalificacionesPorCurso(string txtIdOferta, string txtIdParcial)
+        {
+            string sQuery = "EXEC SP_CALIFICACIONES_CURSO_PARCIAL @Oferta = " + txtIdOferta + ", @Parcial = '" + txtIdParcial + "'";
+            return ExportDataProduccion("ListadoCalificacionesPorCurso", "Listado de Calificaciones Por Curso ", sQuery);
         }
 
 

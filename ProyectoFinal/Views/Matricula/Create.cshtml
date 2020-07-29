@@ -231,7 +231,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtAlumno').value = e.val; });
+        $("#txtSelectAlumno").on("select2-selecting", function (e) {
+            document.getElementById('txtAlumno').value = e.val;
+        });
 
         $('#txtSelectAlumno').select2({
             width: '50%',
@@ -286,32 +288,38 @@
     });
 
     $(document).ready(function () {
-        $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtOferta').value = e.val; });
+        if ($(txtSelectAlumno).select2('data') != null) {
 
-        $('#txtSelectOferta').select2({
-            width: '50%',
-            allowClear: true,
-            // minimumInputLength: 3,
-            placeholder: "Oferta",
+        }
+            $("#txtSelectOferta").on("select2-selecting", function (e) {
+                document.getElementById('txtOferta').value = e.val;
+            });
 
-            ajax: {
-                url: '/Matricula/GetOfertas',
-                dataType: 'json',
+            $('#txtSelectOferta').select2({
+                width: '50%',
+                allowClear: true,
+                // minimumInputLength: 3,
+                placeholder: "Oferta",
 
-                data: function (term, page) {
-                    return {
-                        q: term // search term
-                    };
+                ajax: {
+                    url: '/Matricula/GetOfertas',
+                    dataType: 'json',
+
+                    data: function (term, page) {
+                        return {
+                            q: term // search term
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                        return { results: data.items };
+                    },
+                    cache: true
                 },
-                results: function (data, page) { // parse the results into the format expected by Select2.
-                    // since we are using custom formatting functions we do not need to alter the remote JSON data
-                    return { results: data.items };
-                },
-                cache: true
-            },
-            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-        });
+                dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+                escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+            });
+        
 
     });
 

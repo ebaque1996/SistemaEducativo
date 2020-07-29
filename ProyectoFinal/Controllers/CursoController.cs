@@ -19,7 +19,7 @@ namespace ProyectoFinal.Controllers
         ProyectoFinalEntities db = new ProyectoFinalEntities();
         string error = "";
 
-        public static clsCapaAcceso.AccesoDatos.SQLServer objSQL;
+        //public static clsCapaAcceso.AccesoDatos.SQLServer objSQL;
 
         // GET: Curso
         public ActionResult Index()
