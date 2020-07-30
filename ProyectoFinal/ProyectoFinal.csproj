@@ -1001,6 +1001,7 @@
     <Content Include="Views\Partial\OfertaP\_EditaOF.cshtml" />
     <Content Include="Views\Reportes\ListadoPorCurso.cshtml" />
     <Content Include="Views\Reportes\CertificadoPromocion.cshtml" />
+    <Content Include="Views\Reportes\LibretaAlumno.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
