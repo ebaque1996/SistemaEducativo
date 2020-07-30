@@ -17,7 +17,7 @@ namespace ProyectoFinal.Controllers
         public ActionResult Index()
         {
             //List<CargaLectiva> listCargaLectiva = db.CargaLectiva.AsNoTracking().ToList();
-            List<CargaLectivaExt> listCargaLectivaExt = new List<CargaLectivaExt>();
+            //List<CargaLectivaExt> listCargaLectivaExt = new List<CargaLectivaExt>();
             //foreach (var item in listCargaLectiva)
             //{
             //    CargaLectivaExt objCarLec = new CargaLectivaExt();
@@ -38,48 +38,49 @@ namespace ProyectoFinal.Controllers
 
 
 
-            var model = (from deta in db.CargaLectiva.AsNoTracking()
-                         join ofer in db.Oferta.AsNoTracking() on deta.IdOferta equals ofer.IdOferta
-                         join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
-                         join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
-                         join mat in db.Materia.AsNoTracking() on deta.IdMateria equals mat.IdMateria
-                         join perlec in db.PeriodoLectivo.AsNoTracking() on deta.IdPeriodoLectivo equals perlec.IdPeriodoLectivo
-                         join prof in db.Profesor.AsNoTracking() on deta.IdProfesor equals prof.IdProfesor
-                         //where deta.NNuIdOF == NNuIdOF
-                         select new
-                         {
-                             deta.IdCargaLectiva,
-                             deta.IdOferta,
-                             deta.IdMateria,
-                             deta.IdPeriodoLectivo,
-                             deta.IdProfesor,
-                             deta.Estado,
-                             DescOferta = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"),
-                             DescMateria = mat.Descripcion,
-                             DescPerLec = perlec.Descripcion,
-                             DescProfesor = prof.Nombres + " " + prof.Apellidos
-                         }).ToList();
+            //List<CargaLectivaExt> listCargaLectivaExt = new List<CargaLectivaExt>();
 
-            foreach (var item in model)
-            {
-                CargaLectivaExt objCarLec = new CargaLectivaExt();
-                objCarLec.IdCargaLectiva = item.IdCargaLectiva;                
-                objCarLec.IdOferta = item.IdOferta;
-                objCarLec.IdMateria = item.IdMateria;
-                objCarLec.IdPeriodoLectivo = item.IdPeriodoLectivo;
-                objCarLec.IdProfesor = item.IdProfesor;
-                objCarLec.Estado = item.Estado;
-                objCarLec.DescOferta = item.DescOferta;
-                objCarLec.DescMateria = item.DescMateria;
-                objCarLec.DescPerLec = item.DescPerLec;
-                objCarLec.DescProfesor = item.DescProfesor;
-                listCargaLectivaExt.Add(objCarLec);
-            }
+            //var model = (from deta in db.CargaLectiva.AsNoTracking()
+            //             join ofer in db.Oferta.AsNoTracking() on deta.IdOferta equals ofer.IdOferta
+            //             join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+            //             join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+            //             join mat in db.Materia.AsNoTracking() on deta.IdMateria equals mat.IdMateria
+            //             join perlec in db.PeriodoLectivo.AsNoTracking() on deta.IdPeriodoLectivo equals perlec.IdPeriodoLectivo
+            //             join prof in db.Profesor.AsNoTracking() on deta.IdProfesor equals prof.IdProfesor
+            //             //where deta.NNuIdOF == NNuIdOF
+            //             select new
+            //             {
+            //                 deta.IdCargaLectiva,
+            //                 deta.IdOferta,
+            //                 deta.IdMateria,
+            //                 deta.IdPeriodoLectivo,
+            //                 deta.IdProfesor,
+            //                 deta.Estado,
+            //                 DescOferta = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"),
+            //                 DescMateria = mat.Descripcion,
+            //                 DescPerLec = perlec.Descripcion,
+            //                 DescProfesor = prof.Nombres + " " + prof.Apellidos
+            //             }).ToList();
 
+            //foreach (var item in model)
+            //{
+            //    CargaLectivaExt objCarLec = new CargaLectivaExt();
+            //    objCarLec.IdCargaLectiva = item.IdCargaLectiva;                
+            //    objCarLec.IdOferta = item.IdOferta;
+            //    objCarLec.IdMateria = item.IdMateria;
+            //    objCarLec.IdPeriodoLectivo = item.IdPeriodoLectivo;
+            //    objCarLec.IdProfesor = item.IdProfesor;
+            //    objCarLec.Estado = item.Estado;
+            //    objCarLec.DescOferta = item.DescOferta;
+            //    objCarLec.DescMateria = item.DescMateria;
+            //    objCarLec.DescPerLec = item.DescPerLec;
+            //    objCarLec.DescProfesor = item.DescProfesor;
+            //    listCargaLectivaExt.Add(objCarLec);
+            //}
 
+            //return View(listCargaLectivaExt);
 
-
-            return View(listCargaLectivaExt);            
+            return View();
         }
 
         public ActionResult Create()
@@ -105,9 +106,6 @@ namespace ProyectoFinal.Controllers
             //objCarLec.DescMateria = db.Materia.AsNoTracking().Where(x => x.IdMateria == objCL.IdMateria).FirstOrDefault().Descripcion;
             //objCarLec.DescPerLec = db.PeriodoLectivo.AsNoTracking().Where(x => x.IdPeriodoLectivo == objCL.IdPeriodoLectivo).FirstOrDefault().Descripcion;
             //objCarLec.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == objCL.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == objCL.IdProfesor).FirstOrDefault().Nombres;
-
-
-
 
             var model = (from deta in db.CargaLectiva.AsNoTracking()
                          join ofer in db.Oferta.AsNoTracking() on deta.IdOferta equals ofer.IdOferta
@@ -153,13 +151,30 @@ namespace ProyectoFinal.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetProfesores(string q)
+        public JsonResult GetProfesores(string q, string view)
         {
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
 
-            var FatherItems = (from maq in db.Profesor.AsNoTracking()
-                               where maq.Estado == "A"
+            if (view == "Create" || view == "Edit")
+            {
+                FatherItems = (from maq in db.Profesor.AsNoTracking()
+                                where maq.Estado == "A"
+                                select new { id = maq.IdProfesor, text = maq.Nombres + " " + maq.Apellidos }
+                ).ToList();
+            }
+            else
+            {
+                FatherItems = (from maq in db.Profesor.AsNoTracking()
                                select new { id = maq.IdProfesor, text = maq.Nombres + " " + maq.Apellidos }
-                   ).ToList();
+                ).ToList();
+            }
+            //var FatherItems = (from maq in db.Profesor.AsNoTracking()
+            //                   where maq.Estado == "A"                               
+            //                   select new { id = maq.IdProfesor, text = maq.Nombres + " " + maq.Apellidos }
+            //       ).ToList();
 
             FatherItems.RemoveAll(item => item == null);
 
@@ -170,7 +185,8 @@ namespace ProyectoFinal.Controllers
             else
             {
                 var FatherItem = (from maq in FatherItems
-                                  where maq.text.Contains(q)
+                                  //where maq.text.Contains(q)
+                                  where maq.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 
@@ -182,7 +198,7 @@ namespace ProyectoFinal.Controllers
 
         }
 
-        public JsonResult GetCursos(string q)
+        public JsonResult GetCursos(string q, string view)
         {
 
             //var FatherItems = (from maq in db.Curso.AsNoTracking()
@@ -190,12 +206,37 @@ namespace ProyectoFinal.Controllers
             //                   select new { id = maq.IdCurso, text = maq.Descripcion}
             //       ).ToList();
 
-            var FatherItems = (from maq in db.Oferta.AsNoTracking()
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            if (view == "Create" || view == "Edit")
+            {
+                  FatherItems = (from maq in db.Oferta.AsNoTracking()
+                                 join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
+                                 join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
+                                 where maq.Estado == "A"
+                                 select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
+                  ).ToList();
+            }
+            else
+            {
+                FatherItems = (from maq in db.Oferta.AsNoTracking()
                                join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
+                               join per in db.PeriodoLectivo.AsNoTracking() on maq.IdPeriodoLectivo equals per.IdPeriodoLectivo
                                where maq.Estado == "A"
-                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
-                   ).ToList();
+                               select new { id = maq.IdOferta, text = per.Descripcion + " | " + cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
+                  ).ToList();
+            }
+
+            //var FatherItems = (from maq in db.Oferta.AsNoTracking()
+            //                   join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
+            //                   join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
+            //                   where maq.Estado == "A"
+            //                   select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
+            //       ).ToList();
 
             FatherItems.RemoveAll(item => item == null);
 
@@ -206,7 +247,7 @@ namespace ProyectoFinal.Controllers
             else
             {
                 var FatherItem = (from maq in FatherItems
-                                  where maq.text.Contains(q)
+                                  where maq.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 
@@ -218,13 +259,31 @@ namespace ProyectoFinal.Controllers
 
         }
 
-        public JsonResult GetPeriodos(string q)
+        public JsonResult GetPeriodos(string q, string view)
         {
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
 
-            var FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()
-                               where maq.Estado == "A"
-                               select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion}
-                   ).ToList();
+            if (view == "Create" || view == "Edit")
+            {
+                  FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()
+                                 where maq.Estado == "A"
+                                 select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion }
+                  ).ToList();
+            }
+            else
+            {
+                FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()                               
+                               select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion }
+                  ).ToList();
+            }
+
+            //var FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()
+            //                   where maq.Estado == "A"
+            //                   select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion}
+            //       ).ToList();
 
             FatherItems.RemoveAll(item => item == null);
 
@@ -235,7 +294,7 @@ namespace ProyectoFinal.Controllers
             else
             {
                 var FatherItem = (from maq in FatherItems
-                                  where maq.text.Contains(q)
+                                  where maq.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 
@@ -247,13 +306,32 @@ namespace ProyectoFinal.Controllers
 
         }
 
-        public JsonResult GetMaterias(string q)
+        public JsonResult GetMaterias(string q, string view)
         {
 
-            var FatherItems = (from maq in db.Materia.AsNoTracking()
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            if (view == "Create" || view == "Edit")
+            {
+                FatherItems = (from maq in db.Materia.AsNoTracking()
                                where maq.Estado == "A"
-                               select new { id = maq.IdMateria, text = maq.Descripcion}
-                   ).ToList();
+                               select new { id = maq.IdMateria, text = maq.Descripcion }
+                              ).ToList();
+            }
+            else
+            {
+                FatherItems = (from maq in db.Materia.AsNoTracking()                               
+                               select new { id = maq.IdMateria, text = maq.Descripcion }
+                              ).ToList();
+            }
+
+            //var FatherItems = (from maq in db.Materia.AsNoTracking()
+            //                   where maq.Estado == "A"
+            //                   select new { id = maq.IdMateria, text = maq.Descripcion}
+            //       ).ToList();
 
             FatherItems.RemoveAll(item => item == null);
 
@@ -264,7 +342,7 @@ namespace ProyectoFinal.Controllers
             else
             {
                 var FatherItem = (from maq in FatherItems
-                                  where maq.text.Contains(q)
+                                  where maq.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 
@@ -274,6 +352,114 @@ namespace ProyectoFinal.Controllers
                 return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+        public JsonResult GetEstados(string q)
+        {
+
+            var Estados = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            Estados.Add(new { id = 1, text = "ACTIVO" });
+            Estados.Add(new { id = 2, text = "INACTIVO" });
+
+            var FatherItem = Estados.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetCargasLectivas(int? idperiodo, int? idoferta, int? idmateria, int? idprofesor, int? idestado)
+        {
+            List<CargaLectivaExt> listCargaLectivaExt = new List<CargaLectivaExt>();           
+
+            //bool consper = false;
+            //bool consofer = false;
+            //bool consmat = false;
+            //bool conspro = false;
+            //bool consest = false;
+
+            string est = "";
+
+            if (idestado != null)
+            {
+                est = idestado == 1 ? "A" : "I";
+            }
+
+            var model = (from deta in db.CargaLectiva.AsNoTracking()
+                         join ofer in db.Oferta.AsNoTracking() on deta.IdOferta equals ofer.IdOferta
+                         join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                         join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                         join mat in db.Materia.AsNoTracking() on deta.IdMateria equals mat.IdMateria
+                         join perlec in db.PeriodoLectivo.AsNoTracking() on deta.IdPeriodoLectivo equals perlec.IdPeriodoLectivo
+                         join prof in db.Profesor.AsNoTracking() on deta.IdProfesor equals prof.IdProfesor
+                         //where (consest && deta.Estado == est)
+                         //&& (idperiodo != null && deta.IdPeriodoLectivo == idperiodo)
+                         //&& (idoferta != null && deta.IdOferta == idoferta)
+                         //&& (idmateria != null && deta.IdMateria == idoferta)
+                         //&& (idprofesor != null && deta.IdProfesor == idprofesor)                         
+                         select new
+                         {
+                             deta.IdCargaLectiva,
+                             deta.IdOferta,
+                             deta.IdMateria,
+                             deta.IdPeriodoLectivo,
+                             deta.IdProfesor,
+                             deta.Estado,
+                             DescOferta = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"),
+                             DescMateria = mat.Descripcion,
+                             DescPerLec = perlec.Descripcion,
+                             DescProfesor = prof.Nombres + " " + prof.Apellidos
+                         });
+            //.ToList();
+
+            if (idestado != null)
+            {
+                model = model.Where(x => x.Estado == est);
+            }
+
+            if (idperiodo != null)
+            {
+                model = model.Where(x => x.IdPeriodoLectivo == idperiodo);
+            }
+
+            if (idoferta != null)
+            {
+                model = model.Where(x => x.IdOferta == idoferta);
+            }
+
+            if (idmateria != null)
+            {
+                model = model.Where(x => x.IdMateria == idmateria);
+            }
+
+            if (idprofesor != null)
+            {
+                model = model.Where(x => x.IdProfesor == idprofesor);
+            }
+
+            var model2 = model.ToList();
+
+            foreach (var item in model2)
+            {
+                CargaLectivaExt objCarLec = new CargaLectivaExt();
+                objCarLec.IdCargaLectiva = item.IdCargaLectiva;
+                objCarLec.IdOferta = item.IdOferta;
+                objCarLec.IdMateria = item.IdMateria;
+                objCarLec.IdPeriodoLectivo = item.IdPeriodoLectivo;
+                objCarLec.IdProfesor = item.IdProfesor;
+                objCarLec.Estado = item.Estado;
+                objCarLec.DescOferta = item.DescOferta;
+                objCarLec.DescMateria = item.DescMateria;
+                objCarLec.DescPerLec = item.DescPerLec;
+                objCarLec.DescProfesor = item.DescProfesor;
+                listCargaLectivaExt.Add(objCarLec);
+            }
+
+            //return View(listCargaLectivaExt);
+            return Json(new { detsCargasLectivas = listCargaLectivaExt }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
