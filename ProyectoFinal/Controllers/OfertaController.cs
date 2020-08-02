@@ -156,7 +156,14 @@ namespace ProyectoFinal.Controllers
         public JsonResult GetDetalle(int idPer)
         {
             List<Oferta> listOfertas = new List<Oferta>();
-            listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == idPer).ToList();
+            listOfertas = (from ofer in db.Oferta.AsNoTracking()
+                           join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                           join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                           orderby cur.Nivel ascending, par.Descripcion ascending
+                           select ofer).ToList();
+
+            //List<Oferta> listOfertas = new List<Oferta>();
+            //listOfertas = db.Oferta.AsNoTracking().Where(x => x.IdPeriodoLectivo == idPer).ToList();
 
             List<OfertaExt> listOfertaExt = new List<OfertaExt>();
             foreach (var item in listOfertas)

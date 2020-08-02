@@ -42,6 +42,73 @@ namespace ProyectoFinal.Controllers
         //    return Json(new { Message = "a", bResultado = true }, JsonRequestBehavior.AllowGet);
         //}
 
+        public JsonResult GetCursosIngreso(string q)
+        {
+            var FatherItems = (from maq in db.Curso.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdCurso, text = maq.Descripcion }
+                   ).ToList();
+
+            FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+                FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+                FatherItem.RemoveAll(item => item == null);
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult GetCursosEdicion(string q)
+        {
+            var FatherItems = (from maq in db.Curso.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdCurso, text = maq.Descripcion }
+                   ).ToList();
+
+            FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+                FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+                FatherItem.RemoveAll(item => item == null);
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult GetDetalleCurso(int idCurso)
+        {
+            Curso objCurso = new Curso();
+            objCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == idCurso).FirstOrDefault();
+
+            return Json(new { data = objCurso }, JsonRequestBehavior.AllowGet);
+
+        }
+
         [HttpPost]
         public JsonResult ConsultarAlumnos()
         {
