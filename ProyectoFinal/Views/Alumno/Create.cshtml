@@ -105,13 +105,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        @*<div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label for="NNuNivel" class="control-label">Último Nivel</label>
                                 </div>
                                 <div class="col-md-8">
                                     @Html.EditorFor(model => model.UltimoNivel, new { htmlAttributes = new { @id = "txtUltimoNivel", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="form-control no-border">Curso:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="txtSelectCurso" />
+                                    <input type="text" id="txtCurso" hidden />
                                 </div>
                             </div>
                         </div>
@@ -231,6 +242,35 @@
 </section>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtSelectCurso").on("select2-selecting", function (e) { document.getElementById('txtCurso').value = e.val; });
+
+        $('#txtSelectCurso').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Curso",
+
+            ajax: {
+                url: '/Alumno/GetCursosIngreso',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+    });
+
     $('#btnGenerar').on('click', function () {
         var Cedula = document.getElementById("txtCedula").value;
         var Nombres = document.getElementById("txtNombres").value;
@@ -239,7 +279,8 @@
         var Sexo = document.getElementById("cmbSexo").value;
         var Direccion = document.getElementById("txtDireccion").value;
         var Telefono = document.getElementById("txtTelefono").value;
-        var UltimoNivel = document.getElementById("txtUltimoNivel").value;
+        //var UltimoNivel = document.getElementById("txtUltimoNivel").value;
+        var UltimoNivel = document.getElementById("txtCurso").value;
         var CedulaRepresentante = document.getElementById("txtCedulaRepresentante").value;
         var NombresRepresentante = document.getElementById("txtNombresRepresentante").value;
         var ApellidosRepresentante = document.getElementById("txtApellidosRepresentante").value;

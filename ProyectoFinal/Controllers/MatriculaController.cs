@@ -89,9 +89,8 @@ namespace ProyectoFinal.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetOfertas(string q)
+        public JsonResult GetOfertas(string q, int? idAlumno)
         {
-
             string sValue = q;
 
             if (string.IsNullOrEmpty(q))
@@ -99,13 +98,21 @@ namespace ProyectoFinal.Controllers
                 sValue = string.Empty;
             }
 
-            var Ofertas = (from ofer in db.Oferta.AsNoTracking() 
-                           join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo 
-                           join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso 
-                           join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo 
-                           where (per.Descripcion.Contains(sValue) || cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) && per.Estado.Equals("A")
-                           select new { id = ofer.IdOferta, text = per.Descripcion + " | " + cur.Descripcion + " | " + par.Descripcion ,
-                                        disabled = ofer.Ocupado < ofer.Capacidad ? false : true
+            int siguienteNivel = (from alum in db.Alumno.AsNoTracking()
+                               where alum.IdAlumno == idAlumno 
+                               select alum.UltimoNivel).FirstOrDefault()+1;
+
+            var Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                           join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+                           join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                           join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                           where (per.Descripcion.Contains(sValue) || cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) &&
+                                  (per.Estado.Equals("A")) && (cur.Nivel.Equals(siguienteNivel))
+                           select new
+                           {
+                               id = ofer.IdOferta,
+                               text = per.Descripcion + " | " + cur.Descripcion + " | " + par.Descripcion + " | " + ofer.Jornada,
+                               disabled = ofer.Ocupado < ofer.Capacidad ? false : true
                            }).ToList();
             Ofertas.RemoveAll(item => item == null);
 
