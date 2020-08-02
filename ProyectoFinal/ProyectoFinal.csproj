@@ -266,6 +266,18 @@
     <Compile Include="Models\OpcionExt.cs" />
     <Compile Include="Models\RolesOpciones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\LibretaPorAlumno.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibretaPorAlumno.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\LibretasPorCurso.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibretasPorCurso.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\ListadoCalificacionesPorCurso.cs">
       <DependentUpon>ListadoCalificacionesPorCurso.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -286,6 +298,12 @@
       <DependentUpon>ListadoPorCurso.rpt</DependentUpon>
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Reports\MatrizCalificaciones.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MatrizCalificaciones.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\prueba.cs">
       <AutoGen>True</AutoGen>
@@ -1008,8 +1026,9 @@
     <Content Include="Views\Partial\OfertaP\_EditaOF.cshtml" />
     <Content Include="Views\Reportes\ListadoPorCurso.cshtml" />
     <Content Include="Views\Reportes\CertificadoPromocion.cshtml" />
-	<Content Include="Views\Reportes\ListadoCalificacionesPorCurso.cshtml" />
-	<Content Include="Views\Reportes\LibretaAlumno.cshtml" />
+    <Content Include="Views\Reportes\ListadoCalificacionesPorCurso.cshtml" />
+    <Content Include="Views\Reportes\LibretaAlumno.cshtml" />
+    <Content Include="Views\Reportes\MatrizCalificaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1073,6 +1092,14 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\LibretaPorAlumno.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LibretaPorAlumno.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\LibretasPorCurso.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LibretasPorCurso.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\ListadoCalificacionesPorCurso.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ListadoCalificacionesPorCurso.cs</LastGenOutput>
@@ -1087,6 +1114,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ListadoPorCurso.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MatrizCalificaciones.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>MatrizCalificaciones.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\prueba.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

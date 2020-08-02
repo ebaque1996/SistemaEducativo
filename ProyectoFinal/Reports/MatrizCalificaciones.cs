@@ -16,14 +16,14 @@ namespace ProyectoFinal.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class CertPromo : ReportClass {
+    public class MatrizCalificaciones : ReportClass {
         
-        public CertPromo() {
+        public MatrizCalificaciones() {
         }
         
         public override string ResourceName {
             get {
-                return "CertPromo.rpt";
+                return "MatrizCalificaciones.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace ProyectoFinal.Reports {
         
         public override string FullResourceName {
             get {
-                return "ProyectoFinal.Reports.CertPromo.rpt";
+                return "ProyectoFinal.Reports.MatrizCalificaciones.rpt";
             }
             set {
                 // Do nothing
@@ -90,7 +90,7 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_Alumno {
+        public CrystalDecisions.Shared.IParameterField Parameter_IdOferta {
             get {
                 return this.DataDefinition.ParameterFields[0];
             }
@@ -98,9 +98,9 @@ namespace ProyectoFinal.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCertPromo : Component, ICachedReport {
+    public class CachedMatrizCalificaciones : Component, ICachedReport {
         
-        public CachedCertPromo() {
+        public CachedMatrizCalificaciones() {
         }
         
         [Browsable(false)]
@@ -137,7 +137,7 @@ namespace ProyectoFinal.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            CertPromo rpt = new CertPromo();
+            MatrizCalificaciones rpt = new MatrizCalificaciones();
             rpt.Site = this.Site;
             return rpt;
         }

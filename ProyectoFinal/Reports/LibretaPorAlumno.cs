@@ -16,14 +16,14 @@ namespace ProyectoFinal.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class CertPromo : ReportClass {
+    public class LibretaPorAlumno : ReportClass {
         
-        public CertPromo() {
+        public LibretaPorAlumno() {
         }
         
         public override string ResourceName {
             get {
-                return "CertPromo.rpt";
+                return "LibretaPorAlumno.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace ProyectoFinal.Reports {
         
         public override string FullResourceName {
             get {
-                return "ProyectoFinal.Reports.CertPromo.rpt";
+                return "ProyectoFinal.Reports.LibretaPorAlumno.rpt";
             }
             set {
                 // Do nothing
@@ -90,7 +90,7 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_Alumno {
+        public CrystalDecisions.Shared.IParameterField Parameter_IdAlumno {
             get {
                 return this.DataDefinition.ParameterFields[0];
             }
@@ -98,9 +98,9 @@ namespace ProyectoFinal.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCertPromo : Component, ICachedReport {
+    public class CachedLibretaPorAlumno : Component, ICachedReport {
         
-        public CachedCertPromo() {
+        public CachedLibretaPorAlumno() {
         }
         
         [Browsable(false)]
@@ -137,7 +137,7 @@ namespace ProyectoFinal.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            CertPromo rpt = new CertPromo();
+            LibretaPorAlumno rpt = new LibretaPorAlumno();
             rpt.Site = this.Site;
             return rpt;
         }

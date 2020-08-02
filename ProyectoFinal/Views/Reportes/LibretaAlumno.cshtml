@@ -1,5 +1,5 @@
 ﻿
-<h2>Listado Por Curso</h2>
+<h2>Libretas de Calificaciones</h2>
 
 <div class="content">
     <div class="row">
@@ -8,31 +8,101 @@
                 <h3 class="box-title"> Parametros de Consulta </h3>
             </div>
             <div class="box-body">
-                <div class="form-group">
-                    <input type="text" id="txtSelectPeriodo" />
-                    <input type="text" id="txtPeriodo" hidden />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label for="Periodo" class="control-label">Periodo:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="txtSelectPeriodo" />
+                                <input type="text" id="txtPeriodo" hidden />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <input type="text" id="txtSelectOferta" />
-                    <input type="text" id="txtOferta" hidden />
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label for="Periodo" class="control-label">Tipo Reporte:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="txtSelectTipoReporte" />
+                                <input type="text" id="txtTipoReporte" hidden />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label for="Periodo" class="control-label">Curso:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="txtSelectOferta" disabled />
+                                <input type="text" id="txtOferta" hidden />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label for="Periodo" class="control-label">Alumno:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="txtSelectAlumno" disabled />
+                                <input type="text" id="txtAlumno" hidden />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                        <input type="text" id="txtSelectTipoReporte" />
+                        <input type="text" id="txtTipoReporte" hidden />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="txtSelectOferta" />
+                        <input type="text" id="txtOferta" hidden />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="txtSelectAlumno" />
+                        <input type="text" id="txtAlumno" hidden />
+                    </div>*@
 
                 <br />
 
                 @using (Html.BeginForm("PrintLibretaAlumno", "Reportes", FormMethod.Get, null))
                 {
-                    <input type="text" id="txtIdOferta" name="txtIdOferta" hidden />
                     <input type="text" id="txtIdPeriodo" name="txtIdPeriodo" hidden />
+                    <input type="text" id="txtIdTipoReporte" name="txtIdTipoReporte" hidden />
+                    <input type="text" id="txtIdOferta" name="txtIdOferta" hidden />
+                    <input type="text" id="txtIdAlumno" name="txtIdAlumno" hidden />
                     <button class="btn btn-primary" type="submit">
                         <i class="fa fa-file-pdf-o"></i>
                     </button>
                 }
 
             </div>
-            <div class="box-body">
+            @*<div class="box-body">
                 <input type="button" class="btn btn-primary" id="btnConsultar" value="Consultar" />
-            </div>
+            </div>*@
         </div>
     </div>
 
@@ -42,11 +112,64 @@
 
 <script>
     $(document).ready(function () {
-        $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtOferta').value = e.val; });
-        $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtIdOferta').value = e.val; });
 
         $("#txtSelectPeriodo").on("select2-selecting", function (e) { document.getElementById('txtPeriodo').value = e.val; });
         $("#txtSelectPeriodo").on("select2-selecting", function (e) { document.getElementById('txtIdPeriodo').value = e.val; });
+
+        $("#txtSelectTipoReporte").on("select2-selecting", function (e) { document.getElementById('txtTipoReporte').value = e.val; });
+        $("#txtSelectTipoReporte").on("select2-selecting", function (e) { document.getElementById('txtIdTipoReporte').value = e.val; });
+
+        $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtOferta').value = e.val; });
+        $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtIdOferta').value = e.val; });
+
+        $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtAlumno').value = e.val; });
+        $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtIdAlumno').value = e.val; });        
+        
+        $('#txtSelectPeriodo').on("change", function (e) {
+
+            if (e.val == "") {
+                $("#txtSelectPeriodo").select2("val", "");
+                document.getElementById('txtPeriodo').value = null;
+                document.getElementById('txtIdPeriodo').value = null;
+
+                $("#txtSelectOferta").select2("val", "");
+                document.getElementById('txtOferta').value = null;
+                document.getElementById('txtIdOferta').value = null;
+
+                $("#txtSelectAlumno").select2("val", "");
+                document.getElementById('txtAlumno').value = null;
+                document.getElementById('txtIdAlumno').value = null;
+            }
+        });
+
+
+        $('#txtSelectTipoReporte').on("change", function (e) {
+
+            if (e.val == "") {
+                $("#txtSelectTipoReporte").select2("val", "");
+                document.getElementById('txtTipoReporte').value = null;
+                document.getElementById('txtIdTipoReporte').value = null;
+
+                $('#txtSelectOferta').select2('disable');
+                $("#txtSelectOferta").select2("val", "");
+                document.getElementById('txtOferta').value = null;
+                document.getElementById('txtIdOferta').value = null;
+
+                $('#txtSelectAlumno').select2('disable');
+                $("#txtSelectAlumno").select2("val", "");
+                document.getElementById('txtAlumno').value = null;
+                document.getElementById('txtIdAlumno').value = null;
+            } else {
+                if (document.getElementById("txtTipoReporte").value == 1) {
+                    $('#txtSelectOferta').select2('enable');
+                    $('#txtSelectAlumno').select2('disable');
+                } else {
+                    $('#txtSelectOferta').select2('disable');
+                    $('#txtSelectAlumno').select2('enable');
+                }
+            }
+        });
+
 
         $('#txtSelectOferta').on("change", function (e) {
 
@@ -57,48 +180,23 @@
             }
         });
 
-        $('#txtSelectPeriodo').on("change", function (e) {
+        $('#txtSelectAlumno').on("change", function (e) {
 
             if (e.val == "") {
-                $("#txtSelectPeriodo").select2("val", "");
-                document.getElementById('txtPeriodo').value = null;
-                document.getElementById('txtIdPeriodo').value = null;
+                $("#txtSelectAlumno").select2("val", "");
+                document.getElementById('txtAlumno').value = null;
+                document.getElementById('txtIdAlumno').value = null;
             }
         });
 
-        $('#txtSelectOferta').select2({
-            width: '50%',
-            allowClear: true,
-            // minimumInputLength: 3,
-            placeholder: "Curso",
-
-            ajax: {
-                url: '/Reportes/GetOfertasLPC',
-                dataType: 'json',
-
-                data: function (term, page) {
-                    return {
-                        q: term // search term
-                    };
-                },
-                results: function (data, page) { // parse the results into the format expected by Select2.
-                    // since we are using custom formatting functions we do not need to alter the remote JSON data
-                    return { results: data.items };
-                },
-                cache: true
-            },
-            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-        });
-
         $('#txtSelectPeriodo').select2({
-            width: '50%',
+            width: '100%',
             allowClear: true,
             // minimumInputLength: 3,
             placeholder: "Periodo Lectivo",
 
             ajax: {
-                url: '/Reportes/GetPeriodosLPC',
+                url: '/Reportes/GetPeriodosLib',
                 dataType: 'json',
 
                 data: function (term, page) {
@@ -115,5 +213,81 @@
             dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
             escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
         });
+
+        $('#txtSelectTipoReporte').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Tipo Reporte",
+
+            ajax: {
+                url: '/Reportes/GetTiposReportesLib',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        $('#txtSelectOferta').select2({
+            width: '100%',
+            allowClear: true,
+            // minimumInputLength: 3,
+            placeholder: "Curso",
+
+            ajax: {
+                url: '/Reportes/GetOfertasLib',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term, IdPeriodoLectivo: document.getElementById('txtPeriodo').value // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+
+        $('#txtSelectAlumno').select2({
+            width: '100%',
+            allowClear: true,
+            minimumInputLength: 3,
+            placeholder: "Cedula | Apellidos y nombres",
+
+            ajax: {
+                url: '/Reportes/GetAlumnosLib',
+                dataType: 'json',
+
+                data: function (term, page) {
+                    return {
+                        q: term, IdPeriodoLectivo: document.getElementById('txtPeriodo').value // search term
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter the remote JSON data
+                    return { results: data.items };
+                },
+                cache: true
+            },
+            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+            escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+        });
+        
     });
 </script>

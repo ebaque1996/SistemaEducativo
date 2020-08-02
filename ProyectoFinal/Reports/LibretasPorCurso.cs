@@ -16,14 +16,14 @@ namespace ProyectoFinal.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class CertPromo : ReportClass {
+    public class LibretasPorCurso : ReportClass {
         
-        public CertPromo() {
+        public LibretasPorCurso() {
         }
         
         public override string ResourceName {
             get {
-                return "CertPromo.rpt";
+                return "LibretasPorCurso.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace ProyectoFinal.Reports {
         
         public override string FullResourceName {
             get {
-                return "ProyectoFinal.Reports.CertPromo.rpt";
+                return "ProyectoFinal.Reports.LibretasPorCurso.rpt";
             }
             set {
                 // Do nothing
@@ -66,7 +66,7 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section3 {
+        public CrystalDecisions.CrystalReports.Engine.Section GroupHeaderSection1 {
             get {
                 return this.ReportDefinition.Sections[2];
             }
@@ -74,7 +74,7 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+        public CrystalDecisions.CrystalReports.Engine.Section Section3 {
             get {
                 return this.ReportDefinition.Sections[3];
             }
@@ -82,7 +82,7 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+        public CrystalDecisions.CrystalReports.Engine.Section GroupFooterSection1 {
             get {
                 return this.ReportDefinition.Sections[4];
             }
@@ -90,7 +90,23 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_Alumno {
+        public CrystalDecisions.CrystalReports.Engine.Section Section4 {
+            get {
+                return this.ReportDefinition.Sections[5];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.CrystalReports.Engine.Section Section5 {
+            get {
+                return this.ReportDefinition.Sections[6];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_IdOferta {
             get {
                 return this.DataDefinition.ParameterFields[0];
             }
@@ -98,9 +114,9 @@ namespace ProyectoFinal.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCertPromo : Component, ICachedReport {
+    public class CachedLibretasPorCurso : Component, ICachedReport {
         
-        public CachedCertPromo() {
+        public CachedLibretasPorCurso() {
         }
         
         [Browsable(false)]
@@ -137,7 +153,7 @@ namespace ProyectoFinal.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            CertPromo rpt = new CertPromo();
+            LibretasPorCurso rpt = new LibretasPorCurso();
             rpt.Site = this.Site;
             return rpt;
         }

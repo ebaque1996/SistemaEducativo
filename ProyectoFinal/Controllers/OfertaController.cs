@@ -147,9 +147,9 @@ namespace ProyectoFinal.Controllers
             Jornadas.Add(new { id = "MAT", text = "MATUTINA" });
             Jornadas.Add(new { id = "VES", text = "VESPERTINA" });
 
-            var FatherItem = Jornadas.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);            
+            var FatherItem = Jornadas.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
 
-            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);          
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -165,7 +165,7 @@ namespace ProyectoFinal.Controllers
                 objOferExt.IdOferta = item.IdOferta;
                 objOferExt.IdPeriodoLectivo = item.IdPeriodoLectivo;
                 objOferExt.IdCurso = item.IdCurso;
-                objOferExt.IdParalelo = item.IdParalelo;                
+                objOferExt.IdParalelo = item.IdParalelo;
                 objOferExt.IdProfesor = item.IdProfesor;
                 objOferExt.Capacidad = item.Capacidad;
                 objOferExt.Ocupado = item.Ocupado;
@@ -251,7 +251,7 @@ namespace ProyectoFinal.Controllers
             {
                 bResult = false;
                 strResult = "Error: " + ex.Message;
-            }            
+            }
 
             return Json(new { Message = strResult, bResultado = bResult, listOfertaExt }, JsonRequestBehavior.AllowGet);
         }
@@ -260,7 +260,7 @@ namespace ProyectoFinal.Controllers
         public JsonResult EditaOferta(int IdOferta, int Capacidad)
         {
             string strResult = string.Empty;
-            bool bResult = false;            
+            bool bResult = false;
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
             try
@@ -290,7 +290,7 @@ namespace ProyectoFinal.Controllers
                 bResult = false;
                 strResult = "Error: " + ex.Message;
             }
-                        
+
             return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
         }
 
@@ -358,7 +358,7 @@ namespace ProyectoFinal.Controllers
             {
                 error = "La oferta que desea editar no existe";
                 return false;
-            }            
+            }
 
             return true;
         }
@@ -367,14 +367,14 @@ namespace ProyectoFinal.Controllers
         [HttpGet]
         public PartialViewResult EditOferta(int IdOferta)
         {
-            
-            OfertaExt objOfertaExt = new OfertaExt();                        
+
+            OfertaExt objOfertaExt = new OfertaExt();
             Oferta objOferta = db.Oferta.AsNoTracking().Where(x => x.IdOferta == IdOferta).FirstOrDefault();
-          
+
             string PartialUrl = "~/Views/Partial/OfertaP/_EditaOF.cshtml";
 
             if (objOferta == null)
-            {                
+            {
                 return PartialView(PartialUrl, objOfertaExt);
             }
 
@@ -394,14 +394,14 @@ namespace ProyectoFinal.Controllers
                 objOfertaExt.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == objOferta.IdCurso).FirstOrDefault().Descripcion;
                 objOfertaExt.DescParalelo = db.Paralelo.AsNoTracking().Where(x => x.IdParalelo == objOferta.IdParalelo).FirstOrDefault().Descripcion;
                 objOfertaExt.DescProfesor = db.Profesor.AsNoTracking().Where(x => x.IdProfesor == objOferta.IdProfesor).FirstOrDefault().Apellidos + " " + db.Profesor.AsNoTracking().Where(x => x.IdProfesor == objOferta.IdProfesor).FirstOrDefault().Nombres;
-               
+
             }
             catch (Exception)
             {
                 objOfertaExt = new OfertaExt();
             }
 
-            return PartialView(PartialUrl, objOfertaExt);            
+            return PartialView(PartialUrl, objOfertaExt);
         }
 
         public JsonResult DeleteOferta(int IdOferta)

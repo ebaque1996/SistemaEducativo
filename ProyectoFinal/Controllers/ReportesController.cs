@@ -39,6 +39,64 @@ namespace ProyectoFinal.Controllers
             return View();
         }
 
+        public ActionResult LibretaAlumno()
+        {
+            return View();
+        }
+
+        public ActionResult MatrizCalificaciones()
+        {
+            return View();
+        }
+
+        public JsonResult GetPeriodosLib(string q, string view)
+        {
+            var FatherItems = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()
+                           select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion }
+                  ).ToList();        
+
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+
+                FatherItem.RemoveAll(item => item == null);
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult GetTiposReportesLib(string q)
+        {
+
+            var TiposReportes = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            TiposReportes.Add(new { id = 1, text = "POR CURSO" });
+            TiposReportes.Add(new { id = 2, text = "POR ALUMNO" });
+
+            var FatherItem = TiposReportes.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public JsonResult GetOfertasLPC(string q)
         {
@@ -54,8 +112,8 @@ namespace ProyectoFinal.Controllers
                            join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
                            join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
                            join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
-                           where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) && ofer.Estado.Equals("A")
-                                  && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
+                           where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) 
+                           && ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
                            select new
                            {
                                id = ofer.IdOferta,
@@ -64,6 +122,45 @@ namespace ProyectoFinal.Controllers
             Ofertas.RemoveAll(item => item == null);
 
             return Json(new { items = Ofertas }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetOfertasLib(string q, int? IdPeriodoLectivo)
+        {
+
+            var Ofertas = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            if (IdPeriodoLectivo != null && IdPeriodoLectivo > 0)
+            {
+                string sValue = q;
+
+                if (string.IsNullOrEmpty(q))
+                {
+                    sValue = string.Empty;
+                }
+
+                Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                           join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+                           join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                           join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                           where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue))
+                           && ofer.IdPeriodoLectivo == IdPeriodoLectivo
+                           orderby cur.Nivel
+                           //&& per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
+                           select new
+                           {
+                               id = ofer.IdOferta,
+                               text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
+                           }).ToList();
+                Ofertas.RemoveAll(item => item == null);
+            }            
+
+            var FatherItem = Ofertas.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -78,9 +175,6 @@ namespace ProyectoFinal.Controllers
             }
 
             var Alumnos = (from alum in db.Alumno.AsNoTracking()
-                           //join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
-                           //join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
-                           //join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
                            where (alum.Cedula.Contains(sValue) || alum.Nombres.Contains(sValue) || alum.Apellidos.Contains(sValue))
                            select new
                            {
@@ -90,6 +184,42 @@ namespace ProyectoFinal.Controllers
             Alumnos.RemoveAll(item => item == null);
 
             return Json(new { items = Alumnos }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAlumnosLib(string q, int? IdPeriodoLectivo)
+        {
+
+            var Alumnos = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            if (IdPeriodoLectivo != null && IdPeriodoLectivo > 0)
+            {
+                string sValue = q;
+
+                if (string.IsNullOrEmpty(q))
+                {
+                    sValue = string.Empty;
+                }
+
+                Alumnos = (from alum in db.Alumno.AsNoTracking()
+                           join mat in db.Matricula.AsNoTracking() on alum.IdAlumno equals mat.IdAlumno
+                           join ofer in db.Oferta.AsNoTracking() on mat.IdOferta equals ofer.IdOferta
+                           where (alum.Cedula.Contains(sValue) || alum.Nombres.Contains(sValue) || alum.Apellidos.Contains(sValue))
+                           && ofer.IdPeriodoLectivo == IdPeriodoLectivo
+                           select new
+                           {
+                               id = alum.IdAlumno,
+                               text = alum.Cedula + " | " + alum.Apellidos + " " + alum.Nombres
+                           }).ToList();
+                Alumnos.RemoveAll(item => item == null);
+            }            
+
+            var FatherItem = Alumnos.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetParcialesRCPC(string q)
@@ -132,6 +262,31 @@ namespace ProyectoFinal.Controllers
             return ExportDataProduccion("ListadoCalificacionesPorCurso", "Listado de Calificaciones Por Curso ", sQuery);
         }
 
+        public ActionResult PrintLibretaAlumno(string txtIdPeriodo, string txtIdTipoReporte, string txtIdOferta, string txtIdAlumno)
+        {
+            //string sQuery = "EXEC SP_CALIFICACIONES_CURSO_PARCIAL @Oferta = " + txtIdOferta + ", @Parcial = '" + txtIdParcial + "'";
+            string sQuery = "";
+            string nomRep = "";
+
+            if (txtIdTipoReporte == "1")
+            {
+                sQuery = "EXEC SP_LIBRETAS_POR_CURSO @IdOferta = " + txtIdOferta;
+                nomRep = "LibretasPorCurso";
+            }
+            else
+            {
+                sQuery = "EXEC SP_LIBRETA_POR_ALUMNO @IdAlumno = " + txtIdAlumno;
+                nomRep = "LibretaPorAlumno";
+            }
+
+            return ExportDataProduccion(nomRep, "Libreta(s) de calificaciones ", sQuery);
+        }
+
+        public ActionResult PrintMatrizCalificaciones(string txtIdOferta)
+        {
+            string sQuery = "EXEC SP_SABANA_NOTAS @IdOferta = " + txtIdOferta;
+            return ExportDataProduccion("MatrizCalificaciones", "Matriz de Calificaciones ", sQuery);
+        }
 
         public ActionResult ExportDataProduccion(string psNomRep, string NomArc, string psQuery)
         {
@@ -142,7 +297,8 @@ namespace ProyectoFinal.Controllers
             dbPassword = ConfigurationManager.AppSettings["Password_SQL"];
 
             ReportDocument rd = new ReportDocument();
-            rd.Load(Path.Combine(Server.MapPath("~/bin/Reports"), psNomRep + ".rpt"));
+            //rd.Load(Path.Combine(Server.MapPath("~/bin/Reports"), psNomRep + ".rpt"));
+            rd.Load(Path.Combine(Server.MapPath("~/Reports"), psNomRep + ".rpt"));
 
             TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();
