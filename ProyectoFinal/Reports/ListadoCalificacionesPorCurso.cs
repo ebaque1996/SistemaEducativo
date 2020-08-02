@@ -16,14 +16,14 @@ namespace ProyectoFinal.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class CertPromo : ReportClass {
+    public class ListadoCalificacionesPorCurso : ReportClass {
         
-        public CertPromo() {
+        public ListadoCalificacionesPorCurso() {
         }
         
         public override string ResourceName {
             get {
-                return "CertPromo.rpt";
+                return "ListadoCalificacionesPorCurso.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace ProyectoFinal.Reports {
         
         public override string FullResourceName {
             get {
-                return "ProyectoFinal.Reports.CertPromo.rpt";
+                return "ProyectoFinal.Reports.ListadoCalificacionesPorCurso.rpt";
             }
             set {
                 // Do nothing
@@ -90,17 +90,25 @@ namespace ProyectoFinal.Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_Alumno {
+        public CrystalDecisions.Shared.IParameterField Parameter_Oferta {
             get {
                 return this.DataDefinition.ParameterFields[0];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_Parcial {
+            get {
+                return this.DataDefinition.ParameterFields[1];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCertPromo : Component, ICachedReport {
+    public class CachedListadoCalificacionesPorCurso : Component, ICachedReport {
         
-        public CachedCertPromo() {
+        public CachedListadoCalificacionesPorCurso() {
         }
         
         [Browsable(false)]
@@ -137,7 +145,7 @@ namespace ProyectoFinal.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            CertPromo rpt = new CertPromo();
+            ListadoCalificacionesPorCurso rpt = new ListadoCalificacionesPorCurso();
             rpt.Site = this.Site;
             return rpt;
         }
