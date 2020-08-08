@@ -23,7 +23,9 @@ namespace ProyectoFinal.Controllers
 
             var FatherItems = new List<object>().Select(t => new {
                 id = default(int),
-                text = default(string)                                
+                text = default(string),
+                niv = default(int),
+                par = default(string),
             }).ToList();
           
             int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
@@ -40,8 +42,9 @@ namespace ProyectoFinal.Controllers
                                join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
                                where ofer.Estado == "A" && ofer.IdPeriodoLectivo == idPerLec && usu.IdUsuario == IdUsuario
+                               //orderby cur.Nivel ascending, par.Descripcion ascending
                                //select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion}
-                               select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")}
+                               select new { id = ofer.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"), niv = cur.Nivel, par = par.Descripcion}
                 ).Distinct().ToList();
 
             }
@@ -51,8 +54,9 @@ namespace ProyectoFinal.Controllers
                                join cur in db.Curso.AsNoTracking() on maq.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on maq.IdParalelo equals par.IdParalelo
                                where maq.Estado == "A" && maq.IdPeriodoLectivo == idPerLec
+                               //orderby cur.Nivel ascending, par.Descripcion ascending
                                //select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion }
-                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA") }
+                               select new { id = maq.IdOferta, text = cur.Descripcion + " " + par.Descripcion + " | " + (maq.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA"), niv = cur.Nivel, par = par.Descripcion }
                 ).Distinct().ToList();
             }
 
@@ -60,12 +64,19 @@ namespace ProyectoFinal.Controllers
 
             if (string.IsNullOrEmpty(q))
             {
-                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+                var FatherItem = (from maq in FatherItems
+                                  //where maq.text.Contains(q)
+                                  orderby maq.niv ascending, maq.par ascending
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var FatherItem = (from maq in FatherItems
                                   where maq.text.Contains(q)
+                                  orderby maq.niv ascending, maq.par ascending
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 

@@ -108,18 +108,68 @@ namespace ProyectoFinal.Controllers
                 sValue = string.Empty;
             }
 
-            var Ofertas = (from ofer in db.Oferta.AsNoTracking()
-                           join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
-                           join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
-                           join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
-                           where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) 
-                           && ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
-                           select new
-                           {
-                               id = ofer.IdOferta,
-                               text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
-                           }).ToList();
-            Ofertas.RemoveAll(item => item == null);
+            var Ofertas = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
+
+             //Si es un profesor solo carga los cursos a los que el esta asignado, si no carga todos
+            if (idrol == 3)
+            {
+
+                string IdUsuario = Request.Cookies["UserID"].Value.ToString();
+
+                 Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                               join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+                               join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                               join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+
+                               join clec in db.CargaLectiva.AsNoTracking() on ofer.IdOferta equals clec.IdOferta
+                               join prof in db.Profesor.AsNoTracking() on clec.IdProfesor equals prof.IdProfesor
+                               join usu in db.Usuario.AsNoTracking() on prof.Cedula equals usu.Cedula
+
+                               where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue))
+                               //&& ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
+                               && usu.IdUsuario == IdUsuario
+                               orderby cur.Nivel ascending, par.Descripcion ascending
+                               select new
+                               {
+                                   id = ofer.IdOferta,
+                                   text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
+                               }).Distinct().ToList();
+                Ofertas.RemoveAll(item => item == null);
+            }
+            else
+            {
+                 Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                               join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+                               join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                               join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                               where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue))
+                               //&& ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
+                               orderby cur.Nivel ascending, par.Descripcion ascending
+                               select new
+                               {
+                                   id = ofer.IdOferta,
+                                   text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
+                               }).ToList();
+                Ofertas.RemoveAll(item => item == null);
+            }
+
+            //var Ofertas = (from ofer in db.Oferta.AsNoTracking()
+            //               join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+            //               join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+            //               join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+            //               where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) 
+            //               && ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
+            //               select new
+            //               {
+            //                   id = ofer.IdOferta,
+            //                   text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
+            //               }).ToList();
+            //Ofertas.RemoveAll(item => item == null);
 
             return Json(new { items = Ofertas }, JsonRequestBehavior.AllowGet);
         }
@@ -148,7 +198,7 @@ namespace ProyectoFinal.Controllers
                            join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
                            where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue))
                            && ofer.IdPeriodoLectivo == IdPeriodoLectivo
-                           orderby cur.Nivel
+                           orderby cur.Nivel ascending, par.Descripcion ascending
                            //&& per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
                            select new
                            {

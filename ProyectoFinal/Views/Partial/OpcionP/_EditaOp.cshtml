@@ -1,4 +1,4 @@
-﻿@model ProyectoFinal.Models.OfertaExt
+﻿@model ProyectoFinalModel.Opcion
 
 <style>
     .wrap {
@@ -35,11 +35,11 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-md-4">
-                            <label class="form-control no-border">Id Oferta:</label>
+                            <label class="form-control no-border">Id Opcion:</label>
                         </div>
                         <div class="col-md-8">
                             <input type="text" class="form-control"
-                                   id="txtIdOfertaMod" placeholder="Id Oferta" disabled value="@Model.IdOferta" />
+                                   id="txtIdOpcionMod" placeholder="Id Opcion" disabled value="@Model.IdOpcion" />
                         </div>
                     </div>
                 </div>
@@ -47,11 +47,11 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-md-4">
-                            <label class="form-control no-border">Curso:</label>
+                            <label class="form-control no-border">Descripcion:</label>
                         </div>
                         <div class="col-md-8">
 
-                            <input type="text" class="form-control" id="txtCursoMod" placeholder="Capacidad" disabled value="@Model.DescCurso" />
+                            <input type="text" class="form-control" id="txtDescMod" placeholder="Descripcion" value="@Model.Descripcion" />
                         </div>
                     </div>
                 </div>
@@ -61,30 +61,36 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-md-4">
-                            <label class="form-control no-border">Paralelo:</label>
+                            <label class="form-control no-border">Url:</label>
                         </div>
                         <div class="col-md-8">
                             <input type="text" class="form-control"
-                                   id="txtParaleloMod" placeholder="Id Oferta" disabled value="@Model.DescParalelo" />
+                                   id="txtUrlMod" placeholder="Url" value="@Model.Url" />
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-5 col-md-offset-1">
                     <div class="form-group">
                         <div class="col-md-4">
-                            <label class="form-control no-border">Capacidad:</label>
+                            <label class="radio">
+                                @if (Model.Estado == "A")
+                                {
+                                    <input type="checkbox" name="chkEstado" , checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="chkEstado" />
+                                }
+                                Activo
+                            </label>
                         </div>
-                        <div class="col-md-8">
 
-                            @*<input type="text" class="form-control" id="txtCapacidadMod" placeholder="Capacidad" value="@Model.Capacidad" />*@
-                            <input min="0" step="1" class="form-control" id="txtCapacidadMod" type="number" name="txtCapacidadMod" placeholder="Capacidad " value="@Model.Capacidad"  />
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
+            @*<div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-md-4">
@@ -100,7 +106,7 @@
                 <div class="col-md-5 col-md-offset-1">
                     <div class="form-group">
                         <div class="col-md-4">
-                            <label class="radio" >
+                            <label class="radio">
                                 @if (Model.Estado == "A")
                                 {
                                     <input type="checkbox" name="chkEstado" , checked>
@@ -112,11 +118,11 @@
                                 Activo
                             </label>
                         </div>
-                        
-                    </div>                  
+
+                    </div>
                 </div>
-                
-            </div>
+
+            </div>*@
 
         </div>
 
@@ -138,12 +144,14 @@
 </form>
 
 <script type="text/javascript">
+
     //$(document).on('click', '#SavePartialOF', function (event) {
     $('#SavePartialOF').on('click', function () {
         event.preventDefault()
 
-        var txtIdOferta = document.getElementById("txtIdOfertaMod").value;
-        var txtCapacidad = document.getElementById("txtCapacidadMod").value;
+        var txtIdOpcion = document.getElementById("txtIdOpcionMod").value;
+        var txtDescripcion = document.getElementById("txtDescMod").value;
+        var txtUrl = document.getElementById("txtUrlMod").value;
         var txtEstado = "A";
 
         var chkestado = $('input[name="chkEstado"]').is(':checked')
@@ -151,17 +159,19 @@
         if (chkestado == false) {
             txtEstado = "I";
         }
-       
+
         $.ajax({
-            url: '/Oferta/EditaOferta/',
+            url: '/Opcion/EditaOpcion/',
             type: 'POST',
             dataType: 'json',
             data: {
-                IdOferta: txtIdOferta,
-                Capacidad: txtCapacidad,
+                IdOpcion: txtIdOpcion,
+                Descripcion: txtDescripcion,
+                Url: txtUrl,
                 Estado: txtEstado
             }
-        }).done(function (response) {            
+            
+        }).done(function (response) {
 
             toastr.options = {
                 "closeButton": false,
@@ -182,10 +192,10 @@
 
             if (response.bResultado) {
                 $('#lista_productosModal').modal('hide');
-                toastr.success(response.Message, 'Editar Oferta');
-            } else {
-                toastr.error(response.Message, 'Editar Oferta');
-            }            
+                toastr.success(response.Message, 'Editar Opcion');
+            }else{
+                toastr.error(response.Message, 'Editar Opcion');
+            }   
         });
     });
 </script>
@@ -197,3 +207,4 @@
         $(this).val(cleanNum);
     });
 </script>
+

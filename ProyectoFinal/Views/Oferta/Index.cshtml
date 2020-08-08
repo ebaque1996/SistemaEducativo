@@ -121,7 +121,7 @@
                             <th>Disponible</th>
                             <th>Estado</th>
                             <th></th>
-                            <th></th>
+                            @*<th></th>*@
                         </tr>
                     </thead>
                 </table>
@@ -431,17 +431,17 @@
 
                 },
 
-                {
-                    "data": "btnElim", "className": 'btnElim', "title": "", "width": "5%",
-                    "render": function (data, type, row) {
-                        var sCad = '<button type="button" class="btn btn-danger btn-sm btnDeleteRow"> ';
-                        sCad = sCad + '<i class="fa fas fa-trash" aria - hidden="true" ></i >';
-                        sCad = sCad + '</button>';
+                //{
+                //    "data": "btnElim", "className": 'btnElim', "title": "", "width": "5%",
+                //    "render": function (data, type, row) {
+                //        var sCad = '<button type="button" class="btn btn-danger btn-sm btnDeleteRow"> ';
+                //        sCad = sCad + '<i class="fa fas fa-trash" aria - hidden="true" ></i >';
+                //        sCad = sCad + '</button>';
 
-                        return sCad;
-                    }
+                //        return sCad;
+                //    }
 
-                }
+                //}
             ],
         });
     }
@@ -497,47 +497,47 @@
     });
 
 
-    $('#example2').DataTable().on('click', '.btnDeleteRow', function () {
-        var table = $('#example2').DataTable();
-        var data = table.row($(this).parents('tr')).data();
-        var txtIdOferta = data.IdOferta;
-        var jsonCad = "{'IdOferta':" + txtIdOferta + "}";
+    //$('#example2').DataTable().on('click', '.btnDeleteRow', function () {
+    //    var table = $('#example2').DataTable();
+    //    var data = table.row($(this).parents('tr')).data();
+    //    var txtIdOferta = data.IdOferta;
+    //    var jsonCad = "{'IdOferta':" + txtIdOferta + "}";
 
-        swal({
-            title: "Oferta ",
-            text: "Desea eliminar el registro? ",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true
-        }, function (isConfirm) {
-            if (isConfirm) {
+    //    swal({
+    //        title: "Oferta ",
+    //        text: "Desea eliminar el registro? ",
+    //        type: "info",
+    //        showCancelButton: true,
+    //        closeOnConfirm: false,
+    //        showLoaderOnConfirm: true
+    //    }, function (isConfirm) {
+    //        if (isConfirm) {
 
-                $.ajax(
-                    {
-                        type: "POST",
-                        url: "/Oferta/DeleteOferta",
-                        data: jsonCad,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (data) {
+    //            $.ajax(
+    //                {
+    //                    type: "POST",
+    //                    url: "/Oferta/DeleteOferta",
+    //                    data: jsonCad,
+    //                    contentType: "application/json; charset=utf-8",
+    //                    dataType: "json",
+    //                    success: function (data) {
 
-                            if (data.bResultado) {
-                                swal("Saved", data.Message, "success");
-                                GeneraConsulta(data.listOfertaExt);
-                                limpiar();
-                            }
-                            else {
-                                swal("Cancelled", data.Message, "error");
-                            }
-                        }
-                    }
-                )
+    //                        if (data.bResultado) {
+    //                            swal("Saved", data.Message, "success");
+    //                            GeneraConsulta(data.listOfertaExt);
+    //                            limpiar();
+    //                        }
+    //                        else {
+    //                            swal("Cancelled", data.Message, "error");
+    //                        }
+    //                    }
+    //                }
+    //            )
 
-            }
+    //        }
 
-        });
+    //    });
 
-    });
+    //});
 
 </script>
