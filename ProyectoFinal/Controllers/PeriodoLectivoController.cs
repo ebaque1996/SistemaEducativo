@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,6 +19,7 @@ namespace ProyectoFinal.Controllers
 
         ProyectoFinalEntities db = new ProyectoFinalEntities();
         String error = "";
+        public static string strConnSQL = string.Empty;
 
         // GET: PeriodoLectivo
         public ActionResult Index()
@@ -23,6 +27,13 @@ namespace ProyectoFinal.Controllers
 
             List<PeriodoLectivo> profesores = db.PeriodoLectivo.AsNoTracking().ToList();
             return View(profesores);
+        }
+
+        public ActionResult CerrarPL()
+        {
+
+            //List<PeriodoLectivo> profesores = db.PeriodoLectivo.AsNoTracking().ToList();
+            return View();
         }
 
         public ActionResult Edit(int id)
@@ -163,6 +174,92 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
             return true;
+        }
+
+        public JsonResult GetPeriodosCPL(string q)
+        {
+
+            var FatherItems = (from maq in db.PeriodoLectivo.AsNoTracking()
+                               where maq.Estado == "A"
+                               select new { id = maq.IdPeriodoLectivo, text = maq.Descripcion }
+                   ).ToList();
+
+            FatherItems.RemoveAll(item => item == null);
+
+            if (string.IsNullOrEmpty(q))
+            {
+                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var FatherItem = (from maq in FatherItems
+                                  where maq.text.Contains(q)
+                                  select new { id = maq.id, text = maq.text }
+                     ).ToList();
+
+
+                FatherItem.RemoveAll(item => item == null);
+
+                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult CerrarPeriodoLectivo(string IdPerLec)
+        {
+            ProyectoFinalEntities db = new ProyectoFinalEntities();
+            string strResult = string.Empty;
+            bool bResult = false;
+
+            try
+            {
+                if (String.IsNullOrEmpty(IdPerLec))
+                {
+                    return Json(new { Message = "Debe ingresar el Periodo Lectivo", bResultado = false }, JsonRequestBehavior.AllowGet);
+                }
+
+                strConnSQL = ConfigurationManager.ConnectionStrings["ProyectoFinalCN"].ConnectionString;
+                //string psQuery = "EXEC SP_CERRAR_PERIODO_LECTIVO " + IdPerLec.ToString();
+                string psQuery = "EXEC SP_CERRAR_PERIODO_LECTIVO " + IdPerLec;
+
+                DataSet dtsConsulta = new DataSet();
+                string ConnectionStrinHANA = strConnSQL;
+                SqlConnection conn = new SqlConnection(ConnectionStrinHANA);
+                conn.Open();
+
+                string sQuery = psQuery;
+
+                SqlCommand cmd = new SqlCommand(sQuery, conn);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dtsConsulta);
+
+                conn.Close();
+
+                //DataTable dt = dtsConsulta.Tables[0];
+                int count = dtsConsulta.Tables.Count;
+
+                if (count > 0)
+                {
+                    //DataTable dt = dtsConsulta.Tables[0];
+                    DataRow dr = dtsConsulta.Tables[0].Rows[0];
+                    bResult = false;
+                    strResult = dr["ErrorSp"].ToString();
+                }
+                else
+                {
+                    bResult = true;
+                    strResult = "Datos grabados correctamente";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                bResult = false;
+                strResult = ex.Message;
+            }            
+
+            return Json(new { Message = strResult, bResultado = bResult }, JsonRequestBehavior.AllowGet);
         }
 
         [DataType(DataType.Date)]

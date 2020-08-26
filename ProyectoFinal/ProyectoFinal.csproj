@@ -1030,6 +1030,7 @@
     <Content Include="Views\Reportes\LibretaAlumno.cshtml" />
     <Content Include="Views\Reportes\MatrizCalificaciones.cshtml" />
     <Content Include="Views\Partial\OpcionP\_EditaOp.cshtml" />
+    <Content Include="Views\PeriodoLectivo\CerrarPL.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
