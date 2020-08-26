@@ -120,6 +120,71 @@ namespace ProyectoFinal.Controllers
             return Json(new { data = listAlumno }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAlumnos(int? idperiodo, int? idoferta, int? idmateria, int? idalumno, int? idestado)
+        {
+            List<Alumno> listAlumno = new List<Alumno>();
+
+            string est = "";
+
+            if (idestado != null)
+            {
+                est = idestado == 1 ? "A" : "I";
+            }
+
+            var model = (from deta in db.Alumno.AsNoTracking()
+                         //join ofer in db.Oferta.AsNoTracking() on deta.IdOferta equals ofer.IdOferta
+                         //where deta.NNuIdOF == NNuIdOF
+                         select new
+                         {
+                             deta.IdAlumno,
+                             deta.Cedula,
+                             deta.Nombres,
+                             deta.Apellidos,
+                             deta.Estado
+                         });
+
+            if (idestado != null)
+            {
+                model = model.Where(x => x.Estado == est);
+            }
+
+            //if (idperiodo != null)
+            //{
+            //    model = model.Where(x => x.IdPeriodoLectivo == idperiodo);
+            //}
+
+            //if (idoferta != null)
+            //{
+            //    model = model.Where(x => x.IdOferta == idoferta);
+            //}
+
+            //if (idmateria != null)
+            //{
+            //    model = model.Where(x => x.IdMateria == idmateria);
+            //}
+
+            if (idalumno != null)
+            {
+                model = model.Where(x => x.IdAlumno == idalumno);
+            }
+
+            var model2 = model.ToList();
+
+            foreach (var item in model2)
+            {
+                Alumno objAlumno = new Alumno();
+                objAlumno.IdAlumno = item.IdAlumno;
+                objAlumno.Cedula = item.Cedula;
+                objAlumno.Nombres = item.Nombres;
+                objAlumno.Apellidos = item.Apellidos;
+                objAlumno.Estado = item.Estado;
+                listAlumno.Add(objAlumno);
+            }
+
+            //return View(listAlumno);
+            return Json(new { detsCargasLectivas = listAlumno }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult Create(int IdAlumno, string Cedula, string Nombres, string Apellidos, DateTime FechaNac, 
                                 string Sexo, string Direccion, string Telefono, int UltimoNivel, string CedulaRepresentante, 
