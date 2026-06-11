@@ -1,5 +1,11 @@
 ﻿@model ProyectoFinal.Models.CargaLectivaExt
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+
 <h2>Editar carga lectiva</h2>
 
 <section class="content">
@@ -14,9 +20,9 @@
                 <div class="box-body">
 
                     @*<div class="input-group">
-            <label for="CCiMaquina" class="control-label">Id Carga Lectiva</label>
-            @Html.EditorFor(model => model.IdCargaLectiva, new { htmlAttributes = new { @id = "txtIdCargaLectiva", @class = "form-control", disabled = "disabled" } })
-        </div>*@
+                            <label for="CCiMaquina" class="control-label">Id Carga Lectiva</label>
+                            @Html.EditorFor(model => model.IdCargaLectiva, new { htmlAttributes = new { @id = "txtIdCargaLectiva", @class = "form-control", disabled = "disabled" } })
+                        </div>*@
 
                     <div class="row">
                         <div class="col-md-6">
@@ -96,28 +102,28 @@
                     </div>
 
                     @*<div class="input-group">
-            <label for="CDsMaquina" class="control-label">Profesor</label>
-            <input type="text" id="txtSelectProfesor" style="width: 100%;" />
-            <input type="text" id="txtProfesor" hidden />
-        </div>
+                            <label for="CDsMaquina" class="control-label">Profesor</label>
+                            <input type="text" id="txtSelectProfesor" style="width: 100%;" />
+                            <input type="text" id="txtProfesor" hidden />
+                        </div>
 
-        <div class="input-group">
-            <label for="CDsMaquina" class="control-label">Curso</label>
-            <input type="text" id="txtSelectCurso" style="width: 100%;" />
-            <input type="text" id="txtCurso" hidden />
-        </div>
+                        <div class="input-group">
+                            <label for="CDsMaquina" class="control-label">Curso</label>
+                            <input type="text" id="txtSelectCurso" style="width: 100%;" />
+                            <input type="text" id="txtCurso" hidden />
+                        </div>
 
-        <div class="input-group">
-            <label for="CDsMaquina" class="control-label">Periodo</label>
-            <input type="text" id="txtSelectPeriodo" style="width: 100%;" />
-            <input type="text" id="txtPeriodo" hidden />
-        </div>
+                        <div class="input-group">
+                            <label for="CDsMaquina" class="control-label">Periodo</label>
+                            <input type="text" id="txtSelectPeriodo" style="width: 100%;" />
+                            <input type="text" id="txtPeriodo" hidden />
+                        </div>
 
-        <div class="input-group">
-            <label for="CDsMaquina" class="control-label">Materia</label>
-            <input type="text" id="txtSelectMateria" style="width: 100%;" />
-            <input type="text" id="txtMateria" hidden />
-        </div>*@
+                        <div class="input-group">
+                            <label for="CDsMaquina" class="control-label">Materia</label>
+                            <input type="text" id="txtSelectMateria" style="width: 100%;" />
+                            <input type="text" id="txtMateria" hidden />
+                        </div>*@
 
                     <div class="checkbox">
                         <label class="radio">
@@ -253,7 +259,7 @@
 
         var obj = @Html.Raw(Json.Encode(Model));
 
-        $('#txtSelectProfesor').select2('data', { id: obj.IdProfesor, text: obj.DescProfesor });        
+        $('#txtSelectProfesor').select2('data', { id: obj.IdProfesor, text: obj.DescProfesor });
         document.getElementById('txtProfesor').value = obj.IdProfesor;
 
         //$('#txtSelectCurso').select2('data', { id: obj.IdCurso, text: obj.DescCurso });

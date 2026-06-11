@@ -1,13 +1,18 @@
 ﻿@model ProyectoFinalModel.Modulo
 
-<h2>Crear nuevo modulo</h2>
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+<h2>Crear módulo</h2>
 
 <section class="content">
 
     <div class="class=" col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
-                <h3 class="box-title">Registro Modulo</h3>
+                <h3 class="box-title">Registro Módulo</h3>
             </div>
 
             <form class="input-horizontal">

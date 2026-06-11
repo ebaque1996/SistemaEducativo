@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Usuario>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Usuario", "Create")
 </p>
@@ -12,8 +17,9 @@
                     <tr>
                         <th>Id Usuario</th>
                         <th>Cédula</th>
-                        <th>Nombres</th>
+                        @*<th>Nombres</th>*@
                         <th>Apellidos</th>
+                        <th>Nombres</th>
                         <th>Estado</th>
                         <th></th>
                     </tr>
@@ -46,13 +52,14 @@
             "columns": [
                 { "data": "IdUsuario", "className": 'IdUsuario', "title": "Id Usuario" },
                 { "data": "Cedula", "className": 'Cedula', "title": "Cédula" },
-                { "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
+                //{ "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
                 { "data": "Apellidos", "className": 'Apellidos', "title": "Apellidos" },
+                { "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
-                    "render": function (data, type, row) {                        
+                    "render": function (data, type, row) {
                         var myUrl = '@Url.Action("Edit", "Usuario")?id=' + row.IdUsuario;
-                        return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                        return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                     }
                 },
             ],

@@ -271,12 +271,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LibretaPorAlumno.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\LibretasPorCurso.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LibretasPorCurso.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\ListadoCalificacionesPorCurso.cs">
       <DependentUpon>ListadoCalificacionesPorCurso.rpt</DependentUpon>
@@ -304,6 +306,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MatrizCalificaciones.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Reports\prueba.cs">
       <AutoGen>True</AutoGen>
@@ -1030,6 +1033,7 @@
     <Content Include="Views\Reportes\LibretaAlumno.cshtml" />
     <Content Include="Views\Reportes\MatrizCalificaciones.cshtml" />
     <Content Include="Views\Partial\OpcionP\_EditaOp.cshtml" />
+    <Content Include="Views\Partial\MatriculaP\_AnularMatr.cshtml" />
     <Content Include="Views\PeriodoLectivo\CerrarPL.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1097,10 +1101,12 @@
     <EmbeddedResource Include="Reports\LibretaPorAlumno.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>LibretaPorAlumno.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\LibretasPorCurso.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>LibretasPorCurso.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ListadoCalificacionesPorCurso.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -1120,6 +1126,7 @@
     <EmbeddedResource Include="Reports\MatrizCalificaciones.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MatrizCalificaciones.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\prueba.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

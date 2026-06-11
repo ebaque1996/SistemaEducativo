@@ -1,11 +1,15 @@
-﻿
+﻿@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Libretas de Calificaciones</h2>
 
 <div class="content">
     <div class="row">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"> Parametros de Consulta </h3>
+                <h3 class="box-title"> Parámetros de Consulta </h3>
             </div>
             <div class="box-body">
 
@@ -94,15 +98,15 @@
                     <input type="text" id="txtIdTipoReporte" name="txtIdTipoReporte" hidden />
                     <input type="text" id="txtIdOferta" name="txtIdOferta" hidden />
                     <input type="text" id="txtIdAlumno" name="txtIdAlumno" hidden />
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" type="submit" id="btnConsultar">
                         <i class="fa fa-file-pdf-o"></i>
                     </button>
                 }
 
             </div>
             @*<div class="box-body">
-                <input type="button" class="btn btn-primary" id="btnConsultar" value="Consultar" />
-            </div>*@
+                    <input type="button" class="btn btn-primary" id="btnConsultar" value="Consultar" />
+                </div>*@
         </div>
     </div>
 
@@ -112,6 +116,8 @@
 
 <script>
     $(document).ready(function () {
+
+        document.getElementById("btnConsultar").disabled = true;
 
         $("#txtSelectPeriodo").on("select2-selecting", function (e) { document.getElementById('txtPeriodo').value = e.val; });
         $("#txtSelectPeriodo").on("select2-selecting", function (e) { document.getElementById('txtIdPeriodo').value = e.val; });
@@ -123,9 +129,11 @@
         $("#txtSelectOferta").on("select2-selecting", function (e) { document.getElementById('txtIdOferta').value = e.val; });
 
         $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtAlumno').value = e.val; });
-        $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtIdAlumno').value = e.val; });        
-        
+        $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtIdAlumno').value = e.val; });
+
         $('#txtSelectPeriodo').on("change", function (e) {
+
+            habilitarBoton();
 
             if (e.val == "") {
                 $("#txtSelectPeriodo").select2("val", "");
@@ -144,6 +152,8 @@
 
 
         $('#txtSelectTipoReporte').on("change", function (e) {
+
+            habilitarBoton();
 
             if (e.val == "") {
                 $("#txtSelectTipoReporte").select2("val", "");
@@ -167,11 +177,21 @@
                     $('#txtSelectOferta').select2('disable');
                     $('#txtSelectAlumno').select2('enable');
                 }
+
+                $("#txtSelectOferta").select2("val", "");
+                document.getElementById('txtOferta').value = null;
+                document.getElementById('txtIdOferta').value = null;
+
+                $("#txtSelectAlumno").select2("val", "");
+                document.getElementById('txtAlumno').value = null;
+                document.getElementById('txtIdAlumno').value = null;
             }
         });
 
 
         $('#txtSelectOferta').on("change", function (e) {
+
+            habilitarBoton();
 
             if (e.val == "") {
                 $("#txtSelectOferta").select2("val", "");
@@ -181,6 +201,8 @@
         });
 
         $('#txtSelectAlumno').on("change", function (e) {
+
+            habilitarBoton();
 
             if (e.val == "") {
                 $("#txtSelectAlumno").select2("val", "");
@@ -288,6 +310,26 @@
             dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
             escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
         });
-        
+
+        function habilitarBoton() {
+            if ($(txtSelectTipoReporte).select2('data') != null) {
+                if (document.getElementById("txtTipoReporte").value == 1) {
+                    if ($(txtSelectPeriodo).select2('data') == null || $(txtSelectOferta).select2('data') == null) {
+                        document.getElementById("btnConsultar").disabled = true;
+                    } else {
+                        document.getElementById("btnConsultar").disabled = false;
+                    }
+                } else {
+                    if ($(txtSelectPeriodo).select2('data') == null || $(txtSelectAlumno).select2('data') == null) {
+                        document.getElementById("btnConsultar").disabled = true;
+                    } else {
+                        document.getElementById("btnConsultar").disabled = false;
+                    }
+                }
+            } else {
+                document.getElementById("btnConsultar").disabled = true;
+            }
+        }
+
     });
 </script>

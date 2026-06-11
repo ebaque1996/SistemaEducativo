@@ -1,5 +1,10 @@
 ﻿@*@model IEnumerable<ProyectoFinal.Models.CargaLectivaExt>*@
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Carga Lectiva", "Create")
 </p>
@@ -9,7 +14,7 @@
     <div class="row">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"> Parametros de Consulta </h3>
+                <h3 class="box-title"> Parámetros de Consulta </h3>
             </div>
             <div class="box-body">
                 <div class="row">
@@ -21,11 +26,11 @@
                             <div class="col-md-8">
                                 <input type="text" id="txtSelectPeriodo" />
                                 <input type="text" id="txtPeriodo" hidden />
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                     @*</div>
-            <div class="row">*@
+                        <div class="row">*@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="col-md-4">
@@ -34,7 +39,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="txtSelectCurso" />
                                 <input type="text" id="txtCurso" hidden />
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,7 +52,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="txtSelectMateria" />
                                 <input type="text" id="txtMateria" hidden />
-                            </div>                            
+                            </div>
                         </div>
                     </div>
 
@@ -59,7 +64,7 @@
                             <div class="col-md-8">
                                 <input type="text" id="txtSelectProfesor" />
                                 <input type="text" id="txtProfesor" hidden />
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,7 +80,7 @@
                                 <input type="text" id="txtEstado" hidden />
                             </div>
                         </div>
-                    </div>                   
+                    </div>
                 </div>
 
             </div>
@@ -284,7 +289,7 @@
 
     $('#btnConsultar').on('click', function () { consultar(); });
 
-    function consultar() {        
+    function consultar() {
 
         if (true) {
             $.ajax({
@@ -334,7 +339,7 @@
                                 "width": "10%","render": function (data, type, row) {
 
                                 var myUrl = '@Url.Action("Edit", "CargaLectiva")/' + row.IdCargaLectiva;
-                                return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                                return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                             }
                             },
                         ],
@@ -345,7 +350,7 @@
                 }
             });
         }
-        
+
     }
 
 </script>

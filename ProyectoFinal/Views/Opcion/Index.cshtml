@@ -1,11 +1,15 @@
-﻿
+﻿@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Opciones</h2>
 
 <div class="content">
     <div class="row">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"> Parametros de Consulta </h3>
+                <h3 class="box-title"> Parámetros de Consulta </h3>
             </div>
             <div class="box-body">
                 <div class="form-group">
@@ -48,16 +52,16 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
                     <br />
-                    
+
                     <div class="row">
                         <div class="col-md-12">
                             <input type="button" class="btn btn-primary" id="btnAddRow" value="Agregar" />
                         </div>
                     </div>
-                
+
                 </div>
 
                 <br />
@@ -85,7 +89,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title"> Editar Opcion</h4>
+                <h4 class="modal-title"> Editar Opción</h4>
             </div>
             <div class="modal-body table-placeholder2"></div>
         </div>
@@ -121,7 +125,7 @@
             dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
             escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
         });
-        
+
     });
 
     $('#txtSelectModulo').on("change", function (e) {
@@ -133,7 +137,7 @@
         //        data: { idMod: document.getElementById('txtModulo').value },
         //        dataType: "json",
         //        success: function (data) {
-        //            GeneraConsulta(data.detsOpciones);                   
+        //            GeneraConsulta(data.detsOpciones);
         //        }
         //    });
         //} else {
@@ -151,7 +155,7 @@
 
         if (document.getElementById("txtModulo").value == null || document.getElementById("txtModulo").value == '') { IdModulo = 0; }
 
-        var jsonCad = "{'IdModulo':'" + IdModulo + "'";        
+        var jsonCad = "{'IdModulo':'" + IdModulo + "'";
         jsonCad = jsonCad + ", 'Descripcion': '" + Descripcion + "'";
         jsonCad = jsonCad + ", 'Url': '" + Url + "'";
         jsonCad = jsonCad + "}";
@@ -206,7 +210,7 @@
             "data": detsOpciones,
             "columns": [
                 { "data": "IdOpcion", "className": 'IdOpcion', "title": "Id Opcion", "visible": false },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 { "data": "Url", "className": 'Url', "title": "Url" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
 
@@ -237,7 +241,7 @@
         });
     }
 
-    function limpiar() {   
+    function limpiar() {
         $('#txtDescripcion').val("");
         $('#txtUrl').val("");
     }
@@ -288,7 +292,7 @@
 
     //$('#example2').DataTable().on('click', '.btnDeleteRow', function () {
     //    var table = $('#example2').DataTable();
-    //    var data = table.row($(this).parents('tr')).data();        
+    //    var data = table.row($(this).parents('tr')).data();
     //    var txtIdOpcion = data.IdOpcion;
     //    var jsonCad = "{'IdOpcion':" + txtIdOpcion + "}";
 

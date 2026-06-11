@@ -45,6 +45,8 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             if (esValido(IdUsuario, Cedula, Nombres, Apellidos, Email, Password, ConfPassword, Rol, Estado, Transaccion))
             {
@@ -60,8 +62,9 @@ namespace ProyectoFinal.Controllers
                 objUsuario.EstadoReset = "A";                             
 
                 if (Transaccion == "C")
-                {                    
-                    objUsuario.UsuarioCreacion = 1;
+                {
+                    //objUsuario.UsuarioCreacion = 1;
+                    objUsuario.UsuarioCreacion = userName;
                     objUsuario.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objUsuario).State = EntityState.Added;
                 }
@@ -71,7 +74,8 @@ namespace ProyectoFinal.Controllers
                     //objAlumno.IdAlumno = IdAlumno;
                     objUsuario.UsuarioCreacion = consUsuario.UsuarioCreacion;
                     objUsuario.FechaCreacion = consUsuario.FechaCreacion;
-                    objUsuario.UsuarioActualizacion = 1;
+                    //objUsuario.UsuarioActualizacion = 1;
+                    objUsuario.UsuarioActualizacion = userName;
                     objUsuario.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objUsuario).State = EntityState.Modified;
                 }

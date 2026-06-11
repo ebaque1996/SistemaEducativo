@@ -27,6 +27,15 @@ namespace ProyectoFinal.Controllers
         {
             Alumno objAlumno = new Alumno();
             objAlumno = db.Alumno.AsNoTracking().Where(x => x.IdAlumno == id).FirstOrDefault();
+            if (objAlumno.UltimoNivel>0)
+            {
+                ViewBag.DescCurso = db.Curso.AsNoTracking().Where(x => x.IdCurso == objAlumno.UltimoNivel).FirstOrDefault().Descripcion;
+            }
+            else
+            {
+                ViewBag.DescCurso = "PRIMER INGRESO A UNA INSTITUCIÓN EDUCATIVA";
+            }
+            
             return View(objAlumno);
         }
 
@@ -45,17 +54,17 @@ namespace ProyectoFinal.Controllers
         public JsonResult GetCursosIngreso(string q)
         {
             var FatherItems = (from maq in db.Curso.AsNoTracking()
-                               where maq.Estado == "A"
+                               where maq.Estado == "A"// && maq.Descripcion.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0
                                select new { id = maq.IdCurso, text = maq.Descripcion }
                    ).ToList();
 
-            FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+            FatherItems.Add(new { id = 0, text = "PRIMER INGRESO A UNA INSTITUCIÓN EDUCATIVA" });
             FatherItems.RemoveAll(item => item == null);
 
             if (string.IsNullOrEmpty(q))
             {
                 
-                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+                return Json(new { items = FatherItems.OrderBy(x => x.id) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -64,9 +73,9 @@ namespace ProyectoFinal.Controllers
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 
-                FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+                FatherItems.Add(new { id = 0, text = "PRIMER INGRESO A UNA INSTITUCIÓN EDUCATIVA" });
                 FatherItem.RemoveAll(item => item == null);
-                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+                return Json(new { items = FatherItem.OrderBy(x => x.id) }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -78,13 +87,13 @@ namespace ProyectoFinal.Controllers
                                select new { id = maq.IdCurso, text = maq.Descripcion }
                    ).ToList();
 
-            FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+            FatherItems.Add(new { id = 0, text = "PRIMER INGRESO A UNA INSTITUCIÓN EDUCATIVA" });
             FatherItems.RemoveAll(item => item == null);
 
             if (string.IsNullOrEmpty(q))
             {
 
-                return Json(new { items = FatherItems }, JsonRequestBehavior.AllowGet);
+                return Json(new { items = FatherItems.OrderBy(x => x.id) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -93,9 +102,9 @@ namespace ProyectoFinal.Controllers
                                   select new { id = maq.id, text = maq.text }
                      ).ToList();
 
-                FatherItems.Add(new { id = 0, text = "Primer Ingreso a una Institución Educativa" });
+                FatherItems.Add(new { id = 0, text = "PRIMER INGRESO A UNA INSTITUCIÓN EDUCATIVA" });
                 FatherItem.RemoveAll(item => item == null);
-                return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+                return Json(new { items = FatherItem.OrderBy(x => x.id) }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -120,9 +129,123 @@ namespace ProyectoFinal.Controllers
             return Json(new { data = listAlumno }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetEstados(string q)
+        {
+
+            var Estados = new List<object>().Select(t => new {
+                id = default(int),
+                text = default(string)
+            }).ToList();
+
+            Estados.Add(new { id = 1, text = "ACTIVO" });
+            Estados.Add(new { id = 2, text = "INACTIVO" });
+
+            var FatherItem = Estados.Where(x => x.text.IndexOf(q, StringComparison.CurrentCultureIgnoreCase) >= 0);
+
+            return Json(new { items = FatherItem }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAlumnos(string cedAl, string apAl, string nomAl, string cedRep, string apRep, string nomRep, int? idestado)
+        {
+            List<Alumno> listAlumno = new List<Alumno>();
+
+            string est = "";
+
+            if (idestado != null)
+            {
+                est = idestado == 1 ? "A" : "I";
+            }
+
+            var model = (from deta in db.Alumno.AsNoTracking()
+                         //join ofer in db.Oferta.AsNoTracking() on deta.IdOferta equals ofer.IdOferta
+                         //where deta.NNuIdOF == NNuIdOF
+                         select new
+                         {
+                             deta.IdAlumno,
+                             deta.Cedula,
+                             deta.Nombres,
+                             deta.Apellidos,
+                             deta.CedulaRepresentante,
+                             deta.NombresRepresentante,
+                             deta.ApellidosRepresentante,
+                             deta.Estado
+                         });
+
+            if (idestado != null)
+            {
+                model = model.Where(x => x.Estado == est);
+            }
+
+            if (!String.IsNullOrEmpty(cedAl))
+            {
+                model = model.Where(x => x.Cedula.Contains(cedAl));
+            }
+
+            if (!String.IsNullOrEmpty(apAl))
+            {
+                model = model.Where(x => x.Apellidos.Contains(apAl));
+            }
+
+            if (!String.IsNullOrEmpty(nomAl))
+            {
+                model = model.Where(x => x.Nombres.Contains(nomAl));
+            }
+
+            if (!String.IsNullOrEmpty(cedRep))
+            {
+                model = model.Where(x => x.CedulaRepresentante.Contains(cedRep));
+            }
+
+            if (!String.IsNullOrEmpty(apRep))
+            {
+                model = model.Where(x => x.ApellidosRepresentante.Contains(apRep));
+            }
+
+            if (!String.IsNullOrEmpty(nomRep))
+            {
+                model = model.Where(x => x.NombresRepresentante.Contains(nomRep));
+            }
+
+            //if (idperiodo != null)
+            //{
+            //    model = model.Where(x => x.IdPeriodoLectivo == idperiodo);
+            //}
+
+            //if (idoferta != null)
+            //{
+            //    model = model.Where(x => x.IdOferta == idoferta);
+            //}
+
+            //if (idmateria != null)
+            //{
+            //    model = model.Where(x => x.IdMateria == idmateria);
+            //}
+
+            //if (idalumno != null)
+            //{
+            //    model = model.Where(x => x.IdAlumno == idalumno);
+            //}
+
+            var model2 = model.ToList();
+
+            foreach (var item in model2)
+            {
+                Alumno objAlumno = new Alumno();
+                objAlumno.IdAlumno = item.IdAlumno;
+                objAlumno.Cedula = item.Cedula;
+                objAlumno.Nombres = item.Nombres;
+                objAlumno.Apellidos = item.Apellidos;
+                objAlumno.Estado = item.Estado;
+                listAlumno.Add(objAlumno);
+            }
+
+            //return View(listAlumno);
+            return Json(new { detsCargasLectivas = listAlumno }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult Create(int IdAlumno, string Cedula, string Nombres, string Apellidos, DateTime FechaNac, 
-                                string Sexo, string Direccion, string Telefono, int UltimoNivel, string CedulaRepresentante, 
+                                string Sexo, string Direccion, string Telefono, int? UltimoNivel, string CedulaRepresentante, 
                                 string NombresRepresentante, string ApellidosRepresentante, string TelefonoRepresentante, 
                                 string DireccionRepresentante, string ColegioAnterior, string Estado)
         {
@@ -131,6 +254,8 @@ namespace ProyectoFinal.Controllers
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
+            string userName = User.Identity.Name;
+            
             if (esValido(IdAlumno, Cedula, Nombres, Apellidos, FechaNac, Sexo, Direccion, Telefono, UltimoNivel, CedulaRepresentante, 
                 NombresRepresentante, ApellidosRepresentante, TelefonoRepresentante, DireccionRepresentante, ColegioAnterior, Estado))
             {
@@ -142,7 +267,7 @@ namespace ProyectoFinal.Controllers
                 objAlumno.Sexo = Sexo;
                 objAlumno.Direccion = Direccion;
                 objAlumno.Telefono = Telefono;
-                objAlumno.UltimoNivel = UltimoNivel;
+                objAlumno.UltimoNivel = Convert.ToInt32(UltimoNivel);
                 objAlumno.CedulaRepresentante = CedulaRepresentante;
                 objAlumno.NombresRepresentante = NombresRepresentante;
                 objAlumno.ApellidosRepresentante = ApellidosRepresentante;
@@ -157,7 +282,8 @@ namespace ProyectoFinal.Controllers
                     alumnos = db.Alumno.AsNoTracking().ToList();
                     objAlumno.IdAlumno = alumnos.Count() == 0 ? 1 : alumnos.Max(x => x.IdAlumno) + 1;
 
-                    objAlumno.UsuarioCreacion = 1;
+                    //objAlumno.UsuarioCreacion = 1;
+                    objAlumno.UsuarioCreacion = userName;
                     objAlumno.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objAlumno).State = EntityState.Added;
                 }
@@ -167,7 +293,8 @@ namespace ProyectoFinal.Controllers
                     objAlumno.IdAlumno = IdAlumno;
                     objAlumno.UsuarioCreacion = consAlumno.UsuarioCreacion;
                     objAlumno.FechaCreacion = consAlumno.FechaCreacion;
-                    objAlumno.UsuarioActualizacion = 1;
+                    //objAlumno.UsuarioActualizacion = 1;
+                    objAlumno.UsuarioActualizacion = userName;
                     objAlumno.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objAlumno).State = EntityState.Modified;
                 }
@@ -188,7 +315,7 @@ namespace ProyectoFinal.Controllers
         }
 
         public bool esValido(int IdAlumno, string Cedula, string Nombres, string Apellidos, DateTime FechaNac,
-                            string Sexo, string Direccion, string Telefono, int UltimoNivel, string CedulaRepresentante,
+                            string Sexo, string Direccion, string Telefono, int? UltimoNivel, string CedulaRepresentante,
                             string NombresRepresentante, string ApellidosRepresentante, string TelefonoRepresentante,
                             string DireccionRepresentante, string ColegioAnterior, string Estado)
         {
@@ -294,6 +421,22 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
+            if (UltimoNivel == null)
+            {
+                error = "Debe ingresar el Ultimo Curso";
+                return false;
+            }
+
+            if (UltimoNivel > 0)
+            {
+                if (String.IsNullOrEmpty(ColegioAnterior))
+                {
+                    error = "Debe ingresar el Colegio Anterior";
+                    return false;
+                }
+            }
+            
+
             /*if (UltimoNivel==0)
             {
                 error = "Debe ingresar el Último Nivel";
@@ -330,11 +473,7 @@ namespace ProyectoFinal.Controllers
                 return false;
             }
 
-            if (String.IsNullOrEmpty(ColegioAnterior))
-            {
-                error = "Debe ingresar el Colegio Anterior";
-                return false;
-            }
+           
             
             return true;
         }

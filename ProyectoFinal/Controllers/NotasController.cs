@@ -205,6 +205,7 @@ namespace ProyectoFinal.Controllers
                                from notas in g.DefaultIfEmpty()
                                where matr.Estado == "A" && alum.Estado == "A" && matr.IdOferta == idoferta && ofer.IdPeriodoLectivo == idperiodo
                                && clec.IdCargaLectiva == idcl
+                               orderby alum.Apellidos
                                select new
                                {
                                    matr.IdOferta,

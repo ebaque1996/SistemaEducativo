@@ -1,33 +1,38 @@
 ﻿@model ProyectoFinalModel.Modulo
 
-<h2>Editar modulo</h2>
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+<h2>Editar módulo</h2>
 
 <section class="content">
 
     <div class="class=" col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
-                <h3 class="box-title">Editar Modulo</h3>
+                <h3 class="box-title">Editar Módulo</h3>
             </div>
 
             <form class="input-horizontal">
                 <div class="box-body">
 
                     @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Modulo</label>
-                        @Html.EditorFor(model => model.IdModulo, new { htmlAttributes = new { @id = "txtIdModulo", @class = "form-control" } })
-                    </div>
+                            <label for="CCiMaquina" class="control-label">Id Modulo</label>
+                            @Html.EditorFor(model => model.IdModulo, new { htmlAttributes = new { @id = "txtIdModulo", @class = "form-control" } })
+                        </div>
 
-                    <label for="NNuTonelaje" class="control-label">Descripción</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
-                    </div>*@
+                        <label for="NNuTonelaje" class="control-label">Descripción</label>
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                        </div>*@
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="IdModulo" class="control-label">Id Modulo</label>
+                                    <label for="IdModulo" class="control-label">Id Módulo</label>
                                 </div>
                                 <div class="col-md-8">
                                     @Html.EditorFor(model => model.IdModulo, new { htmlAttributes = new { @id = "txtIdModulo", @class = "form-control", disabled = "disabled" } })

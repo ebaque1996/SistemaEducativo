@@ -223,6 +223,8 @@ namespace ProyectoFinal.Controllers
             //List<Oferta> listOfertas = new List<Oferta>();
             List<OfertaExt> listOfertaExt = new List<OfertaExt>();
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             try
             {
@@ -242,7 +244,8 @@ namespace ProyectoFinal.Controllers
                     ofertas = db.Oferta.AsNoTracking().ToList();
                     objOferta.IdOferta = ofertas.Count() == 0 ? 1 : ofertas.Max(x => x.IdOferta) + 1;
 
-                    objOferta.UsuarioCreacion = 1;
+                    //objOferta.UsuarioCreacion = 1;
+                    objOferta.UsuarioCreacion = userName;
                     objOferta.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objOferta).State = EntityState.Added;
 
@@ -319,6 +322,8 @@ namespace ProyectoFinal.Controllers
             string strResult = string.Empty;
             bool bResult = false;
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             try
             {
@@ -328,7 +333,8 @@ namespace ProyectoFinal.Controllers
                     objOferta.Capacidad = Capacidad;
                     objOferta.Estado = Estado;
 
-                    objOferta.UsuarioActualizacion = 1;
+                    //objOferta.UsuarioActualizacion = 1;
+                    objOferta.UsuarioActualizacion = userName;
                     objOferta.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objOferta).State = EntityState.Modified;
 

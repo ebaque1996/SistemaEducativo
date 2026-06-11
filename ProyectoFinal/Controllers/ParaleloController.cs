@@ -59,6 +59,8 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             if (esValido(Descripcion, Estado))
             {
@@ -72,7 +74,8 @@ namespace ProyectoFinal.Controllers
                     paralelos = db.Paralelo.AsNoTracking().ToList();
                     objParalelo.IdParalelo = paralelos.Count() == 0 ? 1 : paralelos.Max(x => x.IdParalelo) + 1;
 
-                    objParalelo.UsuarioCreacion = 1;
+                    //objParalelo.UsuarioCreacion = 1;
+                    objParalelo.UsuarioCreacion = userName;
                     objParalelo.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objParalelo).State = EntityState.Added;
                 }
@@ -82,7 +85,8 @@ namespace ProyectoFinal.Controllers
                     objParalelo.IdParalelo = IdParalelo;
                     objParalelo.UsuarioCreacion = consParalelo.UsuarioCreacion;
                     objParalelo.FechaCreacion = consParalelo.FechaCreacion;
-                    objParalelo.UsuarioActualizacion = 1;
+                    //objParalelo.UsuarioActualizacion = 1;
+                    objParalelo.UsuarioActualizacion = userName;
                     objParalelo.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objParalelo).State = EntityState.Modified;
                 }

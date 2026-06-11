@@ -1,28 +1,33 @@
 ﻿@model ProyectoFinalModel.Matricula
 
-<h2>Crear nuevo Matricula</h2>
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+<h2>Crear nueva Matrícula</h2>
 
 <section class="content">
 
     <div class="class=" col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
-                <h3 class="box-title">Registro Matricula</h3>
+                <h3 class="box-title">Registro Matrícula</h3>
             </div>
 
             <form class="input-horizontal">
                 <div class="box-body">
 
                     @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Matricula</label>
-                        @Html.EditorFor(model => model.IdMatricula, new { htmlAttributes = new { @id = "txtIdMatricula", @class = "form-control" } })
-                    </div>*@
+                            <label for="CCiMaquina" class="control-label">Id Matricula</label>
+                            @Html.EditorFor(model => model.IdMatricula, new { htmlAttributes = new { @id = "txtIdMatricula", @class = "form-control" } })
+                        </div>*@
 
                     <div class="box-body">
                         <label for="NNuTonelaje" class="control-label">Alumno</label>
                         <div class="form-group">
                             <input type="text" id="txtSelectAlumno" />
-                            <input type="text" id="txtAlumno" hidden/>
+                            <input type="text" id="txtAlumno" hidden />
                         </div>
                     </div>
 
@@ -96,15 +101,15 @@
                                         </div>
                                     </div>
                                     @*<div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="col-md-4">
-                                                <label for="NNuCurso" class="control-label">Curso Anterior</label>
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label for="NNuCurso" class="control-label">Curso Anterior</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="txtCurso" name="txtCurso" class="form-control" readonly />
+                                                </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                <input type="text" id="txtCurso" name="txtCurso" class="form-control" readonly />
-                                            </div>
-                                        </div>
-                                    </div>*@
+                                        </div>*@
                                 </div>
 
                                 <br />
@@ -124,11 +129,11 @@
                     </div>
 
                     @*<div class="checkbox">
-                        <label class="radio">
-                            <input type="checkbox" name="chkEstado" , checked>
-                            Activo
-                        </label>
-                    </div>*@
+                            <label class="radio">
+                                <input type="checkbox" name="chkEstado" , checked>
+                                Activo
+                            </label>
+                        </div>*@
 
                     <div class="class=" col-md-6">
                         <div class="box">
@@ -200,15 +205,15 @@
                                         </div>
                                     </div>
                                     @*<div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="col-md-4">
-                                                <label for="NNuProfesor" class="control-label">Profesor</label>
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label for="NNuProfesor" class="control-label">Profesor</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="txtProfesor" name="txtProfesor" class="form-control" readonly />
+                                                </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                <input type="text" id="txtProfesor" name="txtProfesor" class="form-control" readonly />
-                                            </div>
-                                        </div>
-                                    </div>*@
+                                        </div>*@
                                 </div>
 
                                 <br />
@@ -283,6 +288,18 @@
             $("#txtTelefono").val('');
             $("#txtDireccion").val('');
             $("#txtColegio").val('');
+
+            $("#txtSelectAlumno").select2("val", "");
+            document.getElementById('txtAlumno').value = null;
+
+            $("#txtPeriodo").val('');
+            $("#txtCurso").val('');
+            $("#txtParalelo").val('');
+            $("#txtProfesor").val('');
+            $("#txtDisponibles").val('');
+
+            $("#txtSelectOferta").select2("val", "");
+            document.getElementById('txtOferta').value = null;
         }
 
     });
@@ -337,7 +354,10 @@
             $("#txtCurso").val('');
             $("#txtParalelo").val('');
             $("#txtProfesor").val('');
-            $("#txtDisponibles").val('');            
+            $("#txtDisponibles").val('');
+
+            $("#txtSelectOferta").select2("val", "");
+            document.getElementById('txtOferta').value = null;
         }
 
     });
@@ -385,7 +405,7 @@
 
                                 window.setTimeout(function () {
                                     location.href = '@Url.Action("Create", "Matricula")';
-                                }, 4000);
+                                }, 500);
 
                             }
                             else {

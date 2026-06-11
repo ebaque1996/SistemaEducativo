@@ -1,10 +1,15 @@
 ﻿@model ProyectoFinalModel.Usuario
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Crear nuevo Usuario</h2>
 
 <section class="content">
 
-    <div class="class=" col-md-6">        
+    <div class="class=" col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
                 <h3 class="box-title">Datos Usuario</h3>
@@ -41,23 +46,40 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label for="NNuNombresRepresentante" class="control-label">Nombres</label>
-                                </div>
-                                <div class="col-md-8">
-                                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
+                            @*<div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuNombresRepresentante" class="control-label">Nombres</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
+                                    </div>
+                                </div>*@
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label for="NNuApellidosRepresentante" class="control-label">Apellidos</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control", @style = "text-transform:uppercase" } })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            @*<div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuApellidosRepresentante" class="control-label">Apellidos</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuNombresRepresentante" class="control-label">Nombres</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
@@ -191,9 +213,9 @@
         var Email = document.getElementById("txtEmail").value;
         var Password = document.getElementById("txtPassword").value;
         var ConfPassword = document.getElementById("txtConfPassword").value;
-        var Rol = document.getElementById("txtRol").value == '' ? 0 : document.getElementById("txtRol").value;        
+        var Rol = document.getElementById("txtRol").value == '' ? 0 : document.getElementById("txtRol").value;
         var Estado = "A";
-        var Transaccion = "C";        
+        var Transaccion = "C";
 
         var chkestado = $('input[name="chkEstado"]').is(':checked')
 
@@ -210,7 +232,7 @@
         jsonCad = jsonCad + ", 'Email': '" + Email + "'";
         jsonCad = jsonCad + ", 'Password': '" + Password + "'";
         jsonCad = jsonCad + ", 'ConfPassword': '" + ConfPassword + "'";
-        jsonCad = jsonCad + ", 'Rol': '" + Rol + "'";        
+        jsonCad = jsonCad + ", 'Rol': '" + Rol + "'";
         jsonCad = jsonCad + ", 'Estado': '" + Estado + "'";
         jsonCad = jsonCad + ", 'Transaccion': '" + Transaccion + "'";
         jsonCad = jsonCad + "}";

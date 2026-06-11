@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinalModel.Usuario
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Perfil</h2>
 
 <div class="content">

@@ -1,4 +1,5 @@
-﻿using ProyectoFinalModel;
+﻿//using ProyectoFinal.Clases;
+using ProyectoFinalModel;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -19,6 +20,7 @@ namespace ProyectoFinal.Controllers
         {
 
             List<Materia> materias = db.Materia.AsNoTracking().ToList();
+            List<Nota> notas = db.Nota.AsNoTracking().ToList();
             return View(materias);
         }
 
@@ -59,6 +61,8 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            
+            string userName = User.Identity.Name;            
 
             if (esValido(Descripcion, Estado))
             {
@@ -72,7 +76,8 @@ namespace ProyectoFinal.Controllers
                     materias = db.Materia.AsNoTracking().ToList();
                     objMateria.IdMateria = materias.Count() == 0 ? 1 : materias.Max(x => x.IdMateria) + 1;
 
-                    objMateria.UsuarioCreacion = 1;
+                    //objMateria.UsuarioCreacion = 1;
+                    objMateria.UsuarioCreacion = userName;
                     objMateria.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objMateria).State = EntityState.Added;
                 }
@@ -82,7 +87,8 @@ namespace ProyectoFinal.Controllers
                     objMateria.IdMateria = IdMateria;
                     objMateria.UsuarioCreacion = consMateria.UsuarioCreacion;
                     objMateria.FechaCreacion = consMateria.FechaCreacion;
-                    objMateria.UsuarioActualizacion = 1;
+                    //objMateria.UsuarioActualizacion = 1;
+                    objMateria.UsuarioActualizacion = userName;
                     objMateria.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objMateria).State = EntityState.Modified;
                 }

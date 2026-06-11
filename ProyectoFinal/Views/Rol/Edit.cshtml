@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinal.Models.RolesOpciones
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <div class="content">
 
     @*<input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />*@
@@ -118,14 +123,14 @@
                 { "data": "DescModulo", "className": 'DescModulo', "title": "Desc Modulo", "visible": false },
                 { "data": "Descripcion", "className": 'Descripcion', "title": "" },
                 {
-                    "render": function (data, type, row) {                    
+                    "render": function (data, type, row) {
 
                         if (row.EstadoRolOpcion == "A") {
                             return '<input type="checkbox" name="chkPermiso" , checked>';
                         } else {
                             return '<input type="checkbox" name="chkPermiso">';
                         }
-                        
+
                 }
                 },
             ],
@@ -153,7 +158,7 @@
             var objOpc = {};
             objOpc.IdOpcion = value.IdOpcion;
             objOpc.IdRol = document.getElementById("txtIdRol").value;
-            objOpc.Estado = "I";            
+            objOpc.Estado = "I";
 
             table.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 if (rowIdx == index) {
@@ -161,9 +166,9 @@
                     var check = $(dataRow).find('input').prop('checked');
                     if (check) {
                         objOpc.Estado = "A";
-                    }                
+                    }
                 }
-                
+
             });
 
             data.push(objOpc);
@@ -173,7 +178,7 @@
         objRolOpc.Rol = objRol;
         objRolOpc.OpcionExt = data;
 
-        var myJsonData = { objRol: objRol, detOpc: data, trans: "U" };        
+        var myJsonData = { objRol: objRol, detOpc: data, trans: "U" };
 
         var previousWindowKeyDown = window.onkeydown;
 

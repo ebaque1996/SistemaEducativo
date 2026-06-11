@@ -1,0 +1,172 @@
+﻿@model ProyectoFinalModel.Matricula
+
+<style>
+    .wrap {
+        position: relative;
+        display: inline-block;
+    }
+
+        .wrap span {
+            position: absolute;
+            bottom: 5px;
+            right: 0px;
+        }
+
+    .counter {
+        background-color: #5dc991;
+        color: #fff;
+        font-size: 10px;
+        padding: 2px 5px;
+        line-height: 12px;
+        height: 14px;
+        text-align: center;
+        border-top-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        font-weight: 400;
+    }
+</style>
+
+<form class="form-horizontal" id="lstOF" name="form_of">
+
+    <div class="box-body">
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Id Matricula:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control"
+                                   id="txtIdMatriculaMod" placeholder="Id Matricula" disabled value="@Model.IdMatricula" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Descripcion:</label>
+                        </div>
+                        <div class="col-md-8">
+
+                            <input type="text" class="form-control" id="txtDescMod" placeholder="Descripcion" value="@Model.IdMatricula" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="form-control no-border">Url:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control"
+                                   id="txtUrlMod" placeholder="Url" value="@Model.IdMatricula" />
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="col-md-5 col-md-offset-1">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="radio">
+                                    @if (Model.Estado == "A")
+                                    {
+                                        <input type="checkbox" name="chkEstado" , checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" name="chkEstado" />
+                                    }
+                                    Activo
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>*@
+            </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="SaveMatriculaOF"
+                style="font-size:30px;">
+            <i class="fa fa-save"> </i>
+        </button>
+
+        @*<button type="button" id="SaveMatriculaOF" class="btn btn-primary pull-left" data-dismiss="modal">
+                <i class="fa fa-save" aria-hidden="true"></i> Guardar
+            </button>*@
+        <button type="button" class="btn btn-danger pull-right" data-dismiss="modal"
+                style="font-size:30px;">
+            <i class="fa fa-close"></i>
+        </button>
+    </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    //$(document).on('click', '#SaveMatriculaOF', function (event) {
+    $('#SaveMatriculaOF').on('click', function () {
+        event.preventDefault()
+
+        var txtIdMatricula = document.getElementById("txtIdMatriculaMod").value;
+        var txtEstado = "A";
+
+        //var chkestado = $('input[name="chkEstado"]').is(':checked')
+
+        //if (chkestado == false) {
+        //    txtEstado = "I";
+        //}
+
+        $.ajax({
+            url: '/Matricula/EditaMatricula/',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                IdMatricula: txtIdMatricula,
+                Estado: txtEstado
+            }
+
+        }).done(function (response) {
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            if (response.bResultado) {
+                $('#lista_productosModal').modal('hide');
+                toastr.success(response.Message, 'Editar Matricula');
+            }else{
+                toastr.error(response.Message, 'Editar Matricula');
+            }
+        });
+    });
+</script>
+
+<script>
+    $('input[type=number]').blur(function () {
+        var num = parseFloat($(this).val());
+        var cleanNum = num;
+        $(this).val(cleanNum);
+    });
+</script>
+

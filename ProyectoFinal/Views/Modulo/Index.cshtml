@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Modulo>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
-    @Html.ActionLink("Crear Modulo", "Create")
+    @Html.ActionLink("Crear Módulo", "Create")
 </p>
 
 <div class="content">
@@ -43,13 +48,13 @@
             "data": arr,
             "columns": [
                 { "data": "IdModulo", "className": 'IdModulo', "title": "Id Modulo" },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "Modulo")/' + row.IdModulo;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

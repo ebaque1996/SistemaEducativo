@@ -1,18 +1,23 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Curso>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Curso", "Create")
 </p>
 
 @*<input type="button" class="btn btn-primary" id="btnNuevo" value="Nuevo" />
 
-@using (Html.BeginForm("ExportDataProduccion", "Curso", FormMethod.Get, null))
-{
-    <input type="text" id="CCiMaquina" name="CCiMaquina" hidden />
-    <button class="btn btn-primary" type="submit">
-        <i class="fa fa-file-pdf-o"></i>
-    </button>
-}*@
+    @using (Html.BeginForm("ExportDataProduccion", "Curso", FormMethod.Get, null))
+    {
+        <input type="text" id="CCiMaquina" name="CCiMaquina" hidden />
+        <button class="btn btn-primary" type="submit">
+            <i class="fa fa-file-pdf-o"></i>
+        </button>
+    }*@
 
 <div class="content">
     <div class="row">
@@ -55,13 +60,13 @@
             "columns": [
                 { "data": "IdCurso", "className": 'IdCurso', "title": "Id Curso" },
                 { "data": "Nivel", "className": 'Nivel', "title": "Nivel" },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "Curso")/' + row.IdCurso;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

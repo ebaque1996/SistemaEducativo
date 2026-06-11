@@ -196,10 +196,10 @@
             document.body.appendChild(modal);
             loading = document.getElementsByClassName("loading")[0];
 
-            var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
-            var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
-            loading.style.top = top + "px";
-            loading.style.left = left + "px";
+            var top = Math.max(window.innerHeight / 2 - loading?.offsetHeight / 2, 0);
+            var left = Math.max(window.innerWidth / 2 - loading?.offsetWidth / 2, 0);
+            loading?.style.top = top + "px";
+            loading?.style.left = left + "px";
         };
         ShowProgress();
     </script>
@@ -216,10 +216,10 @@
 
             var splash = window.pleaseWait({
                 //logo: "/Content/Img/logo.jpg",
-                //logo: "/Content/Img/loading1.gif",
+                logo: "/Content/Img/Loading.gif",
+                //logo: "",
                 backgroundColor: '#0053A0',
-                loadingHtml: "<h1 class='loading-message'>  </h1>" + sCadHtmlIMg
-                //loadingHtml: "<h1 class='loading-message'>Plapasa S.A. </h1>" + sCadHtml
+                //loadingHtml: "<h1 class='loading-message'>  </h1>" + sCadHtmlIMg
             });
             return splash;
         }
@@ -271,13 +271,13 @@
         <aside class="main-sidebar">
             @*@Html.Partial("Menus")*@
             @*@Html.Partial("Menus", new ProyectoFinalModel.ProyectoFinalEntities().RolOpcion.Where(x => x.IdRol == Convert.ToInt32(Request.Cookies["Rol"].Value.ToString())).ToList());*@
-            @{ 
+            @{
                 int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
             }
             @Html.Partial("Menus", new ProyectoFinalModel.ProyectoFinalEntities().RolOpcion.AsNoTracking().Where(x => x.IdRol == idrol && x.Estado == "A").ToList());
         </aside>
         <!-- =============================================== -->
-        <!-- Content Wrapper. Contains page content --> 
+        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">

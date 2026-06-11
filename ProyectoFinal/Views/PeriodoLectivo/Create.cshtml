@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinalModel.PeriodoLectivo
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Crear nuevo Periodo Lectivo</h2>
 
 <section class="content">
@@ -21,15 +26,15 @@
                             <div class="box-body">
                                 <div class="row">
                                     @*<div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="col-md-4">
-                                                <label for="CCiMaquina" class="control-label">Id PeriodoLectivo</label>
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label for="CCiMaquina" class="control-label">Id PeriodoLectivo</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    @Html.EditorFor(model => model.IdPeriodoLectivo, new { htmlAttributes = new { @id = "txtIdPeriodoLectivo", @class = "form-control" } })
+                                                </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                @Html.EditorFor(model => model.IdPeriodoLectivo, new { htmlAttributes = new { @id = "txtIdPeriodoLectivo", @class = "form-control" } })
-                                            </div>
-                                        </div>
-                                    </div>*@
+                                        </div>*@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -44,7 +49,7 @@
                                 </div>
 
                                 <br />
-                                
+
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">

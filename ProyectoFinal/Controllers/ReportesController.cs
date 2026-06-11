@@ -98,10 +98,10 @@ namespace ProyectoFinal.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetOfertasLPC(string q)
+        public JsonResult GetOfertasLPC(string q, int? IdPeriodoLectivo)
         {
 
-            string sValue = q;
+            string sValue = q;            
 
             if (string.IsNullOrEmpty(q))
             {
@@ -113,15 +113,17 @@ namespace ProyectoFinal.Controllers
                 text = default(string)
             }).ToList();
 
-            int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
-
-             //Si es un profesor solo carga los cursos a los que el esta asignado, si no carga todos
-            if (idrol == 3)
+            if (IdPeriodoLectivo != null && IdPeriodoLectivo > 0)
             {
+                int idrol = Convert.ToInt32(Request.Cookies["Rol"].Value.ToString());
 
-                string IdUsuario = Request.Cookies["UserID"].Value.ToString();
+                //Si es un profesor solo carga los cursos a los que el esta asignado, si no carga todos
+                if (idrol == 3)
+                {
 
-                 Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                    string IdUsuario = Request.Cookies["UserID"].Value.ToString();
+
+                    Ofertas = (from ofer in db.Oferta.AsNoTracking()
                                join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
                                join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
@@ -139,15 +141,16 @@ namespace ProyectoFinal.Controllers
                                    id = ofer.IdOferta,
                                    text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
                                }).Distinct().ToList();
-                Ofertas.RemoveAll(item => item == null);
-            }
-            else
-            {
-                 Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                    Ofertas.RemoveAll(item => item == null);
+                }
+                else
+                {
+                    Ofertas = (from ofer in db.Oferta.AsNoTracking()
                                join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
                                join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
                                join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
                                where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue))
+                               && ofer.IdPeriodoLectivo == IdPeriodoLectivo
                                //&& ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
                                orderby cur.Nivel ascending, par.Descripcion ascending
                                select new
@@ -155,21 +158,22 @@ namespace ProyectoFinal.Controllers
                                    id = ofer.IdOferta,
                                    text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
                                }).ToList();
-                Ofertas.RemoveAll(item => item == null);
-            }
+                    Ofertas.RemoveAll(item => item == null);
+                }
 
-            //var Ofertas = (from ofer in db.Oferta.AsNoTracking()
-            //               join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
-            //               join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
-            //               join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
-            //               where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) 
-            //               && ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
-            //               select new
-            //               {
-            //                   id = ofer.IdOferta,
-            //                   text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
-            //               }).ToList();
-            //Ofertas.RemoveAll(item => item == null);
+                //var Ofertas = (from ofer in db.Oferta.AsNoTracking()
+                //               join per in db.PeriodoLectivo.AsNoTracking() on ofer.IdPeriodoLectivo equals per.IdPeriodoLectivo
+                //               join cur in db.Curso.AsNoTracking() on ofer.IdCurso equals cur.IdCurso
+                //               join par in db.Paralelo.AsNoTracking() on ofer.IdParalelo equals par.IdParalelo
+                //               where (cur.Descripcion.Contains(sValue) || par.Descripcion.Contains(sValue)) 
+                //               && ofer.Estado.Equals("A") && per.Estado.Equals("A") && cur.Estado.Equals("A") && par.Estado.Equals("A")
+                //               select new
+                //               {
+                //                   id = ofer.IdOferta,
+                //                   text = cur.Descripcion + " " + par.Descripcion + " | " + (ofer.Jornada == "MAT" ? "MATUTINA" : "VESPERTINA")
+                //               }).ToList();
+                //Ofertas.RemoveAll(item => item == null);
+            }
 
             return Json(new { items = Ofertas }, JsonRequestBehavior.AllowGet);
         }
@@ -258,7 +262,7 @@ namespace ProyectoFinal.Controllers
                            join mat in db.Matricula.AsNoTracking() on alum.IdAlumno equals mat.IdAlumno
                            join ofer in db.Oferta.AsNoTracking() on mat.IdOferta equals ofer.IdOferta
                            where (alum.Cedula.Contains(sValue) || alum.Nombres.Contains(sValue) || alum.Apellidos.Contains(sValue))
-                           && ofer.IdPeriodoLectivo == IdPeriodoLectivo
+                           && ofer.IdPeriodoLectivo == IdPeriodoLectivo && mat.Anulado == "N"
                            select new
                            {
                                id = alum.IdAlumno,
@@ -301,9 +305,9 @@ namespace ProyectoFinal.Controllers
         }
 
         public ActionResult PrintListadoPorCurso(string txtIdOferta)
-        {
+        {          
             string sQuery = "EXEC SP_LISTADO_POR_CURSO @Oferta = " + txtIdOferta;
-            return ExportDataProduccion("ListadoPorCurso", "Listado Por Curso ", sQuery);
+            return ExportDataProduccion("ListadoPorCurso", "Listado Por Curso ", sQuery);                      
         }
 
         public ActionResult PrintListadoCalificacionesPorCurso(string txtIdOferta, string txtIdParcial)
@@ -348,7 +352,7 @@ namespace ProyectoFinal.Controllers
 
             ReportDocument rd = new ReportDocument();
             //rd.Load(Path.Combine(Server.MapPath("~/bin/Reports"), psNomRep + ".rpt"));
-            rd.Load(Path.Combine(Server.MapPath("~/Reports"), psNomRep + ".rpt"));
+            rd.Load(Path.Combine(Server.MapPath("~/bin/Reports"), psNomRep + ".rpt"));
 
             TableLogOnInfos crtableLogoninfos = new TableLogOnInfos();
             TableLogOnInfo crtableLogoninfo = new TableLogOnInfo();

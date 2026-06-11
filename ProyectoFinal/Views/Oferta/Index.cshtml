@@ -1,11 +1,15 @@
-﻿
+﻿@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Ofertas</h2>
 
 <div class="content">
     <div class="row">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"> Parametros de Consulta </h3>
+                <h3 class="box-title"> Parámetros de Consulta </h3>
             </div>
             <div class="box-body">
                 <div class="form-group">
@@ -69,7 +73,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     @*<input type="text" class="form-control"
-                        id="txtCapacidad" placeholder="Capacidad" />*@
+                                        id="txtCapacidad" placeholder="Capacidad" />*@
 
                                     <input min="0" step="1" class="form-control" id="txtCapacidad" type="number" name="txtCapacidad" placeholder="Capacidad " />
                                 </div>
@@ -88,7 +92,7 @@
                                     <input type="text" id="txtJornada" hidden />
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
 
                     <br />
@@ -340,11 +344,11 @@
         var Jornada = document.getElementById("txtJornada").value;
         var Capacidad = document.getElementById("txtCapacidad").value;
 
-        if (document.getElementById("txtPeriodo").value == null || document.getElementById("txtPeriodo").value == '') { IdPeriodo = 0;}
+        if (document.getElementById("txtPeriodo").value == null || document.getElementById("txtPeriodo").value == '') { IdPeriodo = 0; }
         if (document.getElementById("txtCurso").value == null || document.getElementById("txtCurso").value == '') { IdCurso = 0; }
-        if (document.getElementById("txtParalelo").value == null || document.getElementById("txtParalelo").value == '') {IdParalelo = 0;}
-        if (document.getElementById("txtDirigente").value == null || document.getElementById("txtDirigente").value == '') {IdProfesor = 0;}
-        if (document.getElementById("txtCapacidad").value == null || document.getElementById("txtCapacidad").value == '') {Capacidad = 0;}
+        if (document.getElementById("txtParalelo").value == null || document.getElementById("txtParalelo").value == '') { IdParalelo = 0; }
+        if (document.getElementById("txtDirigente").value == null || document.getElementById("txtDirigente").value == '') { IdProfesor = 0; }
+        if (document.getElementById("txtCapacidad").value == null || document.getElementById("txtCapacidad").value == '') { Capacidad = 0; }
 
         var jsonCad = "{'IdPeriodo':'" + IdPeriodo + "'";
         jsonCad = jsonCad + ", 'IdCurso': '" + IdCurso + "'";
@@ -407,7 +411,7 @@
                 { "data": "IdPeriodoLectivo", "className": 'IdPeriodoLectivo', "title": "Id Periodo Lectivo", "visible": false },
                 { "data": "IdCurso", "className": 'IdCurso', "title": "Id Curso", "visible": false },
                 { "data": "IdParalelo", "className": 'IdParalelo', "title": "Id Paralelo", "visible": false },
-                { "data": "IdProfesor", "className": 'IdProfesor', "title": "Id Profesor", "visible": false },                
+                { "data": "IdProfesor", "className": 'IdProfesor', "title": "Id Profesor", "visible": false },
                 { "data": "DescPerLec", "className": 'DescPerLec', "title": "Periodo Lectivo" },
                 { "data": "DescCurso", "className": 'DescCurso', "title": "Curso" },
                 { "data": "DescParalelo", "className": 'DescParalelo', "title": "Paralelo" },

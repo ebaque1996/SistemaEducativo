@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Materia>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Materia", "Create")
 </p>
@@ -27,6 +32,8 @@
 
         var arr = @Html.Raw(Json.Encode(Model));
 
+        @*var arr = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model,Newtonsoft.Json.Formatting.Indented))*@
+
         $('#example2').DataTable({
             "autoWidth": false,
             "info": false,
@@ -43,13 +50,13 @@
             "data": arr,
             "columns": [
                 { "data": "IdMateria", "className": 'IdMateria', "title": "Id Materia" },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "Materia")/' + row.IdMateria;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

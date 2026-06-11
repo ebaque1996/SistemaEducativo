@@ -59,6 +59,8 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             if (esValido(Descripcion, Estado))
             {
@@ -72,7 +74,8 @@ namespace ProyectoFinal.Controllers
                     modulos = db.Modulo.AsNoTracking().ToList();
                     objModulo.IdModulo = modulos.Count() == 0 ? 1 : modulos.Max(x => x.IdModulo) + 1;
 
-                    objModulo.UsuarioCreacion = 1;
+                    //objModulo.UsuarioCreacion = 1;
+                    objModulo.UsuarioCreacion = userName;
                     objModulo.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objModulo).State = EntityState.Added;
                 }
@@ -82,7 +85,8 @@ namespace ProyectoFinal.Controllers
                     objModulo.IdModulo = IdModulo;
                     objModulo.UsuarioCreacion = consModulo.UsuarioCreacion;
                     objModulo.FechaCreacion = consModulo.FechaCreacion;
-                    objModulo.UsuarioActualizacion = 1;
+                    //objModulo.UsuarioActualizacion = 1;
+                    objModulo.UsuarioActualizacion = userName;
                     objModulo.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objModulo).State = EntityState.Modified;
                 }

@@ -1,5 +1,11 @@
 ﻿@model ProyectoFinalModel.Alumno
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+
 <h2>Crear nuevo Alumno</h2>
 
 <section class="content">
@@ -16,9 +22,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Alumno</label>
-                        @Html.EditorFor(model => model.IdAlumno, new { htmlAttributes = new { @id = "txtIdAlumno", @class = "form-control" } })
-                    </div>*@
+                                        <label for="CCiMaquina" class="control-label">Id Alumno</label>
+                                        @Html.EditorFor(model => model.IdAlumno, new { htmlAttributes = new { @id = "txtIdAlumno", @class = "form-control" } })
+                                    </div>*@
                                 <div class="col-md-4">
                                     <label for="NNuCedula" class="control-label">Cédula</label>
                                 </div>
@@ -28,12 +34,20 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            @*<div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuNombres" class="control-label">Nombres</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control", @style = "text-transform:uppercase" } })
+                                    </div>
+                                </div>*@
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="NNuNombres" class="control-label">Nombres</label>
+                                    <label for="NNuApellidos" class="control-label">Apellidos</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
@@ -43,12 +57,20 @@
 
                     <div class="row">
                         <div class="col-md-6">
+                            @*<div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuApellidos" class="control-label">Apellidos</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control", @style = "text-transform:uppercase" } })
+                                    </div>
+                                </div>*@
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="NNuApellidos" class="control-label">Apellidos</label>
+                                    <label for="NNuNombres" class="control-label">Nombres</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "txtApellidos", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @id = "txtNombres", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
@@ -86,7 +108,7 @@
                                     <label for="NNuDireccion" class="control-label">Dirección</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "txtDireccion", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "txtDireccion", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
@@ -106,19 +128,19 @@
                             </div>
                         </div>
                         @*<div class="col-md-6">
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label for="NNuNivel" class="control-label">Último Nivel</label>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuNivel" class="control-label">Último Nivel</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.UltimoNivel, new { htmlAttributes = new { @id = "txtUltimoNivel", @class = "form-control" } })
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                    @Html.EditorFor(model => model.UltimoNivel, new { htmlAttributes = new { @id = "txtUltimoNivel", @class = "form-control" } })
-                                </div>
-                            </div>
-                        </div>*@
+                            </div>*@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label class="form-control no-border">Curso:</label>
+                                    <label class="no-border">Curso:</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input type="text" id="txtSelectCurso" />
@@ -127,7 +149,22 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuColegioAnterior" class="control-label">Colegio Anterior</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.ColegioAnterior, new { htmlAttributes = new { @id = "txtColegioAnterior", @class = "form-control", @style = "text-transform:uppercase" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <br />
 
                 </div>
@@ -152,13 +189,23 @@
                                 </div>
                             </div>
                         </div>
+                        @*<div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuNombresRepresentante" class="control-label">Nombres Representante</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.NombresRepresentante, new { htmlAttributes = new { @id = "txtNombresRepresentante", @class = "form-control", @style = "text-transform:uppercase" } })
+                                    </div>
+                                </div>
+                            </div>*@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="NNuNombresRepresentante" class="control-label">Nombres Representante</label>
+                                    <label for="NNuApellidosRepresentante" class="control-label">Apellidos Representante</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.NombresRepresentante, new { htmlAttributes = new { @id = "txtNombresRepresentante", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.ApellidosRepresentante, new { htmlAttributes = new { @id = "txtApellidosRepresentante", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
@@ -167,13 +214,23 @@
                     <br />
 
                     <div class="row">
+                        @*<div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuApellidosRepresentante" class="control-label">Apellidos Representante</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.ApellidosRepresentante, new { htmlAttributes = new { @id = "txtApellidosRepresentante", @class = "form-control", @style = "text-transform:uppercase" } })
+                                    </div>
+                                </div>
+                            </div>*@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="NNuApellidosRepresentante" class="control-label">Apellidos Representante</label>
+                                    <label for="NNuNombresRepresentante" class="control-label">Nombres Representante</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.ApellidosRepresentante, new { htmlAttributes = new { @id = "txtApellidosRepresentante", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.NombresRepresentante, new { htmlAttributes = new { @id = "txtNombresRepresentante", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
@@ -198,20 +255,20 @@
                                     <label for="NNuDireccionRepresentante" class="control-label">Dirección Representante</label>
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.EditorFor(model => model.DireccionRepresentante, new { htmlAttributes = new { @id = "txtDireccionRepresentante", @class = "form-control" } })
+                                    @Html.EditorFor(model => model.DireccionRepresentante, new { htmlAttributes = new { @id = "txtDireccionRepresentante", @class = "form-control", @style = "text-transform:uppercase" } })
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label for="NNuColegioAnterior" class="control-label">Colegio Anterior</label>
+                        @*<div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="NNuColegioAnterior" class="control-label">Colegio Anterior</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.ColegioAnterior, new { htmlAttributes = new { @id = "txtColegioAnterior", @class = "form-control", @style = "text-transform:uppercase" } })
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                    @Html.EditorFor(model => model.ColegioAnterior, new { htmlAttributes = new { @id = "txtColegioAnterior", @class = "form-control" } })
-                                </div>
-                            </div>
-                        </div>
+                            </div>*@
                     </div>
 
                     <br />
@@ -244,6 +301,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#txtSelectCurso").on("select2-selecting", function (e) { document.getElementById('txtCurso').value = e.val; });
+
+        $('#txtSelectCurso').on("change", function (e) {
+            if ($(txtSelectCurso).select2('data') == null) {
+                document.getElementById('txtCurso').value = null;
+            }
+        });
 
         $('#txtSelectCurso').select2({
             width: '100%',
@@ -280,7 +343,7 @@
         var Direccion = document.getElementById("txtDireccion").value;
         var Telefono = document.getElementById("txtTelefono").value;
         //var UltimoNivel = document.getElementById("txtUltimoNivel").value;
-        var UltimoNivel = document.getElementById("txtCurso").value;
+        var UltimoNivel = document.getElementById("txtCurso").value == '' ? null : document.getElementById("txtCurso").value;
         var CedulaRepresentante = document.getElementById("txtCedulaRepresentante").value;
         var NombresRepresentante = document.getElementById("txtNombresRepresentante").value;
         var ApellidosRepresentante = document.getElementById("txtApellidosRepresentante").value;
@@ -343,7 +406,7 @@
 
                                 window.setTimeout(function () {
                                     location.href = '@Url.Action("Index", "Alumno")';
-                                }, 4000);
+                                }, 1500);
 
                             }
                             else {

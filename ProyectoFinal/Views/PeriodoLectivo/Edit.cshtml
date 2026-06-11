@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinalModel.PeriodoLectivo
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Editar Periodo Lectivo</h2>
 
 <section class="content">

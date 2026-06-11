@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Profesor>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Profesor", "Create")
 </p>
@@ -11,8 +16,9 @@
                 <thead>
                     <tr>
                         <th>Id Profesor</th>
-                        <th>Nombres</th>
+                        @*<th>Nombres</th>*@
                         <th>Apellidos</th>
+                        <th>Nombres</th>
                         <th>Estado</th>
                         <th></th>
                     </tr>
@@ -44,14 +50,15 @@
             "data": arr,
             "columns": [
                 { "data": "IdProfesor", "className": 'IdProfesor', "title": "Id Profesor" },
-                { "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
+                //{ "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
                 { "data": "Apellidos", "className": 'Apellidos', "title": "Apellidos" },
+                { "data": "Nombres", "className": 'Nombres', "title": "Nombres" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "Profesor")/' + row.IdProfesor;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

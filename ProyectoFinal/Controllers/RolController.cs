@@ -29,6 +29,9 @@ namespace ProyectoFinal.Controllers
             ProyectoFinalEntities dbGrabarRol = new ProyectoFinalEntities();
             ProyectoFinalEntities dbGrabarOpc = new ProyectoFinalEntities();
 
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
+
             if (String.IsNullOrEmpty(objRol.Descripcion))
             {                
                 bResult = false;
@@ -58,7 +61,8 @@ namespace ProyectoFinal.Controllers
                 roles = db.Rol.AsNoTracking().ToList();
                 objRol.IdRol = roles.Count() == 0 ? 1 : roles.Max(x => x.IdRol) + 1;
 
-                objRol.UsuarioCreacion = 1;
+                //objRol.UsuarioCreacion = 1;
+                objRol.UsuarioCreacion = userName;
                 objRol.FechaCreacion = DateTime.Now;                
                 dbGrabarRol.Entry(objRol).State = EntityState.Added;
             }
@@ -67,7 +71,8 @@ namespace ProyectoFinal.Controllers
                 Rol consRol = db.Rol.AsNoTracking().Where(x => x.IdRol == objRol.IdRol).FirstOrDefault();
                 objRol.UsuarioCreacion = consRol.UsuarioCreacion;
                 objRol.FechaCreacion = consRol.FechaCreacion;
-                objRol.UsuarioActualizacion = 1;
+                //objRol.UsuarioActualizacion = 1;
+                objRol.UsuarioActualizacion = userName;
                 objRol.FechaActualizacion = DateTime.Now;                
                 dbGrabarRol.Entry(objRol).State = EntityState.Modified;
             }
@@ -81,7 +86,8 @@ namespace ProyectoFinal.Controllers
                 foreach (var item in detOpc)
                 {         
                     item.IdRol = objRol.IdRol;
-                    item.UsuarioCreacion = 1;
+                    //item.UsuarioCreacion = 1;
+                    item.UsuarioCreacion = userName;
                     item.FechaCreacion = DateTime.Now;
                     dbGrabarOpc.Entry(item).State = EntityState.Added;
                 }
@@ -95,7 +101,8 @@ namespace ProyectoFinal.Controllers
                     if (consRolOp == null)
                     {
                         item.IdRol = objRol.IdRol;
-                        item.UsuarioCreacion = 1;
+                        //item.UsuarioCreacion = 1;
+                        item.UsuarioCreacion = userName;
                         item.FechaCreacion = DateTime.Now;
                         dbGrabarOpc.Entry(item).State = EntityState.Added;
                     }
@@ -103,7 +110,8 @@ namespace ProyectoFinal.Controllers
                     {
                         item.UsuarioCreacion = consRolOp.UsuarioCreacion;
                         item.FechaCreacion = consRolOp.FechaCreacion;
-                        item.UsuarioActualizacion = 1;
+                        //item.UsuarioActualizacion = 1;
+                        item.UsuarioActualizacion = userName;
                         item.FechaActualizacion = DateTime.Now;
                         dbGrabarOpc.Entry(item).State = EntityState.Modified;
                     }

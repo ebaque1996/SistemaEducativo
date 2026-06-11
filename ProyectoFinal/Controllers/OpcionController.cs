@@ -56,6 +56,8 @@ namespace ProyectoFinal.Controllers
             List<Opcion> detsOpciones = new List<Opcion>();
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             if (esValido(IdModulo, Descripcion, Url))
             {
@@ -69,7 +71,8 @@ namespace ProyectoFinal.Controllers
                 opciones = db.Opcion.AsNoTracking().ToList();
                 objOpcion.IdOpcion = opciones.Count() == 0 ? 1 : opciones.Max(x => x.IdOpcion) + 1;
 
-                objOpcion.UsuarioCreacion = 1;
+                //objOpcion.UsuarioCreacion = 1;
+                objOpcion.UsuarioCreacion = userName;
                 objOpcion.FechaCreacion = DateTime.Now;
                 dbGrabar.Entry(objOpcion).State = EntityState.Added;              
 
@@ -134,6 +137,8 @@ namespace ProyectoFinal.Controllers
             string strResult = string.Empty;
             bool bResult = false;
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             try
             {
@@ -144,7 +149,8 @@ namespace ProyectoFinal.Controllers
                     objOpcion.Url = Url;
                     objOpcion.Estado = Estado;
 
-                    objOpcion.UsuarioActualizacion = 1;
+                    //objOpcion.UsuarioActualizacion = 1;
+                    objOpcion.UsuarioActualizacion = userName;
                     objOpcion.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objOpcion).State = EntityState.Modified;
 

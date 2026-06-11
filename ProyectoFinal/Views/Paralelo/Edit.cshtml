@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinalModel.Paralelo
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Editar paralelo</h2>
 
 <section class="content">
@@ -37,7 +42,7 @@
                                                 <label for="NNuTonelaje" class="control-label">Descripción</label>
                                             </div>
                                             <div class="col-md-8">
-                                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control", @style = "text-transform:uppercase" } })
                                             </div>
                                         </div>
                                     </div>

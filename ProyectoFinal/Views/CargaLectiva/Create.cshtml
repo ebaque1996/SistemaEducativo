@@ -1,5 +1,11 @@
 ﻿<h2>Crear nueva carga lectiva</h2>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+
 <section class="content">
 
     <div class="class=" col-md-8">
@@ -72,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="checkbox">
                         <label class="radio">
                             <input type="checkbox" name="chkEstado" , checked>
@@ -201,9 +207,9 @@
     });
 
     $('#txtSelectProfesor').on("change", function (e) {
-        if ($(txtSelectProfesor).select2('data') == null) {            
+        if ($(txtSelectProfesor).select2('data') == null) {
             document.getElementById('txtProfesor').value = null;
-        }        
+        }
     });
 
     $('#txtSelectCurso').on("change", function (e) {

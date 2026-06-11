@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Paralelo>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Paralelo", "Create")
 </p>
@@ -43,13 +48,13 @@
             "data": arr,
             "columns": [
                 { "data": "IdParalelo", "className": 'IdParalelo', "title": "Id Paralelo" },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "Paralelo")/' + row.IdParalelo;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

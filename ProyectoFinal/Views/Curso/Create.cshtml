@@ -1,5 +1,11 @@
 ﻿@model ProyectoFinalModel.Curso
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+
 <h2>Crear nuevo curso</h2>
 
 <section class="content">
@@ -23,12 +29,12 @@
                                     @Html.EditorFor(model => model.Nivel, new { htmlAttributes = new { @id = "txtNivel", @class = "form-control" } })
                                 </div>
                             </div>
-                        </div>                      
+                        </div>
                     </div>
 
                     <br />
 
-                    <div class="row">                       
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
@@ -64,7 +70,7 @@
         var Descripcion = document.getElementById("txtDescripcion").value;
         var Estado = "A";
 
-        var chkestado = $('input[name="chkEstado"]').is(':checked')        
+        var chkestado = $('input[name="chkEstado"]').is(':checked')
 
         if (chkestado == false) {
             Estado = "I";

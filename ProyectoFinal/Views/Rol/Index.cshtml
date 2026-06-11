@@ -1,10 +1,15 @@
 ﻿@model IEnumerable<ProyectoFinalModel.Rol>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Rol", "Create")
 </p>
 
-<div class="content">    
+<div class="content">
 
     <div class="row">
         <div class="col-md-12">
@@ -40,13 +45,13 @@
             "data": arr,
             "columns": [
                 { "data": "IdRol", "className": 'IdRol', "title": "Id Rol" },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 { "data": "Estado", "className": 'Estado', "title": "Estado" },
                 {
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "Rol")/' + row.IdRol;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

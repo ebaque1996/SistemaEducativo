@@ -73,6 +73,8 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             if (esValido(Descripcion, FechaInicio, FechaFin, Estado))
             {
@@ -102,7 +104,8 @@ namespace ProyectoFinal.Controllers
                         profesores = db.PeriodoLectivo.AsNoTracking().ToList();
                         objPeriodoLectivo.IdPeriodoLectivo = profesores.Count() == 0 ? 1 : profesores.Max(x => x.IdPeriodoLectivo) + 1;
 
-                        objPeriodoLectivo.UsuarioCreacion = 1;
+                        //objPeriodoLectivo.UsuarioCreacion = 1;
+                        objPeriodoLectivo.UsuarioCreacion = userName;
                         objPeriodoLectivo.FechaCreacion = DateTime.Now;
                         dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Added;
 
@@ -132,7 +135,8 @@ namespace ProyectoFinal.Controllers
                         objPeriodoLectivo.IdPeriodoLectivo = IdPeriodoLectivo;
                         objPeriodoLectivo.UsuarioCreacion = consPeriodoLectivo.UsuarioCreacion;
                         objPeriodoLectivo.FechaCreacion = consPeriodoLectivo.FechaCreacion;
-                        objPeriodoLectivo.UsuarioActualizacion = 1;
+                        //objPeriodoLectivo.UsuarioActualizacion = 1;
+                        objPeriodoLectivo.UsuarioActualizacion = userName;
                         objPeriodoLectivo.FechaActualizacion = DateTime.Now;
                         dbGrabar.Entry(objPeriodoLectivo).State = EntityState.Modified;
 

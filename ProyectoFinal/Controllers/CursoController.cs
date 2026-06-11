@@ -49,6 +49,8 @@ namespace ProyectoFinal.Controllers
             bool bResult = false;
 
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
 
             if (esValido(Nivel,Descripcion,Estado))
             {
@@ -63,7 +65,8 @@ namespace ProyectoFinal.Controllers
                     cursos = db.Curso.AsNoTracking().ToList();
                     objCurso.IdCurso = cursos.Count() == 0 ? 1 : cursos.Max(x => x.IdCurso) + 1;
 
-                    objCurso.UsuarioCreacion = 1;
+                    //objCurso.UsuarioCreacion = 1;
+                    objCurso.UsuarioCreacion = userName;
                     objCurso.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objCurso).State = EntityState.Added;
                 }
@@ -73,7 +76,8 @@ namespace ProyectoFinal.Controllers
                     objCurso.IdCurso = IdCurso;
                     objCurso.UsuarioCreacion = consCurso.UsuarioCreacion;
                     objCurso.FechaCreacion = consCurso.FechaCreacion;
-                    objCurso.UsuarioActualizacion = 1;
+                    //objCurso.UsuarioActualizacion = 1;
+                    objCurso.UsuarioActualizacion = userName;
                     objCurso.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objCurso).State = EntityState.Modified;
                 }

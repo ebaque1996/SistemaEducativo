@@ -385,6 +385,9 @@ namespace ProyectoFinal.Controllers
             string strResult = string.Empty;
             bool bResult = false;
 
+            //string userName = Request.Cookies["UserCode"].Value;
+            string userName = User.Identity.Name;
+
             ProyectoFinalEntities dbGrabar = new ProyectoFinalEntities();
 
             if (esValido(objCargaLectiva))
@@ -395,7 +398,8 @@ namespace ProyectoFinal.Controllers
                     carLecs = db.CargaLectiva.AsNoTracking().ToList();
                     objCargaLectiva.IdCargaLectiva = carLecs.Count() == 0 ? 1 : carLecs.Max(x => x.IdCargaLectiva) + 1;
 
-                    objCargaLectiva.UsuarioCreacion = 1;
+                    //objCargaLectiva.UsuarioCreacion = 1;
+                    objCargaLectiva.UsuarioCreacion = userName;
                     objCargaLectiva.FechaCreacion = DateTime.Now;
                     dbGrabar.Entry(objCargaLectiva).State = EntityState.Added;
                 }
@@ -404,7 +408,8 @@ namespace ProyectoFinal.Controllers
                     CargaLectiva consCL = db.CargaLectiva.AsNoTracking().Where(x => x.IdCargaLectiva == objCargaLectiva.IdCargaLectiva).FirstOrDefault();
                     objCargaLectiva.UsuarioCreacion = consCL.UsuarioCreacion;
                     objCargaLectiva.FechaCreacion = consCL.FechaCreacion;
-                    objCargaLectiva.UsuarioActualizacion = 1;
+                    //objCargaLectiva.UsuarioActualizacion = 1;
+                    objCargaLectiva.UsuarioActualizacion = userName;
                     objCargaLectiva.FechaActualizacion = DateTime.Now;
                     dbGrabar.Entry(objCargaLectiva).State = EntityState.Modified;
                 }

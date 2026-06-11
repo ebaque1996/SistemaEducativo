@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinalModel.Materia
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Editar materia</h2>
 
 <section class="content">
@@ -13,15 +18,47 @@
             <form class="input-horizontal">
                 <div class="box-body">
 
-                    <div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Materia</label>
-                        @Html.EditorFor(model => model.IdMateria, new { htmlAttributes = new { @id = "txtIdMateria", @class = "form-control", disabled = "disabled" } })
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDescripcion" class="control-label">Id Materia</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.IdMateria, new { htmlAttributes = new { @id = "txtIdMateria", @class = "form-control", disabled = "disabled" } })
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <label for="NNuTonelaje" class="control-label">Descripción</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                    <br />
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="NNuDescripcion" class="control-label">Descripción</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control", @style = "text-transform:uppercase" } })
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <br />
+
+                    @*<div class="input-group">
+                            <label for="CCiMaquina" class="control-label">Id Materia</label>
+                            @Html.EditorFor(model => model.IdMateria, new { htmlAttributes = new { @id = "txtIdMateria", @class = "form-control", disabled = "disabled" } })
+                        </div>
+
+                        <label for="NNuTonelaje" class="control-label">Descripción</label>
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                        </div>*@
 
                     <div class="checkbox">
                         <label class="radio">
@@ -83,7 +120,7 @@
 
                                 window.setTimeout(function () {
                                     location.href = '@Url.Action("Index", "Materia")';
-                                }, 4000);
+                                }, 1000);
 
                             }
                             else {

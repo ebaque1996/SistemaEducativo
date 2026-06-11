@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinal.Models.RolesOpciones
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <div class="content">
 
     @*<input type="button" class="btn btn-primary" id="btnGenerar" value="Grabar" />*@
@@ -82,7 +87,7 @@
                 var last = null;
                 api.column(2, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
-                        $(rows).eq(i).before(                            
+                        $(rows).eq(i).before(
                             '<tr class="group"><td bgcolor="#D3D3D3" style="font-weight:bold" colspan="5">' + group + '</td></tr>'
                         );
                         last = group;
@@ -106,7 +111,7 @@
 
     $('#btnGenerar').on('click', function () {
 
-        var objRol = {};        
+        var objRol = {};
         objRol.Descripcion = document.getElementById("txtDescripcion").value;
         objRol.Estado = "A";
 

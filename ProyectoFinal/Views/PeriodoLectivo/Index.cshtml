@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<ProyectoFinalModel.PeriodoLectivo>
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <p>
     @Html.ActionLink("Crear Periodo Lectivo", "Create")
 </p>
@@ -45,7 +50,7 @@
             "data": arr,
             "columns": [
                 { "data": "IdPeriodoLectivo", "className": 'IdPeriodoLectivo', "title": "Id Periodo Lectivo" },
-                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripcion" },
+                { "data": "Descripcion", "className": 'Descripcion', "title": "Descripción" },
                 {
                     "data": "FechaInicio",
                     render: function (data, type, row) {
@@ -69,7 +74,7 @@
                     "render": function (data, type, row) {
 
                     var myUrl = '@Url.Action("Edit", "PeriodoLectivo")/' + row.IdPeriodoLectivo;
-                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Edit</a>';
+                    return '<a href=\"' + myUrl + '\" class=\"btn btn-default btn-sm\">Editar</a>';
                 }
                 },
             ],

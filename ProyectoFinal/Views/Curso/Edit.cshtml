@@ -1,5 +1,11 @@
 ﻿@model ProyectoFinalModel.Curso
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
+
 <h2>Editar curso</h2>
 
 <section class="content">
@@ -57,19 +63,19 @@
                     </div>
 
                     @*<div class="input-group">
-                        <label for="CCiMaquina" class="control-label">Id Curso</label>
-                        @Html.EditorFor(model => model.IdCurso, new { htmlAttributes = new { @id = "txtIdCurso", @class = "form-control", disabled = "disabled" } })
-                    </div>
+                            <label for="CCiMaquina" class="control-label">Id Curso</label>
+                            @Html.EditorFor(model => model.IdCurso, new { htmlAttributes = new { @id = "txtIdCurso", @class = "form-control", disabled = "disabled" } })
+                        </div>
 
-                    <div class="input-group">
-                        <label for="CDsMaquina" class="control-label">Nivel</label>
-                        @Html.EditorFor(model => model.Nivel, new { htmlAttributes = new { @id = "txtNivel", @class = "form-control" } })
-                    </div>
+                        <div class="input-group">
+                            <label for="CDsMaquina" class="control-label">Nivel</label>
+                            @Html.EditorFor(model => model.Nivel, new { htmlAttributes = new { @id = "txtNivel", @class = "form-control" } })
+                        </div>
 
-                    <label for="NNuTonelaje" class="control-label">Descripción</label>
-                    <div class="input-group">
-                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
-                    </div>*@
+                        <label for="NNuTonelaje" class="control-label">Descripción</label>
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                        </div>*@
 
                     <div class="checkbox">
                         <label class="radio">

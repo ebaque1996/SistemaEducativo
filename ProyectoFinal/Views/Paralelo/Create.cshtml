@@ -1,5 +1,10 @@
 ﻿@model ProyectoFinalModel.Paralelo
 
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Crear nuevo paralelo</h2>
 
 <section class="content">
@@ -15,19 +20,19 @@
                     <div class="class=" col-md-6">
                         <div class="box">
                             @*<div class="box-header with-border">
-                                <h3 class="box-title">Datos del Paralelo</h3>
-                            </div>*@
+                                    <h3 class="box-title">Datos del Paralelo</h3>
+                                </div>*@
 
                             <div class="box-body">
                                 <div class="row">
-                                 
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="col-md-4">
                                                 <label for="NNuTonelaje" class="control-label">Descripción</label>
                                             </div>
                                             <div class="col-md-8">
-                                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control" } })
+                                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "txtDescripcion", @class = "form-control", @style = "text-transform:uppercase" } })
                                             </div>
                                         </div>
                                     </div>

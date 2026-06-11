@@ -1,11 +1,15 @@
-﻿
+﻿@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("~/Account/Login");
+}
+
 <h2>Certificado de Promoción</h2>
 
 <div class="content">
     <div class="row">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"> Parametros de Consulta </h3>
+                <h3 class="box-title"> Parámetros de Consulta </h3>
             </div>
             <div class="box-body">
                 <div class="form-group">
@@ -18,7 +22,7 @@
                 @using (Html.BeginForm("PrintCertPromo", "Reportes", FormMethod.Get, null))
                 {
                     <input type="text" id="txtIdAlumno" name="txtIdAlumno" hidden />
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" type="submit" id="btnConsultar">
                         <i class="fa fa-file-pdf-o"></i>
                     </button>
                 }
@@ -33,6 +37,9 @@
 
 <script>
     $(document).ready(function () {
+
+        document.getElementById("btnConsultar").disabled = true;
+
         $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtAlumno').value = e.val; });
         $("#txtSelectAlumno").on("select2-selecting", function (e) { document.getElementById('txtIdAlumno').value = e.val; });
 
@@ -42,13 +49,16 @@
                 $("#txtSelectAlumno").select2("val", "");
                 document.getElementById('txtAlumno').value = null;
                 document.getElementById('txtIdAlumno').value = null;
+                document.getElementById("btnConsultar").disabled = true;
+            } else {
+                document.getElementById("btnConsultar").disabled = false;
             }
         });
 
         $('#txtSelectAlumno').select2({
             width: '50%',
             allowClear: true,
-            // minimumInputLength: 3,
+            minimumInputLength: 3,
             placeholder: "Cédula | Apellidos y Nombres",
 
             ajax: {
